@@ -63,14 +63,9 @@
       <h2 id="formTitle" class="font-bold mb-4 font-display">เพิ่มสินค้าใหม่</h2>
       <input type="hidden" id="editId">
       <div class="mb-4"><label class="text-xs text-stone-500 block mb-1.5">ชื่อสินค้า</label><input id="fTitle" placeholder="เช่น Champion Reverse Weave Hoodie" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
-      <div class="grid sm:grid-cols-3 gap-4 mb-4">
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
         <div><label class="text-xs text-stone-500 block mb-1.5">แบรนด์</label><input id="fBrand" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
         <div><label class="text-xs text-stone-500 block mb-1.5">หมวดหมู่</label><input id="fCategory" placeholder="ฮู้ด, แจ็คเก็ต" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
-        <div><label class="text-xs text-stone-500 block mb-1.5">ยุค/ปี</label>
-          <select id="fEra" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm">
-            <option>80s</option><option>90s</option><option>00s</option><option>Y2K</option>
-          </select>
-        </div>
       </div>
       <div class="grid sm:grid-cols-3 gap-4 mb-4">
         <div><label class="text-xs text-stone-500 block mb-1.5">ไซส์</label>
@@ -102,11 +97,9 @@
       </div>
 
       <label class="text-xs text-stone-500 block mb-1.5">ตารางขนาด (ซม.)</label>
-      <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="grid grid-cols-2 gap-3 mb-4">
         <input id="mChest" placeholder="อก" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
         <input id="mLength" placeholder="ยาว" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
-        <input id="mShoulder" placeholder="ไหล่" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
-        <input id="mSleeve" placeholder="แขน" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
       </div>
 
       <label class="text-xs text-stone-500 block mb-1.5">จุดตำหนิ (ถ้ามี)</label>
@@ -251,11 +244,11 @@ function loadItemToForm(id){
   formTitle.textContent = 'แก้ไขสินค้า #' + p.id;
   editId.value = p.id;
   fTitle.value = p.title; fBrand.value = p.brand; fCategory.value = p.category;
-  fEra.value = p.era; fSize.value = p.size_label; fScore.value = p.condition_score;
+  fSize.value = p.size_label; fScore.value = p.condition_score;
   fSingleStock.checked = !!p.single_stock; fSold.checked = !!p.sold;
   fPrice.value = p.price; fOldPrice.value = p.old_price || '';
   const m = p.measurements || {};
-  mChest.value = m['อก'] || ''; mLength.value = m['ยาว'] || ''; mShoulder.value = m['ไหล่'] || ''; mSleeve.value = m['แขน'] || '';
+  mChest.value = m['อก'] || ''; mLength.value = m['ยาว'] || '';
   currentImages = [...(p.images || [])]; pendingFiles = [];
   defects = (p.defects || []).map(d => ({ note: d.note || '', image: d.image || null, pendingFile: null }));
   renderImagePreviews(); renderDefects();
@@ -264,9 +257,9 @@ function loadItemToForm(id){
 
 function clearFormFields(){
   formTitle.textContent = 'เพิ่มสินค้าใหม่';
-  editId.value=''; fTitle.value=''; fBrand.value=''; fCategory.value=''; fEra.value='90s'; fSize.value='M'; fScore.value='7';
+  editId.value=''; fTitle.value=''; fBrand.value=''; fCategory.value=''; fSize.value='M'; fScore.value='7';
   fSingleStock.checked = true; fSold.checked = false; fPrice.value=''; fOldPrice.value='';
-  mChest.value=''; mLength.value=''; mShoulder.value=''; mSleeve.value='';
+  mChest.value=''; mLength.value='';
   currentImages = []; pendingFiles = []; defects = [];
   renderImagePreviews(); renderDefects();
 }
@@ -298,11 +291,11 @@ saveItem.addEventListener('click', async ()=>{
 
     const data = {
       title: fTitle.value.trim(), brand: fBrand.value.trim(), category: fCategory.value.trim(),
-      era: fEra.value, size_label: fSize.value, condition_score: Number(fScore.value),
+      size_label: fSize.value, condition_score: Number(fScore.value),
       price: Number(fPrice.value), old_price: fOldPrice.value ? Number(fOldPrice.value) : null,
       single_stock: fSingleStock.checked, sold: fSold.checked,
       images: currentImages,
-      measurements: { 'อก': mChest.value, 'ยาว': mLength.value, 'ไหล่': mShoulder.value, 'แขน': mSleeve.value },
+      measurements: { 'อก': mChest.value, 'ยาว': mLength.value },
       defects: defects.map(d => ({ note: d.note, image: d.image }))
     };
 
