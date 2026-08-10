@@ -15,52 +15,106 @@
 </head>
 <body class="bg-stone-50 text-stone-900">
 
-<nav class="sticky top-0 z-30 bg-stone-50/95 backdrop-blur border-b border-stone-200">
-  <div class="max-w-6xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
-    <span id="shopName" class="text-xl font-extrabold tracking-tight font-display">…</span>
-    <div class="flex items-center gap-3 flex-1 justify-end">
-      <input id="searchInput" type="text" placeholder="ค้นหาแบรนด์, ชื่อสินค้า..." class="w-full max-w-[220px] text-sm border border-stone-300 rounded-full px-4 py-1.5 focus:outline-none focus:border-orange-600">
+<header class="sticky top-0 z-40 bg-stone-50/95 backdrop-blur border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 h-16 lg:h-20 flex items-center gap-4">
+    <span id="shopName" class="text-xl lg:text-2xl font-extrabold tracking-tight font-display flex-shrink-0">…</span>
+    <div class="hidden md:flex flex-1 max-w-xl mx-auto relative">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+      <input id="searchInput" type="search" placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
+        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600">
+    </div>
+    <a id="navContact" target="_blank" class="hidden sm:flex ml-auto items-center gap-1.5 bg-orange-700 hover:bg-orange-600 text-white rounded-full px-4 py-2 text-sm font-bold font-display transition-colors">
+      แชทสั่งซื้อ
+    </a>
+  </div>
+  <div class="md:hidden px-4 pb-3">
+    <div class="relative">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+      <input id="searchInputMobile" type="search" placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
+        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-600">
     </div>
   </div>
-</nav>
+</header>
 
-<!-- STOREFRONT -->
 <div id="storeView">
-  <section class="max-w-6xl mx-auto px-4 lg:px-8 pt-10 pb-6">
-    <p id="tagline" class="text-xs font-bold text-orange-700 uppercase tracking-widest mb-2 font-display"></p>
-    <h1 class="text-3xl lg:text-5xl font-extrabold leading-tight font-display">
-      ของหายาก <span class="text-orange-700">มือสอง</span><br class="hidden lg:block"> คัดมาแล้วทุกชิ้น
-    </h1>
-    <p id="heroSub" class="text-stone-500 mt-3 max-w-md text-sm lg:text-base"></p>
-  </section>
+<main>
 
-  <section class="max-w-6xl mx-auto px-4 lg:px-8 pb-16">
-    <div class="flex items-center justify-between mb-5">
-      <h2 class="text-lg font-bold font-display">สินค้าทั้งหมด (<span id="countLabel">0</span>)</h2>
-      <button id="filterToggle" class="lg:hidden flex items-center gap-1.5 text-sm font-medium border border-stone-300 px-3 py-1.5 rounded-full">ตัวกรอง</button>
-    </div>
-
-    <div class="grid lg:grid-cols-[220px_1fr] gap-8">
-      <div id="filterOverlay" class="fixed inset-0 z-40 hidden lg:static lg:block lg:z-auto">
-        <div class="absolute inset-0 bg-black/40 lg:hidden" onclick="document.getElementById('filterOverlay').classList.add('hidden')"></div>
-        <div class="absolute right-0 top-0 h-full w-80 bg-white p-6 overflow-y-auto lg:static lg:w-full lg:h-auto lg:p-0 lg:bg-transparent">
-          <div id="filterGroups"></div>
-        </div>
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-stone-800 via-stone-900 to-black"></div>
+    <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 20% 30%, rgba(194,101,61,0.35), transparent 45%), radial-gradient(circle at 80% 70%, rgba(120,113,108,0.4), transparent 50%);"></div>
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-16 lg:py-24 text-center">
+      <p id="tagline" class="text-orange-400 text-xs lg:text-sm font-bold uppercase tracking-[0.2em] mb-4 font-display"></p>
+      <h1 id="heroTitle" class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight font-display max-w-3xl mx-auto"></h1>
+      <p id="heroSub" class="text-stone-300 mt-5 max-w-lg mx-auto text-sm lg:text-base"></p>
+      <div class="flex justify-center gap-10 mt-10">
+        <div><div id="statTotal" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">สินค้าทั้งหมด</div></div>
+        <div><div id="statAvailable" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">พร้อมขาย</div></div>
+        <div><div id="statSold" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">ขายแล้ว</div></div>
       </div>
-      <div id="cardGrid" class="grid grid-cols-2 md:grid-cols-3 gap-5"><p class="text-stone-400 col-span-full">กำลังโหลด...</p></div>
+      <a href="#products" class="inline-block mt-10 bg-orange-700 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-full font-display transition-colors">ช้อปเลย</a>
     </div>
   </section>
 
-  <footer class="border-t border-stone-200 py-6">
-    <div class="max-w-6xl mx-auto px-4 lg:px-8 flex justify-between items-center flex-wrap gap-3">
-      <p id="footShopName" class="text-xs text-stone-400"></p>
-      <div id="footLinks" class="flex gap-4 text-xs text-stone-400"></div>
+  <section id="products" class="max-w-7xl mx-auto px-4 lg:px-8 py-10 lg:py-14">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-xl lg:text-2xl font-bold font-display">สินค้าล่าสุด (<span id="countLabel">0</span>)</h2>
+        <p class="text-stone-500 text-sm mt-1">คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น</p>
+      </div>
+      <label class="flex items-center gap-2 text-sm">
+        <span class="text-stone-500">เรียงตาม</span>
+        <select id="sortSelect" class="border border-stone-300 rounded-full pl-4 pr-8 py-2 text-sm font-medium focus:outline-none focus:border-orange-600 bg-white">
+          <option value="new">สินค้ามาใหม่</option>
+          <option value="low">ราคา: น้อย → มาก</option>
+          <option value="high">ราคา: มาก → น้อย</option>
+        </select>
+      </label>
     </div>
-  </footer>
+
+    <div id="categoryChips" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="filterGroups" class="flex flex-wrap gap-2 mb-8"></div>
+
+    <div id="cardGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
+      <p class="text-stone-400 col-span-full py-10 text-center">กำลังโหลด...</p>
+    </div>
+  </section>
+
+  <section class="bg-white border-y border-stone-200 py-14 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 grid sm:grid-cols-3 gap-8 text-center">
+      <div>
+        <div class="w-11 h-11 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center mx-auto mb-3 text-lg">🔍</div>
+        <h3 class="font-semibold font-display text-sm">ตรวจสภาพก่อนลงขาย</h3>
+        <p class="text-stone-500 text-xs mt-1">เช็คตำหนิ วัดขนาดจริงทุกชิ้น</p>
+      </div>
+      <div>
+        <div class="w-11 h-11 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center mx-auto mb-3 text-lg">🧺</div>
+        <h3 class="font-semibold font-display text-sm">ซักรีดพร้อมส่ง</h3>
+        <p class="text-stone-500 text-xs mt-1">สะอาด เรียบร้อยก่อนแพ็กทุกครั้ง</p>
+      </div>
+      <div>
+        <div class="w-11 h-11 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center mx-auto mb-3 text-lg">💬</div>
+        <h3 class="font-semibold font-display text-sm">แอดมินตอบไว</h3>
+        <p class="text-stone-500 text-xs mt-1">ทักถามไซส์เพิ่มเติมได้ก่อนซื้อ</p>
+      </div>
+    </div>
+  </section>
+
+</main>
 </div>
 
-<!-- DETAIL VIEW -->
-<div id="detailView" class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-6"></div>
+<div id="detailView" class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-8"></div>
+
+<footer class="bg-stone-900 text-stone-300">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+      <p id="footShopName" class="text-white text-lg font-extrabold font-display"></p>
+      <div id="footLinks" class="flex gap-3"></div>
+    </div>
+    <div class="border-t border-stone-800 mt-8 pt-6 text-center text-xs text-stone-500">
+      สงวนลิขสิทธิ์
+    </div>
+  </div>
+</footer>
 
 <script src="/config.js"></script>
 <script>
@@ -78,7 +132,7 @@ function fmt(n){ return Number(n).toLocaleString('th-TH'); }
 
 let items = [];
 let cfg = {};
-let filters = { brand: 'ทั้งหมด', size: 'ทั้งหมด', score: null, search: '' };
+let filters = { category: 'ทั้งหมด', brand: 'ทั้งหมด', size: 'ทั้งหมด', score: null, search: '', sort: 'new' };
 
 async function load(){
   const { data: c, error: cErr } = await sb.from('config').select('*').eq('id', 1).single();
@@ -91,27 +145,50 @@ async function load(){
   cfg = c; items = rows || [];
 
   shopName.textContent = cfg.shop_name;
-  footShopName.textContent = `© 2026 ${cfg.shop_name}`;
+  footShopName.textContent = cfg.shop_name;
   tagline.textContent = cfg.tagline;
+  heroTitle.innerHTML = `${esc(cfg.hero_title1)} <span class="text-orange-400">${esc(cfg.hero_title2)}</span><br class="hidden sm:block">${esc(cfg.hero_title3)}`;
   heroSub.textContent = cfg.hero_sub;
-  footLinks.innerHTML = cfg.ig_url ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="hover:text-stone-700">Instagram</a>` : '';
 
+  if (cfg.ig_url){
+    navContact.href = cfg.ig_url;
+    footLinks.innerHTML = `<a href="${escAttr(cfg.ig_url)}" target="_blank" aria-label="Instagram" class="w-9 h-9 rounded-full bg-stone-800 hover:bg-orange-700 flex items-center justify-center transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.695.272.273 2.69.073 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.948C23.73 2.7 21.311.273 16.949.073 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>`;
+  } else {
+    navContact.classList.add('hidden');
+  }
+
+  statTotal.textContent = items.length;
+  statAvailable.textContent = items.filter(l => !l.sold).length;
+  statSold.textContent = items.filter(l => l.sold).length;
+
+  renderCategoryChips();
   renderFilters();
   renderGrid();
+}
+
+function renderCategoryChips(){
+  const cats = ['ทั้งหมด', ...new Set(items.map(i=>i.category).filter(Boolean))];
+  categoryChips.innerHTML = cats.map(c =>
+    `<button data-cat="${escAttr(c)}" class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display ${filters.category===c ? 'bg-stone-900 text-white' : 'bg-white border border-stone-300 text-stone-600 hover:border-stone-500'}">${esc(c)}</button>`
+  ).join('');
+  categoryChips.querySelectorAll('.cat-chip').forEach(btn => btn.addEventListener('click', () => {
+    filters.category = btn.getAttribute('data-cat');
+    renderCategoryChips(); renderGrid();
+  }));
 }
 
 function renderFilters(){
   const brands = ['ทั้งหมด', ...new Set(items.map(i=>i.brand))];
   const sizes = ['ทั้งหมด','S','M','L','XL'];
   function group(title, options, key){
-    return `<div class="mb-6"><p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3 font-display">${title}</p><div class="flex flex-wrap gap-2">
-      ${options.map(o => `<button data-group="${key}" data-val="${escAttr(o)}" class="chip px-3 py-1.5 rounded-full text-xs font-medium border ${filters[key]===o?'bg-stone-900 text-white border-stone-900':'bg-white text-stone-600 border-stone-300'}">${esc(o)}</button>`).join('')}
-    </div></div>`;
+    return `<div class="flex flex-wrap items-center gap-2 mr-4"><span class="text-xs text-stone-400 uppercase font-display font-semibold">${title}:</span>
+      ${options.map(o => `<button data-group="${key}" data-val="${escAttr(o)}" class="chip px-3 py-1 rounded-full text-xs font-medium border ${filters[key]===o?'bg-orange-700 text-white border-orange-700':'bg-white text-stone-600 border-stone-300'}">${esc(o)}</button>`).join('')}
+    </div>`;
   }
   function scoreGroup(){
-    return `<div class="mb-6"><p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3 font-display">สภาพสินค้า</p><div class="flex flex-wrap gap-2">
-      ${[9,7,5].map(s => `<button data-group="score" data-val="${s}" class="chip px-3 py-1.5 rounded-full text-xs font-medium border ${filters.score===s?'bg-stone-900 text-white border-stone-900':'bg-white text-stone-600 border-stone-300'}">${CONDITION[s].label}</button>`).join('')}
-    </div></div>`;
+    return `<div class="flex flex-wrap items-center gap-2"><span class="text-xs text-stone-400 uppercase font-display font-semibold">สภาพ:</span>
+      ${[9,7,5].map(s => `<button data-group="score" data-val="${s}" class="chip px-3 py-1 rounded-full text-xs font-medium border ${filters.score===s?'bg-orange-700 text-white border-orange-700':'bg-white text-stone-600 border-stone-300'}">${s}/10</button>`).join('')}
+    </div>`;
   }
   filterGroups.innerHTML = group('แบรนด์', brands, 'brand') + group('ไซส์', sizes, 'size') + scoreGroup();
   filterGroups.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
@@ -124,27 +201,31 @@ function renderFilters(){
 
 function renderGrid(){
   const q = filters.search.trim().toLowerCase();
-  const visible = items.filter(i =>
+  let visible = items.filter(i =>
+    (filters.category==='ทั้งหมด' || i.category===filters.category) &&
     (filters.brand==='ทั้งหมด' || i.brand===filters.brand) &&
     (filters.size==='ทั้งหมด' || i.size_label===filters.size) &&
     (!filters.score || i.condition_score===filters.score) &&
     (!q || i.title.toLowerCase().includes(q) || i.brand.toLowerCase().includes(q))
   );
+  if (filters.sort === 'low') visible = [...visible].sort((a,b) => a.price - b.price);
+  if (filters.sort === 'high') visible = [...visible].sort((a,b) => b.price - a.price);
+
   countLabel.textContent = visible.length;
   cardGrid.innerHTML = visible.length ? visible.map(i => `
-    <button data-id="${i.id}" class="card-btn text-left group">
-      <div class="relative aspect-[3/4] rounded-lg overflow-hidden bg-stone-200">
-        ${i.images && i.images[0] ? `<img src="${escAttr(i.images[0])}" class="w-full h-full object-cover" alt="${escAttr(i.title)}">` : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-xs">ไม่มีรูป</div>`}
+    <button data-id="${i.id}" class="card-btn text-left group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow overflow-hidden border border-stone-100">
+      <div class="relative aspect-[3/4] bg-stone-200 overflow-hidden">
+        ${i.images && i.images[0] ? `<img src="${escAttr(i.images[0])}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="${escAttr(i.title)}">` : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-xs">ไม่มีรูป</div>`}
         ${i.sold ? `<div class="absolute inset-0 bg-black/50 flex items-center justify-center"><span class="text-white text-sm font-bold font-display">ขายแล้ว</span></div>` : ''}
-        ${(!i.sold && i.single_stock) ? `<div class="absolute top-2.5 left-2.5 inline-flex items-center gap-1 bg-red-700 text-white px-2.5 py-1 rounded-full text-[11px] font-bold font-display">เหลือชิ้นเดียว</div>` : ''}
-        <div class="absolute bottom-2.5 left-2.5"><span class="${CONDITION[i.condition_score].cls} text-white px-2.5 py-1 text-[11px] rounded-full font-bold font-display">${CONDITION[i.condition_score].label}</span></div>
+        ${(!i.sold && i.single_stock) ? `<span class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">เหลือชิ้นเดียว</span>` : ''}
+        <span class="absolute bottom-3 left-3 ${CONDITION[i.condition_score].cls} text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">${CONDITION[i.condition_score].label}</span>
       </div>
-      <div class="mt-3">
+      <div class="p-4">
         <p class="text-[11px] text-stone-500 uppercase tracking-wider">${esc(i.brand)}</p>
-        <h3 class="text-sm font-semibold mt-0.5 leading-snug font-display">${esc(i.title)}</h3>
-        <div class="flex items-center gap-2 mt-1.5">
+        <h3 class="font-semibold text-sm mt-0.5 leading-snug font-display">${esc(i.title)}</h3>
+        <div class="flex items-center gap-2 mt-2">
           ${i.old_price ? `<span class="text-xs text-stone-400 line-through">฿${fmt(i.old_price)}</span>` : ''}
-          <span class="text-base font-bold">฿${fmt(i.price)}</span>
+          <span class="text-lg font-bold font-display">฿${fmt(i.price)}</span>
         </div>
       </div>
     </button>
@@ -162,16 +243,16 @@ function showDetail(id){
 
   const gallery = (p.images && p.images.length ? p.images : [null]);
   detailView.innerHTML = `
-    <button id="backBtn" class="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 mb-6">← กลับไปดูสินค้าทั้งหมด</button>
+    <button id="backBtn" class="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 mb-6 font-medium">← กลับไปดูสินค้าทั้งหมด</button>
     <div class="grid lg:grid-cols-2 gap-10">
       <div>
-        <div class="relative aspect-[3/4] rounded-xl overflow-hidden bg-stone-200">
+        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-stone-200 shadow-sm">
           ${gallery[0] ? `<img src="${escAttr(gallery[0])}" class="w-full h-full object-cover" alt="${escAttr(p.title)}">` : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-sm">ไม่มีรูป</div>`}
-          ${(!p.sold && p.single_stock) ? `<div class="absolute top-4 left-4 inline-flex items-center gap-1 bg-red-700 text-white px-2.5 py-1 rounded-full text-[11px] font-bold font-display">เหลือชิ้นเดียว</div>` : ''}
+          ${(!p.sold && p.single_stock) ? `<span class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">เหลือชิ้นเดียว</span>` : ''}
         </div>
-        ${gallery.length > 1 ? `<div class="flex gap-2 mt-3">${gallery.slice(1).map(g => `<img src="${escAttr(g)}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">`).join('')}</div>` : ''}
+        ${gallery.length > 1 ? `<div class="flex gap-2 mt-3">${gallery.slice(1).map(g => `<img src="${escAttr(g)}" class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-stone-200">`).join('')}</div>` : ''}
         ${p.defects && p.defects.length ? `
-          <div class="mt-6 border border-orange-200 bg-orange-50 rounded-xl p-4">
+          <div class="mt-6 border border-orange-200 bg-orange-50 rounded-2xl p-4">
             <p class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">จุดตำหนิที่พบ (${p.defects.length})</p>
             <div class="space-y-2">
               ${p.defects.map(d => `
@@ -189,18 +270,18 @@ function showDetail(id){
         <div class="mt-4"><span class="${CONDITION[p.condition_score].cls} text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">${CONDITION[p.condition_score].label}</span></div>
         <div class="flex items-baseline gap-3 mt-5">
           ${p.old_price ? `<span class="text-lg text-stone-400 line-through">฿${fmt(p.old_price)}</span>` : ''}
-          <span class="text-3xl font-bold">฿${fmt(p.price)}</span>
+          <span class="text-3xl font-bold font-display">฿${fmt(p.price)}</span>
         </div>
         ${p.sold
-          ? `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-lg font-bold text-center font-display">สินค้านี้ขายแล้ว</div>`
+          ? `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">สินค้านี้ขายแล้ว</div>`
           : cfg.ig_url
-            ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">สั่งซื้อผ่าน Instagram</a>`
-            : `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-lg font-bold text-center font-display">ยังไม่เปิดช่องทางสั่งซื้อ</div>`}
+            ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">สั่งซื้อผ่าน Instagram</a>`
+            : `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">ยังไม่เปิดช่องทางสั่งซื้อ</div>`}
         <div class="mt-8">
           <p class="text-sm font-bold mb-3 font-display">ตารางขนาด (วัดจริง)</p>
-          <div class="border border-stone-200 rounded-xl overflow-hidden">
-      ${Object.entries(p.measurements || {}).filter(([k,v]) => v).map(([k,v], idx) => `
- <div class="flex justify-between px-4 py-2.5 text-sm ${idx%2===0?'bg-stone-50':'bg-white'}"><span class="text-stone-500">${esc(k)}</span><span class="font-medium">${esc(v)}</span></div>
+          <div class="border border-stone-200 rounded-2xl overflow-hidden">
+            ${Object.entries(p.measurements || {}).filter(([k,v]) => v).map(([k,v], idx) => `
+              <div class="flex justify-between px-4 py-2.5 text-sm ${idx%2===0?'bg-stone-50':'bg-white'}"><span class="text-stone-500">${esc(k)}</span><span class="font-medium">${esc(v)}</span></div>
             `).join('') || '<p class="text-sm text-stone-400 p-4">ไม่มีข้อมูลขนาด</p>'}
           </div>
           <p class="text-xs text-stone-400 mt-2">ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก</p>
@@ -215,8 +296,10 @@ function showDetail(id){
   });
 }
 
-searchInput.addEventListener('input', (e) => { filters.search = e.target.value; renderGrid(); });
-filterToggle.addEventListener('click', () => filterOverlay.classList.remove('hidden'));
+function syncSearch(v){ filters.search = v; searchInput.value = v; searchInputMobile.value = v; renderGrid(); }
+searchInput.addEventListener('input', (e) => syncSearch(e.target.value));
+searchInputMobile.addEventListener('input', (e) => syncSearch(e.target.value));
+sortSelect.addEventListener('change', (e) => { filters.sort = e.target.value; renderGrid(); });
 
 load();
 </script>
