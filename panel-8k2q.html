@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>จัดการร้าน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{ font-family:'IBM Plex Sans Thai', sans-serif; }
+  .font-display{ font-family:'Prompt', sans-serif; }
+  .hide{ display:none !important; }
+</style>
+</head>
+<body class="bg-stone-100 text-stone-900">
+
+<div id="lockView" class="min-h-screen bg-stone-900 flex items-center justify-center px-4">
+  <div class="bg-white rounded-2xl p-8 w-full max-w-sm text-center">
+    <h2 class="text-lg font-bold font-display">เข้าสู่ระบบจัดการร้าน</h2>
+    <p class="text-xs text-stone-500 mt-2 mb-5">ล็อกอินด้วยบัญชีแอดมินที่สร้างไว้ใน Supabase</p>
+    <input id="lockEmail" type="email" placeholder="อีเมล" class="w-full border border-stone-300 rounded-lg px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-orange-600">
+    <input id="lockPw" type="password" placeholder="รหัสผ่าน" class="w-full border border-stone-300 rounded-lg px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-orange-600">
+    <button id="lockSubmit" class="w-full bg-stone-900 text-white py-2.5 rounded-lg font-bold text-sm font-display">เข้าสู่ระบบ</button>
+    <p id="lockError" class="text-red-600 text-xs mt-2 hide"></p>
+  </div>
+</div>
+
+<div id="dashView" class="hide">
+  <nav class="bg-stone-900 text-white sticky top-0 z-20">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <span class="font-bold font-display">จัดการร้าน</span>
+      <button id="logoutBtn" class="text-sm text-stone-300 hover:text-white">ออกจากระบบ</button>
+    </div>
+  </nav>
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+
+    <div class="bg-white rounded-2xl p-6 mb-6">
+      <h2 class="font-bold mb-4 font-display">ตั้งค่าร้าน</h2>
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="text-xs text-stone-500 block mb-1.5">ชื่อร้าน</label><input id="cfgShopName" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">แท็กไลน์</label><input id="cfgTagline" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">ลิงก์ LINE</label><input id="cfgLine" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">ลิงก์ Facebook</label><input id="cfgFb" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">ลิงก์ Instagram</label><input id="cfgIg" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+      </div>
+      <div class="mb-4"><label class="text-xs text-stone-500 block mb-1.5">คำโปรยใต้หัวข้อ</label><input id="cfgHeroSub" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+      <button id="saveConfig" class="border border-stone-300 px-5 py-2 rounded-lg text-sm font-medium">บันทึกการตั้งค่า</button>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 mb-6">
+      <h2 class="font-bold mb-4 font-display">เปลี่ยนรหัสผ่านผู้ดูแล</h2>
+      <div class="flex gap-3 items-end flex-wrap">
+        <div><label class="text-xs text-stone-500 block mb-1.5">รหัสผ่านใหม่</label><input id="newPw" type="password" class="border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <button id="changePwBtn" class="border border-stone-300 px-5 py-2 rounded-lg text-sm font-medium">เปลี่ยนรหัสผ่าน</button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 mb-6">
+      <h2 id="formTitle" class="font-bold mb-4 font-display">เพิ่มสินค้าใหม่</h2>
+      <input type="hidden" id="editId">
+      <div class="mb-4"><label class="text-xs text-stone-500 block mb-1.5">ชื่อสินค้า</label><input id="fTitle" placeholder="เช่น Champion Reverse Weave Hoodie" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+      <div class="grid sm:grid-cols-3 gap-4 mb-4">
+        <div><label class="text-xs text-stone-500 block mb-1.5">แบรนด์</label><input id="fBrand" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">หมวดหมู่</label><input id="fCategory" placeholder="ฮู้ด, แจ็คเก็ต" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">ยุค/ปี</label>
+          <select id="fEra" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm">
+            <option>80s</option><option>90s</option><option>00s</option><option>Y2K</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4 mb-4">
+        <div><label class="text-xs text-stone-500 block mb-1.5">ไซส์</label>
+          <select id="fSize" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm">
+            <option>S</option><option>M</option><option>L</option><option>XL</option>
+          </select>
+        </div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">สภาพสินค้า</label>
+          <select id="fScore" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm">
+            <option value="9">9/10 — เกือบใหม่</option>
+            <option value="7">7/10 — สภาพดี</option>
+            <option value="5">5/10 — มีตำหนิเล็กน้อย</option>
+          </select>
+        </div>
+        <div class="flex items-end gap-4 pb-2">
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" id="fSingleStock"> เหลือชิ้นเดียว</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" id="fSold"> ขายแล้ว</label>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="text-xs text-stone-500 block mb-1.5">ราคาขาย (บาท)</label><input id="fPrice" type="number" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-stone-500 block mb-1.5">ราคาป้ายเดิม (ไม่บังคับ)</label><input id="fOldPrice" type="number" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm"></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="text-xs text-stone-500 block mb-1.5">รูปภาพสินค้า (เลือกได้หลายรูป รูปแรก = รูปหลัก)</label>
+        <input type="file" id="fImages" accept="image/*" multiple class="text-sm">
+        <div id="fImagePreviews" class="flex gap-2 mt-2 flex-wrap"></div>
+      </div>
+
+      <label class="text-xs text-stone-500 block mb-1.5">ตารางขนาด (ซม.)</label>
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        <input id="mChest" placeholder="อก" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
+        <input id="mLength" placeholder="ยาว" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
+        <input id="mShoulder" placeholder="ไหล่" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
+        <input id="mSleeve" placeholder="แขน" class="border border-stone-300 rounded-lg px-2 py-2 text-sm text-center">
+      </div>
+
+      <label class="text-xs text-stone-500 block mb-1.5">จุดตำหนิ (ถ้ามี)</label>
+      <div id="defectsList" class="space-y-2 mb-2"></div>
+      <button id="addDefectBtn" type="button" class="text-xs text-orange-700 font-medium mb-4">+ เพิ่มจุดตำหนิ</button>
+
+      <div class="flex gap-3">
+        <button id="saveItem" class="bg-stone-900 text-white px-6 py-2.5 rounded-lg font-bold text-sm font-display">บันทึกสินค้า</button>
+        <button id="clearForm" type="button" class="border border-stone-300 px-6 py-2.5 rounded-lg text-sm">ล้างฟอร์ม</button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6">
+      <h2 class="font-bold mb-4 font-display">สินค้าทั้งหมด</h2>
+      <div id="itemManageList"><p class="text-sm text-stone-400">กำลังโหลด...</p></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/config.js"></script>
+<script>
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const CONDITION_LABEL = { 9: "9/10 — เกือบใหม่", 7: "7/10 — สภาพดี", 5: "5/10 — มีตำหนิเล็กน้อย" };
+function fmt(n){ return Number(n).toLocaleString('th-TH'); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+let items = [];
+let currentImages = [];   // URLs already uploaded for the item being edited/created
+let pendingFiles = [];    // new files chosen, not yet uploaded
+let defects = [];         // [{ note, image, pendingFile }]
+
+async function checkLogin(){
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) showDash(); else showLock();
+}
+function showLock(){ lockView.classList.remove('hide'); dashView.classList.add('hide'); }
+function showDash(){ lockView.classList.add('hide'); dashView.classList.remove('hide'); loadConfig(); loadItems(); }
+
+lockSubmit.addEventListener('click', async ()=>{
+  const { error } = await sb.auth.signInWithPassword({ email: lockEmail.value, password: lockPw.value });
+  if (error){ lockError.textContent = 'เข้าสู่ระบบไม่สำเร็จ: ' + error.message; lockError.classList.remove('hide'); return; }
+  lockError.classList.add('hide');
+  showDash();
+});
+lockPw.addEventListener('keydown', e=>{ if(e.key==='Enter') lockSubmit.click(); });
+logoutBtn.addEventListener('click', async ()=>{ await sb.auth.signOut(); showLock(); });
+
+changePwBtn.addEventListener('click', async ()=>{
+  if (!newPw.value.trim() || newPw.value.trim().length < 6){ alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
+  const { error } = await sb.auth.updateUser({ password: newPw.value.trim() });
+  if (error){ alert('เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + error.message); return; }
+  alert('เปลี่ยนรหัสผ่านแล้ว'); newPw.value = '';
+});
+
+async function loadConfig(){
+  const { data: cfg, error } = await sb.from('config').select('*').eq('id', 1).single();
+  if (error){ alert('โหลดการตั้งค่าไม่สำเร็จ: ' + error.message); return; }
+  cfgShopName.value = cfg.shop_name || ''; cfgTagline.value = cfg.tagline || '';
+  cfgLine.value = cfg.line_url || ''; cfgFb.value = cfg.fb_url || ''; cfgIg.value = cfg.ig_url || '';
+  cfgHeroSub.value = cfg.hero_sub || '';
+}
+saveConfig.addEventListener('click', async ()=>{
+  const { error } = await sb.from('config').update({
+    shop_name: cfgShopName.value, tagline: cfgTagline.value, line_url: cfgLine.value,
+    fb_url: cfgFb.value, ig_url: cfgIg.value, hero_sub: cfgHeroSub.value
+  }).eq('id', 1);
+  if (error){ alert('บันทึกไม่สำเร็จ: ' + error.message); return; }
+  alert('บันทึกการตั้งค่าแล้ว');
+});
+
+async function loadItems(){
+  const { data, error } = await sb.from('items').select('*').order('created_at', { ascending: false });
+  if (error){ itemManageList.innerHTML = '<p class="text-red-600 text-sm">โหลดไม่สำเร็จ</p>'; return; }
+  items = data || [];
+  renderManageList();
+}
+
+function renderManageList(){
+  if (!items.length){ itemManageList.innerHTML = '<p class="text-sm text-stone-400">ยังไม่มีสินค้าในระบบ</p>'; return; }
+  itemManageList.innerHTML = items.map(i => `
+    <div class="flex items-center justify-between py-3 border-b border-stone-100 gap-3 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-lg overflow-hidden bg-stone-100 flex-shrink-0">${i.images && i.images[0] ? `<img src="${esc(i.images[0])}" class="w-full h-full object-cover">` : ''}</div>
+        <div>
+          <p class="text-sm">${esc(i.brand)} — ${esc(i.title)} ${i.sold ? '<span class="text-red-600 text-xs">(ขายแล้ว)</span>' : ''} ${i.single_stock && !i.sold ? '<span class="text-red-600 text-xs">(เหลือชิ้นเดียว)</span>' : ''}</p>
+          <p class="text-xs text-stone-500">${CONDITION_LABEL[i.condition_score]} • ฿${fmt(i.price)}</p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button data-edit="${i.id}" class="text-xs border border-stone-300 rounded-full px-3 py-1.5 text-stone-600">แก้ไข</button>
+        <button data-del="${i.id}" class="text-xs border border-stone-300 rounded-full px-3 py-1.5 text-stone-600">ลบ</button>
+      </div>
+    </div>
+  `).join('');
+  itemManageList.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => loadItemToForm(Number(b.getAttribute('data-edit')))));
+  itemManageList.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
+    if (!confirm('ลบสินค้านี้?')) return;
+    const { error } = await sb.from('items').delete().eq('id', Number(b.getAttribute('data-del')));
+    if (error){ alert('ลบไม่สำเร็จ: ' + error.message); return; }
+    await loadItems();
+  }));
+}
+
+function renderImagePreviews(){
+  fImagePreviews.innerHTML = currentImages.map((url, idx) => `
+    <div class="relative w-16 h-16">
+      <img src="${esc(url)}" class="w-full h-full object-cover rounded-lg">
+      <button data-rm-img="${idx}" class="absolute -top-1.5 -right-1.5 bg-stone-900 text-white rounded-full w-5 h-5 text-xs">×</button>
+      ${idx===0 ? '<span class="absolute bottom-0.5 left-0.5 bg-orange-700 text-white text-[9px] px-1 rounded">หลัก</span>' : ''}
+    </div>
+  `).join('') + pendingFiles.map((f, idx) => `
+    <div class="relative w-16 h-16">
+      <img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover rounded-lg opacity-70">
+      <button data-rm-pending="${idx}" class="absolute -top-1.5 -right-1.5 bg-stone-900 text-white rounded-full w-5 h-5 text-xs">×</button>
+      <span class="absolute bottom-0.5 left-0.5 bg-stone-600 text-white text-[9px] px-1 rounded">ใหม่</span>
+    </div>
+  `).join('');
+  fImagePreviews.querySelectorAll('[data-rm-img]').forEach(b => b.addEventListener('click', () => { currentImages.splice(Number(b.getAttribute('data-rm-img')),1); renderImagePreviews(); }));
+  fImagePreviews.querySelectorAll('[data-rm-pending]').forEach(b => b.addEventListener('click', () => { pendingFiles.splice(Number(b.getAttribute('data-rm-pending')),1); renderImagePreviews(); }));
+}
+fImages.addEventListener('change', () => { pendingFiles.push(...Array.from(fImages.files)); fImages.value=''; renderImagePreviews(); });
+
+function renderDefects(){
+  defectsList.innerHTML = defects.map((d, i) => `
+    <div class="flex gap-2 items-center">
+      <input data-defect-note="${i}" value="${esc(d.note)}" placeholder="อธิบายจุดตำหนิ" class="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm">
+      <input type="file" accept="image/*" data-defect-file="${i}" class="text-xs w-28">
+      ${d.image || d.pendingFile ? '<span class="text-xs text-emerald-600">มีรูป</span>' : ''}
+      <button data-defect-rm="${i}" class="text-stone-400 hover:text-red-600">✕</button>
+    </div>
+  `).join('');
+  defectsList.querySelectorAll('[data-defect-note]').forEach(inp => inp.addEventListener('input', e => { defects[Number(inp.getAttribute('data-defect-note'))].note = e.target.value; }));
+  defectsList.querySelectorAll('[data-defect-file]').forEach(inp => inp.addEventListener('change', e => { defects[Number(inp.getAttribute('data-defect-file'))].pendingFile = e.target.files[0]; renderDefects(); }));
+  defectsList.querySelectorAll('[data-defect-rm]').forEach(btn => btn.addEventListener('click', () => { defects.splice(Number(btn.getAttribute('data-defect-rm')),1); renderDefects(); }));
+}
+addDefectBtn.addEventListener('click', () => { defects.push({ note:'', image:null, pendingFile:null }); renderDefects(); });
+
+function loadItemToForm(id){
+  const p = items.find(i => i.id === id);
+  if (!p) return;
+  formTitle.textContent = 'แก้ไขสินค้า #' + p.id;
+  editId.value = p.id;
+  fTitle.value = p.title; fBrand.value = p.brand; fCategory.value = p.category;
+  fEra.value = p.era; fSize.value = p.size_label; fScore.value = p.condition_score;
+  fSingleStock.checked = !!p.single_stock; fSold.checked = !!p.sold;
+  fPrice.value = p.price; fOldPrice.value = p.old_price || '';
+  const m = p.measurements || {};
+  mChest.value = m['อก'] || ''; mLength.value = m['ยาว'] || ''; mShoulder.value = m['ไหล่'] || ''; mSleeve.value = m['แขน'] || '';
+  currentImages = [...(p.images || [])]; pendingFiles = [];
+  defects = (p.defects || []).map(d => ({ note: d.note || '', image: d.image || null, pendingFile: null }));
+  renderImagePreviews(); renderDefects();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function clearFormFields(){
+  formTitle.textContent = 'เพิ่มสินค้าใหม่';
+  editId.value=''; fTitle.value=''; fBrand.value=''; fCategory.value=''; fEra.value='90s'; fSize.value='M'; fScore.value='7';
+  fSingleStock.checked = true; fSold.checked = false; fPrice.value=''; fOldPrice.value='';
+  mChest.value=''; mLength.value=''; mShoulder.value=''; mSleeve.value='';
+  currentImages = []; pendingFiles = []; defects = [];
+  renderImagePreviews(); renderDefects();
+}
+clearForm.addEventListener('click', clearFormFields);
+
+async function uploadFile(file){
+  const fileName = `${Date.now()}-${Math.round(Math.random()*1e9)}.${file.name.split('.').pop()}`;
+  const { error } = await sb.storage.from('item-photos').upload(fileName, file, { upsert: false });
+  if (error) throw error;
+  const { data } = sb.storage.from('item-photos').getPublicUrl(fileName);
+  return data.publicUrl;
+}
+
+saveItem.addEventListener('click', async ()=>{
+  if (!fTitle.value.trim() || !fBrand.value.trim() || !fPrice.value){
+    alert('กรุณากรอกชื่อสินค้า, แบรนด์ และราคาให้ครบ'); return;
+  }
+  saveItem.disabled = true; saveItem.textContent = 'กำลังบันทึก...';
+  try{
+    for (const file of pendingFiles){
+      const url = await uploadFile(file);
+      currentImages.push(url);
+    }
+    pendingFiles = [];
+
+    for (const d of defects){
+      if (d.pendingFile){ d.image = await uploadFile(d.pendingFile); d.pendingFile = null; }
+    }
+
+    const data = {
+      title: fTitle.value.trim(), brand: fBrand.value.trim(), category: fCategory.value.trim(),
+      era: fEra.value, size_label: fSize.value, condition_score: Number(fScore.value),
+      price: Number(fPrice.value), old_price: fOldPrice.value ? Number(fOldPrice.value) : null,
+      single_stock: fSingleStock.checked, sold: fSold.checked,
+      images: currentImages,
+      measurements: { 'อก': mChest.value, 'ยาว': mLength.value, 'ไหล่': mShoulder.value, 'แขน': mSleeve.value },
+      defects: defects.map(d => ({ note: d.note, image: d.image }))
+    };
+
+    const { error } = editId.value
+      ? await sb.from('items').update(data).eq('id', Number(editId.value))
+      : await sb.from('items').insert(data);
+    if (error){ alert('บันทึกไม่สำเร็จ: ' + error.message); return; }
+
+    clearFormFields();
+    await loadItems();
+  } catch (err){
+    alert('อัปโหลดรูปไม่สำเร็จ: ' + err.message);
+  } finally {
+    saveItem.disabled = false; saveItem.textContent = 'บันทึกสินค้า';
+  }
+});
+
+clearFormFields();
+checkLogin();
+</script>
+</body>
+</html>
