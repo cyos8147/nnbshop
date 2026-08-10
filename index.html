@@ -4,286 +4,2103 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NNBShop — เสื้อผ้าวินเทจมือสอง</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Prompt:wght@500;600;700;800&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-  body{ font-family:'IBM Plex Sans Thai', sans-serif; }
-  .font-display{ font-family:'Prompt', sans-serif; }
+
+:root{
+  --cream:#f4efe6;
+  --paper:#fffdf8;
+  --ink:#29251f;
+  --brown:#3b3027;
+  --brown2:#59483a;
+  --rust:#a94f2d;
+  --rust-dark:#873c22;
+  --olive:#667052;
+  --line:#ded5c7;
+  --muted:#8b8174;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'IBM Plex Sans Thai',sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(150,120,80,.06), transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(150,100,50,.05), transparent 30%),
+    var(--cream);
+  color:var(--ink);
+}
+
+/* =========================================
+   PAPER / VINTAGE TEXTURE
+========================================= */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  opacity:.12;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.35'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+
+.font-display{
+  font-family:'Prompt',sans-serif;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+header{
+  background:rgba(244,239,230,.95)!important;
+  border-color:var(--line)!important;
+  box-shadow:0 2px 15px rgba(50,40,30,.05);
+}
+
+#shopName{
+  color:var(--brown);
+  letter-spacing:-.04em;
+  position:relative;
+}
+
+#shopName::after{
+  content:"THRIFT / VINTAGE";
+  display:block;
+  font-family:'IBM Plex Sans Thai',sans-serif;
+  font-size:7px;
+  letter-spacing:.22em;
+  color:var(--rust);
+  line-height:1;
+  margin-top:1px;
+  font-weight:700;
+}
+
+#searchInput,
+#searchInputMobile{
+  background:#fffdf8!important;
+  border-color:#d8cfc1!important;
+  color:var(--ink);
+}
+
+#searchInput::placeholder,
+#searchInputMobile::placeholder{
+  color:#aaa092;
+}
+
+#searchInput:focus,
+#searchInputMobile:focus{
+  border-color:var(--rust)!important;
+  box-shadow:0 0 0 3px rgba(169,79,45,.08);
+}
+
+#navContact{
+  background:var(--brown)!important;
+  border-radius:5px!important;
+  box-shadow:3px 3px 0 var(--rust);
+  transition:.2s ease;
+}
+
+#navContact:hover{
+  background:var(--rust)!important;
+  transform:translate(-1px,-1px);
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+#storeView main > section:first-child{
+  min-height:550px;
+  display:flex;
+  align-items:center;
+  background:
+    linear-gradient(rgba(43,35,29,.87),rgba(43,35,29,.94)),
+    radial-gradient(circle at 15% 20%,#a94f2d,transparent 35%),
+    radial-gradient(circle at 80% 80%,#74774e,transparent 35%),
+    #302821;
+}
+
+#storeView main > section:first-child .absolute:first-child{
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.015) 0px,
+      rgba(255,255,255,.015) 1px,
+      transparent 1px,
+      transparent 4px
+    )!important;
+}
+
+#storeView main > section:first-child .relative{
+  position:relative;
+}
+
+#storeView main > section:first-child .relative::before{
+  content:"EST. 2024";
+  position:absolute;
+  top:-38px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#d8b98d;
+  font-size:10px;
+  letter-spacing:.35em;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+#tagline{
+  color:#d9a46e!important;
+  letter-spacing:.35em!important;
+}
+
+#heroTitle{
+  font-family:'DM Serif Display',serif!important;
+  font-weight:400!important;
+  letter-spacing:-.02em;
+  text-shadow:2px 3px 0 rgba(0,0,0,.18);
+}
+
+#heroTitle .text-orange-400{
+  color:#d17a4d!important;
+}
+
+#heroSub{
+  color:#c8bfb2!important;
+  line-height:1.9;
+}
+
+#storeView main > section:first-child .flex.justify-center{
+  border-top:1px solid rgba(255,255,255,.12);
+  border-bottom:1px solid rgba(255,255,255,.12);
+  padding:18px 0;
+  max-width:430px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#statTotal,
+#statAvailable,
+#statSold{
+  color:#f5eadb!important;
+}
+
+#storeView main > section:first-child a[href="#products"]{
+  background:var(--rust)!important;
+  border-radius:4px!important;
+  box-shadow:4px 4px 0 #5e2c1d;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  transition:.2s ease;
+}
+
+#storeView main > section:first-child a[href="#products"]:hover{
+  background:#bd6039!important;
+  transform:translateY(-2px);
+}
+
+/* =========================================
+   PRODUCT SECTION
+========================================= */
+
+#products{
+  position:relative;
+}
+
+#products h2{
+  font-family:'DM Serif Display',serif!important;
+  font-size:30px;
+  font-weight:400;
+  color:var(--brown);
+}
+
+#products h2::before{
+  content:"NEW ARRIVALS";
+  display:block;
+  font-family:'IBM Plex Sans Thai',sans-serif;
+  font-size:9px;
+  letter-spacing:.25em;
+  color:var(--rust);
+  font-weight:700;
+  margin-bottom:3px;
+}
+
+#products .text-stone-500{
+  color:#8c8173!important;
+}
+
+#sortSelect{
+  background:#fffdf8!important;
+  border-color:var(--line)!important;
+  color:var(--brown);
+}
+
+/* =========================================
+   CATEGORY FILTER
+========================================= */
+
+.cat-chip{
+  transition:.2s ease;
+  border-radius:4px!important;
+  font-size:12px!important;
+  letter-spacing:.03em;
+}
+
+.cat-chip:not(.bg-stone-900){
+  background:#eee8dd!important;
+  border-color:#d8cdbd!important;
+  color:#65594c!important;
+}
+
+.cat-chip.bg-stone-900{
+  background:var(--brown)!important;
+  color:white!important;
+  box-shadow:3px 3px 0 var(--rust);
+}
+
+.cat-chip:hover{
+  transform:translateY(-1px);
+}
+
+.chip{
+  border-radius:3px!important;
+}
+
+.chip:hover{
+  border-color:#bcae9c!important;
+}
+
+/* =========================================
+   PRODUCT GRID
+========================================= */
+
+#cardGrid{
+  position:relative;
+}
+
+/* =========================================
+   PRODUCT CARD
+========================================= */
+
+.card-btn{
+  background:#fffdf8!important;
+  border:1px solid #ded5c7!important;
+  border-radius:4px!important;
+
+  box-shadow:
+    0 2px 5px rgba(50,40,30,.05),
+    0 8px 20px rgba(50,40,30,.04)!important;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease!important;
+}
+
+.card-btn:hover{
+  transform:translateY(-5px) rotate(-.25deg);
+
+  border-color:#c8b9a5!important;
+
+  box-shadow:
+    0 12px 30px rgba(50,40,30,.13)!important;
+}
+
+.card-btn > div:first-child{
+  background:#e7dfd3!important;
+}
+
+.card-btn img{
+  filter:saturate(.86) contrast(1.02);
+  transition:
+    transform .5s ease,
+    filter .5s ease!important;
+}
+
+.card-btn:hover img{
+  filter:saturate(1) contrast(1.05);
+}
+
+.card-btn .p-4{
+  position:relative;
+}
+
+.card-btn .p-4::before{
+  content:"";
+  position:absolute;
+  top:12px;
+  right:14px;
+  width:25px;
+  height:1px;
+  background:#d3c6b5;
+}
+
+.card-btn .text-stone-500{
+  color:#9a8d7e!important;
+  font-size:9px!important;
+  letter-spacing:.14em!important;
+}
+
+.card-btn h3{
+  color:#302a24;
+  font-size:14px!important;
+}
+
+.card-btn .text-lg{
+  color:var(--rust)!important;
+}
+
+/* =========================================
+   CONDITION BADGES
+========================================= */
+
+.card-btn .bg-emerald-700{
+  background:#59684d!important;
+}
+
+.card-btn .bg-amber-700{
+  background:#94733f!important;
+}
+
+.card-btn .bg-orange-800{
+  background:#9b4d31!important;
+}
+
+/* =========================================
+   SOLD
+========================================= */
+
+.card-btn .absolute.inset-0.bg-black\/50{
+  background:rgba(38,31,26,.70)!important;
+}
+
+.card-btn .absolute.inset-0.bg-black\/50 span{
+  border:1px solid rgba(255,255,255,.6);
+  padding:9px 22px;
+  letter-spacing:.16em;
+  transform:rotate(-7deg);
+  font-size:13px;
+}
+
+/* =========================================
+   SINGLE STOCK
+========================================= */
+
+.card-btn .bg-red-700{
+  background:var(--rust)!important;
+  border-radius:2px!important;
+  box-shadow:2px 2px 0 rgba(0,0,0,.18);
+}
+
+/* =========================================
+   DETAIL PAGE
+========================================= */
+
+#detailView{
+  min-height:70vh;
+}
+
+#detailView #backBtn{
+  color:#766a5d!important;
+  transition:.2s;
+}
+
+#detailView #backBtn:hover{
+  color:var(--rust)!important;
+}
+
+#detailView h1{
+  font-family:'DM Serif Display',serif!important;
+  font-size:36px;
+  font-weight:400;
+  color:var(--brown);
+}
+
+#detailView .aspect-\[3\/4\]{
+  border-radius:4px!important;
+  box-shadow:0 12px 35px rgba(50,40,30,.12);
+}
+
+#detailView .text-3xl{
+  color:var(--rust);
+}
+
+#detailView .bg-stone-900{
+  background:var(--brown)!important;
+  border-radius:4px!important;
+}
+
+#detailView .bg-stone-900:hover{
+  background:var(--rust)!important;
+}
+
+#detailView .border-orange-200{
+  border-color:#dfc4a8!important;
+  background:#f6eadc!important;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer{
+  background:#2d2722!important;
+  margin-top:30px;
+}
+
+footer .absolute:first-child{
+  background:
+    linear-gradient(135deg,#2e2823,#1f1b18)!important;
+}
+
+#footShopName{
+  font-family:'DM Serif Display',serif!important;
+  font-weight:400!important;
+  font-size:28px!important;
+}
+
+#footLinks a{
+  background:#3b332c!important;
+  border:1px solid #55483d;
+  transition:.2s;
+}
+
+#footLinks a:hover{
+  background:var(--rust)!important;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:640px){
+
+  #shopName{
+    font-size:20px!important;
+  }
+
+  #storeView main > section:first-child{
+    min-height:500px;
+  }
+
+  #storeView main > section:first-child .relative::before{
+    top:-25px;
+  }
+
+  #heroTitle{
+    font-size:35px!important;
+    line-height:1.18!important;
+  }
+
+  #heroSub{
+    font-size:13px!important;
+    line-height:1.8;
+  }
+
+  #products{
+    padding-top:35px!important;
+  }
+
+  #products h2{
+    font-size:27px!important;
+  }
+
+  #cardGrid{
+    gap:12px!important;
+  }
+
+  .card-btn .p-4{
+    padding:12px!important;
+  }
+
+  .card-btn h3{
+    font-size:12px!important;
+  }
+
+  .card-btn .text-lg{
+    font-size:16px!important;
+  }
+
+  .card-btn .absolute.bottom-3{
+    left:8px!important;
+    bottom:8px!important;
+    padding:4px 8px!important;
+    font-size:9px!important;
+  }
+
+  #detailView h1{
+    font-size:30px!important;
+  }
+}
+
 </style>
 </head>
-<body class="bg-stone-50 text-stone-900">
+
+<body>
 
 <header class="sticky top-0 z-40 bg-stone-50/95 backdrop-blur border-b border-stone-200">
+
   <div class="max-w-7xl mx-auto px-4 lg:px-8 h-16 lg:h-20 flex items-center gap-4">
-    <span id="shopName" class="text-xl lg:text-2xl font-extrabold tracking-tight font-display flex-shrink-0">…</span>
+
+    <span
+      id="shopName"
+      class="text-xl lg:text-2xl font-extrabold tracking-tight font-display flex-shrink-0">
+      …
+    </span>
+
     <div class="hidden md:flex flex-1 max-w-xl mx-auto relative">
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
-      <input id="searchInput" type="search" placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
-        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600">
+
+      <svg
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+      </svg>
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
+        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none">
     </div>
-    <a id="navContact" target="_blank" class="hidden sm:flex ml-auto items-center gap-1.5 bg-orange-700 hover:bg-orange-600 text-white rounded-full px-4 py-2 text-sm font-bold font-display transition-colors">
+
+    <a
+      id="navContact"
+      target="_blank"
+      class="hidden sm:flex ml-auto items-center gap-1.5 text-white rounded-full px-4 py-2 text-sm font-bold font-display transition-colors">
       แชทสั่งซื้อ
     </a>
+
   </div>
+
   <div class="md:hidden px-4 pb-3">
+
     <div class="relative">
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
-      <input id="searchInputMobile" type="search" placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
-        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-600">
+
+      <svg
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+      </svg>
+
+      <input
+        id="searchInputMobile"
+        type="search"
+        placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
+        class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none">
+
     </div>
+
   </div>
+
 </header>
 
+
+<!-- =========================================
+     STORE
+========================================= -->
+
 <div id="storeView">
+
 <main>
 
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950"></div>
-    <div class="absolute inset-0 opacity-60" style="background-image: radial-gradient(circle at 15% 20%, rgba(194,101,61,0.4), transparent 50%), radial-gradient(circle at 85% 80%, rgba(168,130,58,0.3), transparent 55%);"></div>
-    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-16 lg:py-24 text-center">
-      <p id="tagline" class="text-orange-400 text-xs lg:text-sm font-bold uppercase tracking-[0.2em] mb-4 font-display"></p>
-      <h1 id="heroTitle" class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight font-display max-w-3xl mx-auto"></h1>
-      <p id="heroSub" class="text-stone-300 mt-5 max-w-lg mx-auto text-sm lg:text-base"></p>
-      <div class="flex justify-center gap-10 mt-10">
-        <div><div id="statTotal" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">สินค้าทั้งหมด</div></div>
-        <div><div id="statAvailable" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">พร้อมขาย</div></div>
-        <div><div id="statSold" class="text-white text-2xl font-extrabold font-display">–</div><div class="text-stone-400 text-xs mt-1">ขายแล้ว</div></div>
-      </div>
-      <a href="#products" class="inline-block mt-10 bg-orange-700 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-full font-display transition-colors">ช้อปเลย</a>
-    </div>
-  </section>
+<!-- HERO -->
 
-  <section id="products" class="max-w-7xl mx-auto px-4 lg:px-8 py-10 lg:py-14">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+<section class="relative overflow-hidden">
+
+  <div class="absolute inset-0 bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950"></div>
+
+  <div
+    class="absolute inset-0 opacity-60"
+    style="
+      background-image:
+      radial-gradient(circle at 15% 20%, rgba(194,101,61,0.4), transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(168,130,58,0.3), transparent 55%);
+    ">
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-20 lg:py-28 text-center">
+
+    <p
+      id="tagline"
+      class="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] mb-4 font-display">
+    </p>
+
+    <h1
+      id="heroTitle"
+      class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight font-display max-w-3xl mx-auto">
+    </h1>
+
+    <p
+      id="heroSub"
+      class="text-stone-300 mt-5 max-w-lg mx-auto text-sm lg:text-base">
+    </p>
+
+    <!-- STATS -->
+
+    <div class="flex justify-center gap-8 sm:gap-10 mt-10">
+
       <div>
-        <h2 class="text-xl lg:text-2xl font-bold font-display">สินค้าล่าสุด (<span id="countLabel">0</span>)</h2>
-        <p class="text-stone-500 text-sm mt-1">คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น</p>
+        <div
+          id="statTotal"
+          class="text-white text-2xl font-extrabold font-display">
+          –
+        </div>
+
+        <div class="text-stone-400 text-xs mt-1">
+          สินค้าทั้งหมด
+        </div>
       </div>
-      <label class="flex items-center gap-2 text-sm">
-        <span class="text-stone-500">เรียงตาม</span>
-        <select id="sortSelect" class="border border-stone-300 rounded-full pl-4 pr-8 py-2 text-sm font-medium focus:outline-none focus:border-orange-600 bg-white">
-          <option value="new">สินค้ามาใหม่</option>
-          <option value="low">ราคา: น้อย → มาก</option>
-          <option value="high">ราคา: มาก → น้อย</option>
-        </select>
-      </label>
+
+      <div>
+        <div
+          id="statAvailable"
+          class="text-white text-2xl font-extrabold font-display">
+          –
+        </div>
+
+        <div class="text-stone-400 text-xs mt-1">
+          พร้อมขาย
+        </div>
+      </div>
+
+      <div>
+        <div
+          id="statSold"
+          class="text-white text-2xl font-extrabold font-display">
+          –
+        </div>
+
+        <div class="text-stone-400 text-xs mt-1">
+          ขายแล้ว
+        </div>
+      </div>
+
     </div>
 
-    <div id="categoryChips" class="flex flex-wrap gap-2 mb-4"></div>
-    <div id="filterGroups" class="flex flex-wrap gap-2 mb-8"></div>
+    <a
+      href="#products"
+      class="inline-block mt-10 text-white font-bold px-8 py-4 font-display transition-colors">
+      ดูเสื้อผ้าทั้งหมด →
+    </a>
 
-    <div id="cardGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
-      <p class="text-stone-400 col-span-full py-10 text-center">กำลังโหลด...</p>
+  </div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section
+  id="products"
+  class="max-w-7xl mx-auto px-4 lg:px-8 py-10 lg:py-14">
+
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+
+    <div>
+
+      <h2 class="font-bold font-display">
+        สินค้าล่าสุด (<span id="countLabel">0</span>)
+      </h2>
+
+      <p class="text-stone-500 text-sm mt-1">
+        คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น
+      </p>
+
     </div>
-  </section>
+
+    <label class="flex items-center gap-2 text-sm">
+
+      <span class="text-stone-500">
+        เรียงตาม
+      </span>
+
+      <select
+        id="sortSelect"
+        class="border border-stone-300 rounded-full pl-4 pr-8 py-2 text-sm font-medium focus:outline-none bg-white">
+
+        <option value="new">
+          สินค้ามาใหม่
+        </option>
+
+        <option value="low">
+          ราคา: น้อย → มาก
+        </option>
+
+        <option value="high">
+          ราคา: มาก → น้อย
+        </option>
+
+      </select>
+
+    </label>
+
+  </div>
+
+
+  <!-- CATEGORY -->
+
+  <div
+    id="categoryChips"
+    class="flex flex-wrap gap-2 mb-4">
+  </div>
+
+
+  <!-- FILTER -->
+
+  <div
+    id="filterGroups"
+    class="flex flex-wrap gap-2 mb-8">
+  </div>
+
+
+  <!-- GRID -->
+
+  <div
+    id="cardGrid"
+    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
+
+    <p class="text-stone-400 col-span-full py-10 text-center">
+      กำลังโหลด...
+    </p>
+
+  </div>
+
+</section>
 
 </main>
+
 </div>
 
-<div id="detailView" class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-8"></div>
+
+<!-- =========================================
+     DETAIL
+========================================= -->
+
+<div
+  id="detailView"
+  class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-8">
+</div>
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
 
 <footer class="relative overflow-hidden text-stone-300">
-  <div class="absolute inset-0 bg-gradient-to-br from-stone-900 via-stone-900 to-stone-950"></div>
-  <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(circle at 80% 20%, rgba(194,101,61,0.3), transparent 50%), radial-gradient(circle at 20% 80%, rgba(168,130,58,0.25), transparent 55%);"></div>
-  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
-      <p id="footShopName" class="text-white text-lg font-extrabold font-display"></p>
-      <div id="footLinks" class="flex gap-3"></div>
-    </div>
+
+  <div
+    class="absolute inset-0 bg-gradient-to-br from-stone-900 via-stone-900 to-stone-950">
   </div>
+
+  <div
+    class="absolute inset-0 opacity-50"
+    style="
+      background-image:
+      radial-gradient(circle at 80% 20%, rgba(194,101,61,0.3), transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(168,130,58,0.25), transparent 55%);
+    ">
+  </div>
+
+  <div
+    class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
+
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-6">
+
+      <div class="text-center sm:text-left">
+
+        <p
+          id="footShopName"
+          class="text-white text-lg font-extrabold font-display">
+        </p>
+
+        <p class="text-stone-500 text-xs mt-2 tracking-widest">
+          THRIFT • VINTAGE • SECOND HAND
+        </p>
+
+      </div>
+
+      <div
+        id="footLinks"
+        class="flex gap-3">
+      </div>
+
+    </div>
+
+  </div>
+
 </footer>
 
+
 <script src="/config.js"></script>
+
 <script>
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const sb = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+/* =========================================
+   CONDITION
+========================================= */
 
 const CONDITION = {
-  9: { label: "9/10 — เกือบใหม่", cls: "bg-emerald-700" },
-  7: { label: "7/10 — สภาพดี", cls: "bg-amber-700" },
-  5: { label: "5/10 — มีตำหนิเล็กน้อย", cls: "bg-orange-800" },
+
+  9:{
+    label:"9/10 — เกือบใหม่",
+    cls:"bg-emerald-700"
+  },
+
+  7:{
+    label:"7/10 — สภาพดี",
+    cls:"bg-amber-700"
+  },
+
+  5:{
+    label:"5/10 — มีตำหนิเล็กน้อย",
+    cls:"bg-orange-800"
+  }
+
 };
 
-function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function escAttr(s){ return esc(s).replace(/`/g, '&#96;'); }
-function fmt(n){ return Number(n).toLocaleString('th-TH'); }
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function esc(s){
+
+  return String(s ?? '').replace(
+    /[&<>"']/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c])
+  );
+
+}
+
+
+function escAttr(s){
+
+  return esc(s).replace(
+    /`/g,
+    '&#96;'
+  );
+
+}
+
+
+function fmt(n){
+
+  return Number(n).toLocaleString('th-TH');
+
+}
+
+
+/* =========================================
+   STATE
+========================================= */
 
 let items = [];
+
 let cfg = {};
-let filters = { category: 'ทั้งหมด', brand: 'ทั้งหมด', size: 'ทั้งหมด', score: null, search: '', sort: 'new' };
+
+let filters = {
+
+  category:'ทั้งหมด',
+
+  brand:'ทั้งหมด',
+
+  size:'ทั้งหมด',
+
+  score:null,
+
+  search:'',
+
+  sort:'new'
+
+};
+
+
+/* =========================================
+   LOAD
+========================================= */
 
 async function load(){
-  const { data: c, error: cErr } = await sb.from('config').select('*').eq('id', 1).single();
-  const { data: rows, error: iErr } = await sb.from('items').select('*').order('created_at', { ascending: false });
-  if (cErr || iErr){
-    cardGrid.innerHTML = '<p class="text-red-600 col-span-full">โหลดข้อมูลไม่สำเร็จ ตรวจสอบ config.js และ Supabase</p>';
+
+  const {
+    data:c,
+    error:cErr
+  } = await sb
+    .from('config')
+    .select('*')
+    .eq('id',1)
+    .single();
+
+
+  const {
+    data:rows,
+    error:iErr
+  } = await sb
+    .from('items')
+    .select('*')
+    .order(
+      'created_at',
+      {
+        ascending:false
+      }
+    );
+
+
+  if(cErr || iErr){
+
+    cardGrid.innerHTML = `
+      <p class="text-red-600 col-span-full text-center py-10">
+        โหลดข้อมูลไม่สำเร็จ ตรวจสอบ config.js และ Supabase
+      </p>
+    `;
+
     console.error(cErr || iErr);
+
     return;
+
   }
-  cfg = c; items = rows || [];
+
+
+  cfg = c;
+
+  items = rows || [];
+
+
+  /* SHOP INFO */
 
   shopName.textContent = cfg.shop_name;
+
   footShopName.textContent = cfg.shop_name;
+
   tagline.textContent = cfg.tagline;
-  heroTitle.innerHTML = `${esc(cfg.hero_title1)} <span class="text-orange-400">${esc(cfg.hero_title2)}</span><br class="hidden sm:block">${esc(cfg.hero_title3)}`;
+
+  heroTitle.innerHTML = `
+    ${esc(cfg.hero_title1)}
+    <span class="text-orange-400">
+      ${esc(cfg.hero_title2)}
+    </span>
+    <br class="hidden sm:block">
+    ${esc(cfg.hero_title3)}
+  `;
+
   heroSub.textContent = cfg.hero_sub;
 
-  if (cfg.ig_url){
+
+  /* INSTAGRAM */
+
+  if(cfg.ig_url){
+
     navContact.href = cfg.ig_url;
-  } else {
+
+  }else{
+
     navContact.classList.add('hidden');
+
   }
 
-  const igIcon = `<a href="${escAttr(cfg.ig_url)}" target="_blank" aria-label="Instagram" class="w-9 h-9 rounded-full bg-stone-800 hover:bg-orange-700 flex items-center justify-center transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.695.272.273 2.69.073 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.948C23.73 2.7 21.311.273 16.949.073 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>`;
-  const fbIcon = `<a href="${escAttr(cfg.fb_url)}" target="_blank" aria-label="Facebook" class="w-9 h-9 rounded-full bg-stone-800 hover:bg-orange-700 flex items-center justify-center transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>`;
-  footLinks.innerHTML = (cfg.ig_url ? igIcon : '') + (cfg.fb_url ? fbIcon : '');
+
+  /* =========================================
+     SOCIAL ICONS
+  ========================================= */
+
+  const igIcon = `
+
+    <a
+      href="${escAttr(cfg.ig_url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+
+      <svg
+        class="w-4 h-4"
+        fill="currentColor"
+        viewBox="0 0 24 24">
+
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.28-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.695.272.273 2.69.073 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.948C23.73 2.7 21.311.273 16.949.073 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+
+      </svg>
+
+    </a>
+
+  `;
+
+
+  const fbIcon = `
+
+    <a
+      href="${escAttr(cfg.fb_url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+
+      <svg
+        class="w-4 h-4"
+        fill="currentColor"
+        viewBox="0 0 24 24">
+
+        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+
+      </svg>
+
+    </a>
+
+  `;
+
+
+  footLinks.innerHTML =
+    (cfg.ig_url ? igIcon : '') +
+    (cfg.fb_url ? fbIcon : '');
+
+
+  /* =========================================
+     STATS
+  ========================================= */
 
   statTotal.textContent = items.length;
-  statAvailable.textContent = items.filter(l => !l.sold).length;
-  statSold.textContent = items.filter(l => l.sold).length;
+
+  statAvailable.textContent =
+    items.filter(l => !l.sold).length;
+
+  statSold.textContent =
+    items.filter(l => l.sold).length;
+
 
   renderCategoryChips();
+
   renderFilters();
+
   renderGrid();
+
 }
+
+
+/* =========================================
+   CATEGORY
+========================================= */
 
 function renderCategoryChips(){
-  const cats = ['ทั้งหมด', ...new Set(items.map(i=>i.category).filter(Boolean))];
-  categoryChips.innerHTML = cats.map(c =>
-    `<button data-cat="${escAttr(c)}" class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display ${filters.category===c ? 'bg-stone-900 text-white' : 'bg-white border border-stone-300 text-stone-600 hover:border-stone-500'}">${esc(c)}</button>`
-  ).join('');
-  categoryChips.querySelectorAll('.cat-chip').forEach(btn => btn.addEventListener('click', () => {
-    filters.category = btn.getAttribute('data-cat');
-    renderCategoryChips(); renderGrid();
-  }));
+
+  const cats = [
+    'ทั้งหมด',
+    ...new Set(
+      items
+        .map(i => i.category)
+        .filter(Boolean)
+    )
+  ];
+
+
+  categoryChips.innerHTML = cats.map(c => `
+
+    <button
+      data-cat="${escAttr(c)}"
+      class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display
+      ${
+        filters.category===c
+        ? 'bg-stone-900 text-white'
+        : 'bg-white border border-stone-300 text-stone-600'
+      }">
+
+      ${esc(c)}
+
+    </button>
+
+  `).join('');
+
+
+  categoryChips
+    .querySelectorAll('.cat-chip')
+    .forEach(btn => {
+
+      btn.addEventListener(
+        'click',
+        () => {
+
+          filters.category =
+            btn.getAttribute('data-cat');
+
+          renderCategoryChips();
+
+          renderGrid();
+
+        }
+      );
+
+    });
+
 }
+
+
+/* =========================================
+   FILTERS
+========================================= */
 
 function renderFilters(){
-  const brands = ['ทั้งหมด', ...new Set(items.map(i=>i.brand))];
-  const sizes = ['ทั้งหมด','S','M','L','XL'];
-  function group(title, options, key){
-    return `<div class="flex flex-wrap items-center gap-2 mr-4"><span class="text-xs text-stone-400 uppercase font-display font-semibold">${title}:</span>
-      ${options.map(o => `<button data-group="${key}" data-val="${escAttr(o)}" class="chip px-3 py-1 rounded-full text-xs font-medium border ${filters[key]===o?'bg-orange-700 text-white border-orange-700':'bg-white text-stone-600 border-stone-300'}">${esc(o)}</button>`).join('')}
-    </div>`;
+
+  const brands = [
+    'ทั้งหมด',
+    ...new Set(
+      items
+        .map(i=>i.brand)
+        .filter(Boolean)
+    )
+  ];
+
+
+  const sizes = [
+    'ทั้งหมด',
+    'S',
+    'M',
+    'L',
+    'XL'
+  ];
+
+
+  function group(
+    title,
+    options,
+    key
+  ){
+
+    return `
+
+      <div class="flex flex-wrap items-center gap-2 mr-4">
+
+        <span
+          class="text-xs text-stone-400 uppercase font-display font-semibold">
+
+          ${title}:
+
+        </span>
+
+        ${options.map(o => `
+
+          <button
+            data-group="${key}"
+            data-val="${escAttr(o)}"
+            class="chip px-3 py-1 rounded-full text-xs font-medium border
+            ${
+              filters[key]===o
+              ? 'bg-orange-700 text-white border-orange-700'
+              : 'bg-white text-stone-600 border-stone-300'
+            }">
+
+            ${esc(o)}
+
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
   }
+
+
   function scoreGroup(){
-    return `<div class="flex flex-wrap items-center gap-2"><span class="text-xs text-stone-400 uppercase font-display font-semibold">สภาพ:</span>
-      ${[9,7,5].map(s => `<button data-group="score" data-val="${s}" class="chip px-3 py-1 rounded-full text-xs font-medium border ${filters.score===s?'bg-orange-700 text-white border-orange-700':'bg-white text-stone-600 border-stone-300'}">${s}/10</button>`).join('')}
-    </div>`;
+
+    return `
+
+      <div class="flex flex-wrap items-center gap-2">
+
+        <span
+          class="text-xs text-stone-400 uppercase font-display font-semibold">
+
+          สภาพ:
+
+        </span>
+
+        ${[9,7,5].map(s => `
+
+          <button
+            data-group="score"
+            data-val="${s}"
+            class="chip px-3 py-1 rounded-full text-xs font-medium border
+            ${
+              filters.score===s
+              ? 'bg-orange-700 text-white border-orange-700'
+              : 'bg-white text-stone-600 border-stone-300'
+            }">
+
+            ${s}/10
+
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
   }
-  filterGroups.innerHTML = group('แบรนด์', brands, 'brand') + group('ไซส์', sizes, 'size') + scoreGroup();
-  filterGroups.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
-    const g = btn.getAttribute('data-group'); const v = btn.getAttribute('data-val');
-    if (g === 'score'){ const n = Number(v); filters.score = filters.score === n ? null : n; }
-    else filters[g] = v;
-    renderFilters(); renderGrid();
-  }));
+
+
+  filterGroups.innerHTML =
+    group('แบรนด์',brands,'brand') +
+    group('ไซส์',sizes,'size') +
+    scoreGroup();
+
+
+  filterGroups
+    .querySelectorAll('.chip')
+    .forEach(btn => {
+
+      btn.addEventListener(
+        'click',
+        () => {
+
+          const g =
+            btn.getAttribute('data-group');
+
+          const v =
+            btn.getAttribute('data-val');
+
+
+          if(g === 'score'){
+
+            const n = Number(v);
+
+            filters.score =
+              filters.score === n
+              ? null
+              : n;
+
+          }else{
+
+            filters[g] = v;
+
+          }
+
+
+          renderFilters();
+
+          renderGrid();
+
+        }
+      );
+
+    });
+
 }
+
+
+/* =========================================
+   GRID
+========================================= */
 
 function renderGrid(){
-  const q = filters.search.trim().toLowerCase();
+
+  const q =
+    filters.search
+      .trim()
+      .toLowerCase();
+
+
   let visible = items.filter(i =>
-    (filters.category==='ทั้งหมด' || i.category===filters.category) &&
-    (filters.brand==='ทั้งหมด' || i.brand===filters.brand) &&
-    (filters.size==='ทั้งหมด' || i.size_label===filters.size) &&
-    (!filters.score || i.condition_score===filters.score) &&
-    (!q || i.title.toLowerCase().includes(q) || i.brand.toLowerCase().includes(q))
+
+    (
+      filters.category === 'ทั้งหมด' ||
+      i.category === filters.category
+    )
+
+    &&
+
+    (
+      filters.brand === 'ทั้งหมด' ||
+      i.brand === filters.brand
+    )
+
+    &&
+
+    (
+      filters.size === 'ทั้งหมด' ||
+      i.size_label === filters.size
+    )
+
+    &&
+
+    (
+      !filters.score ||
+      i.condition_score === filters.score
+    )
+
+    &&
+
+    (
+      !q ||
+      String(i.title || '')
+        .toLowerCase()
+        .includes(q)
+
+      ||
+
+      String(i.brand || '')
+        .toLowerCase()
+        .includes(q)
+    )
+
   );
-  if (filters.sort === 'low') visible = [...visible].sort((a,b) => a.price - b.price);
-  if (filters.sort === 'high') visible = [...visible].sort((a,b) => b.price - a.price);
 
-  countLabel.textContent = visible.length;
-  cardGrid.innerHTML = visible.length ? visible.map(i => `
-    <button data-id="${i.id}" class="card-btn text-left group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow overflow-hidden border border-stone-100">
-      <div class="relative aspect-[3/4] bg-stone-200 overflow-hidden">
-        ${i.images && i.images[0] ? `<img src="${escAttr(i.images[0])}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="${escAttr(i.title)}">` : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-xs">ไม่มีรูป</div>`}
-        ${i.sold ? `<div class="absolute inset-0 bg-black/50 flex items-center justify-center"><span class="text-white text-sm font-bold font-display">ขายแล้ว</span></div>` : ''}
-        ${(!i.sold && i.single_stock) ? `<span class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">เหลือชิ้นเดียว</span>` : ''}
-        <span class="absolute bottom-3 left-3 ${CONDITION[i.condition_score].cls} text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">${CONDITION[i.condition_score].label}</span>
-      </div>
-      <div class="p-4">
-        <p class="text-[11px] text-stone-500 uppercase tracking-wider">${esc(i.brand)}</p>
-        <h3 class="font-semibold text-sm mt-0.5 leading-snug font-display">${esc(i.title)}</h3>
-        <div class="flex items-center gap-2 mt-2">
-          ${i.old_price ? `<span class="text-xs text-stone-400 line-through">฿${fmt(i.old_price)}</span>` : ''}
-          <span class="text-lg font-bold font-display">฿${fmt(i.price)}</span>
+
+  if(filters.sort === 'low'){
+
+    visible =
+      [...visible]
+      .sort(
+        (a,b) => a.price - b.price
+      );
+
+  }
+
+
+  if(filters.sort === 'high'){
+
+    visible =
+      [...visible]
+      .sort(
+        (a,b) => b.price - a.price
+      );
+
+  }
+
+
+  countLabel.textContent =
+    visible.length;
+
+
+  cardGrid.innerHTML =
+    visible.length
+
+    ?
+
+    visible.map(i => `
+
+      <button
+        data-id="${i.id}"
+        class="card-btn text-left group bg-white overflow-hidden">
+
+        <!-- IMAGE -->
+
+        <div
+          class="relative aspect-[3/4] bg-stone-200 overflow-hidden">
+
+          ${
+            i.images && i.images[0]
+
+            ?
+
+            `
+              <img
+                src="${escAttr(i.images[0])}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                alt="${escAttr(i.title)}">
+            `
+
+            :
+
+            `
+              <div
+                class="w-full h-full flex items-center justify-center text-stone-400 text-xs">
+
+                ไม่มีรูป
+
+              </div>
+            `
+          }
+
+
+          ${
+            i.sold
+
+            ?
+
+            `
+              <div
+                class="absolute inset-0 bg-black/50 flex items-center justify-center">
+
+                <span
+                  class="text-white text-sm font-bold font-display">
+
+                  SOLD OUT
+
+                </span>
+
+              </div>
+            `
+
+            :
+
+            ''
+          }
+
+
+          ${
+            (!i.sold && i.single_stock)
+
+            ?
+
+            `
+              <span
+                class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
+
+                เหลือชิ้นเดียว
+
+              </span>
+            `
+
+            :
+
+            ''
+          }
+
+
+          ${
+            CONDITION[i.condition_score]
+
+            ?
+
+            `
+              <span
+                class="absolute bottom-3 left-3
+                ${CONDITION[i.condition_score].cls}
+                text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
+
+                ${CONDITION[i.condition_score].label}
+
+              </span>
+            `
+
+            :
+
+            ''
+          }
+
         </div>
-      </div>
-    </button>
-  `).join('') : '<p class="text-stone-400 col-span-full py-10 text-center">ไม่พบสินค้าตามตัวกรองที่เลือก</p>';
 
-  cardGrid.querySelectorAll('.card-btn').forEach(btn => btn.addEventListener('click', () => showDetail(Number(btn.getAttribute('data-id')))));
+
+        <!-- INFO -->
+
+        <div class="p-4">
+
+          <p
+            class="text-[11px] text-stone-500 uppercase tracking-wider">
+
+            ${esc(i.brand)}
+
+          </p>
+
+
+          <h3
+            class="font-semibold text-sm mt-0.5 leading-snug font-display">
+
+            ${esc(i.title)}
+
+          </h3>
+
+
+          <div
+            class="flex items-center gap-2 mt-2">
+
+            ${
+              i.old_price
+
+              ?
+
+              `
+                <span
+                  class="text-xs text-stone-400 line-through">
+
+                  ฿${fmt(i.old_price)}
+
+                </span>
+              `
+
+              :
+
+              ''
+            }
+
+
+            <span
+              class="text-lg font-bold font-display">
+
+              ฿${fmt(i.price)}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </button>
+
+    `).join('')
+
+    :
+
+    `
+      <div
+        class="col-span-full py-16 text-center">
+
+        <div class="text-4xl mb-3">
+          🧥
+        </div>
+
+        <p class="text-stone-400 text-sm">
+          ไม่พบสินค้าตามตัวกรองที่เลือก
+        </p>
+
+      </div>
+    `;
+
+
+  cardGrid
+    .querySelectorAll('.card-btn')
+    .forEach(btn => {
+
+      btn.addEventListener(
+        'click',
+        () =>
+          showDetail(
+            Number(
+              btn.getAttribute('data-id')
+            )
+          )
+      );
+
+    });
+
 }
+
+
+/* =========================================
+   DETAIL
+========================================= */
 
 function showDetail(id){
-  const p = items.find(i => i.id === id);
-  if (!p) return;
-  storeView.classList.add('hidden');
-  detailView.classList.remove('hidden');
-  window.scrollTo({top:0});
 
-  const gallery = (p.images && p.images.length ? p.images : [null]);
-  detailView.innerHTML = `
-    <button id="backBtn" class="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 mb-6 font-medium">← กลับไปดูสินค้าทั้งหมด</button>
-    <div class="grid lg:grid-cols-2 gap-10">
-      <div>
-        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-stone-200 shadow-sm">
-          ${gallery[0] ? `<img src="${escAttr(gallery[0])}" class="w-full h-full object-cover" alt="${escAttr(p.title)}">` : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-sm">ไม่มีรูป</div>`}
-          ${(!p.sold && p.single_stock) ? `<span class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">เหลือชิ้นเดียว</span>` : ''}
-        </div>
-        ${gallery.length > 1 ? `<div class="flex gap-2 mt-3">${gallery.slice(1).map(g => `<img src="${escAttr(g)}" class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-stone-200">`).join('')}</div>` : ''}
-        ${p.defects && p.defects.length ? `
-          <div class="mt-6 border border-orange-200 bg-orange-50 rounded-2xl p-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">จุดตำหนิที่พบ (${p.defects.length})</p>
-            <div class="space-y-2">
-              ${p.defects.map(d => `
-                <div class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100">
-                  ${d.image ? `<img src="${escAttr(d.image)}" class="w-14 h-14 rounded object-cover flex-shrink-0">` : `<div class="w-14 h-14 rounded bg-stone-100 flex-shrink-0"></div>`}
-                  <p class="text-sm text-stone-700">${esc(d.note)}</p>
-                </div>
-              `).join('')}
-            </div>
-          </div>` : ''}
-      </div>
-      <div>
-        <p class="text-xs text-stone-500 uppercase tracking-wider">${esc(p.brand)} · ${esc(p.category)}</p>
-        <h1 class="text-2xl font-bold mt-1 font-display">${esc(p.title)}</h1>
-        <div class="mt-4"><span class="${CONDITION[p.condition_score].cls} text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">${CONDITION[p.condition_score].label}</span></div>
-        <div class="flex items-baseline gap-3 mt-5">
-          ${p.old_price ? `<span class="text-lg text-stone-400 line-through">฿${fmt(p.old_price)}</span>` : ''}
-          <span class="text-3xl font-bold font-display">฿${fmt(p.price)}</span>
-        </div>
-        ${p.sold
-          ? `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">สินค้านี้ขายแล้ว</div>`
-          : cfg.ig_url
-            ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">สั่งซื้อผ่าน Instagram</a>`
-            : `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">ยังไม่เปิดช่องทางสั่งซื้อ</div>`}
-        <div class="mt-8">
-          <p class="text-sm font-bold mb-3 font-display">ตารางขนาด (วัดจริง)</p>
-          <div class="border border-stone-200 rounded-2xl overflow-hidden">
-            ${Object.entries(p.measurements || {}).filter(([k,v]) => v).map(([k,v], idx) => `
-              <div class="flex justify-between px-4 py-2.5 text-sm ${idx%2===0?'bg-stone-50':'bg-white'}"><span class="text-stone-500">${esc(k)}</span><span class="font-medium">${esc(v)}</span></div>
-            `).join('') || '<p class="text-sm text-stone-400 p-4">ไม่มีข้อมูลขนาด</p>'}
-          </div>
-          <p class="text-xs text-stone-400 mt-2">ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก</p>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('backBtn').addEventListener('click', () => {
-    detailView.classList.add('hidden');
-    storeView.classList.remove('hidden');
-    window.scrollTo({top:0});
+  const p =
+    items.find(i => i.id === id);
+
+
+  if(!p) return;
+
+
+  storeView.classList.add('hidden');
+
+  detailView.classList.remove('hidden');
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
   });
+
+
+  const gallery =
+    (
+      p.images &&
+      p.images.length
+    )
+
+    ?
+
+    p.images
+
+    :
+
+    [null];
+
+
+  detailView.innerHTML = `
+
+    <button
+      id="backBtn"
+      class="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 mb-6 font-medium">
+
+      ← กลับไปดูสินค้าทั้งหมด
+
+    </button>
+
+
+    <div
+      class="grid lg:grid-cols-2 gap-10">
+
+
+      <!-- GALLERY -->
+
+      <div>
+
+        <div
+          class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-stone-200 shadow-sm">
+
+          ${
+            gallery[0]
+
+            ?
+
+            `
+              <img
+                src="${escAttr(gallery[0])}"
+                class="w-full h-full object-cover"
+                alt="${escAttr(p.title)}">
+            `
+
+            :
+
+            `
+              <div
+                class="w-full h-full flex items-center justify-center text-stone-400 text-sm">
+
+                ไม่มีรูป
+
+              </div>
+            `
+          }
+
+
+          ${
+            (!p.sold && p.single_stock)
+
+            ?
+
+            `
+              <span
+                class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
+
+                เหลือชิ้นเดียว
+
+              </span>
+            `
+
+            :
+
+            ''
+          }
+
+        </div>
+
+
+        ${
+          gallery.length > 1
+
+          ?
+
+          `
+            <div class="flex gap-2 mt-3">
+
+              ${gallery.slice(1).map(g => `
+
+                <img
+                  src="${escAttr(g)}"
+                  class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-stone-200">
+
+              `).join('')}
+
+            </div>
+          `
+
+          :
+
+          ''
+        }
+
+
+        ${
+          p.defects && p.defects.length
+
+          ?
+
+          `
+
+            <div
+              class="mt-6 border border-orange-200 bg-orange-50 rounded-2xl p-4">
+
+              <p
+                class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">
+
+                จุดตำหนิที่พบ (${p.defects.length})
+
+              </p>
+
+
+              <div class="space-y-2">
+
+                ${p.defects.map(d => `
+
+                  <div
+                    class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100">
+
+                    ${
+                      d.image
+
+                      ?
+
+                      `
+                        <img
+                          src="${escAttr(d.image)}"
+                          class="w-14 h-14 rounded object-cover flex-shrink-0">
+                      `
+
+                      :
+
+                      `
+                        <div
+                          class="w-14 h-14 rounded bg-stone-100 flex-shrink-0">
+                        </div>
+                      `
+                    }
+
+
+                    <p class="text-sm text-stone-700">
+
+                      ${esc(d.note)}
+
+                    </p>
+
+                  </div>
+
+                `).join('')}
+
+              </div>
+
+            </div>
+
+          `
+
+          :
+
+          ''
+        }
+
+      </div>
+
+
+      <!-- PRODUCT INFO -->
+
+      <div>
+
+        <p
+          class="text-xs text-stone-500 uppercase tracking-wider">
+
+          ${esc(p.brand)}
+          ·
+          ${esc(p.category)}
+
+        </p>
+
+
+        <h1
+          class="text-2xl font-bold mt-1 font-display">
+
+          ${esc(p.title)}
+
+        </h1>
+
+
+        ${
+          CONDITION[p.condition_score]
+
+          ?
+
+          `
+            <div class="mt-4">
+
+              <span
+                class="${CONDITION[p.condition_score].cls}
+                text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">
+
+                ${CONDITION[p.condition_score].label}
+
+              </span>
+
+            </div>
+          `
+
+          :
+
+          ''
+        }
+
+
+        <div
+          class="flex items-baseline gap-3 mt-5">
+
+          ${
+            p.old_price
+
+            ?
+
+            `
+              <span
+                class="text-lg text-stone-400 line-through">
+
+                ฿${fmt(p.old_price)}
+
+              </span>
+            `
+
+            :
+
+            ''
+          }
+
+
+          <span
+            class="text-3xl font-bold font-display">
+
+            ฿${fmt(p.price)}
+
+          </span>
+
+        </div>
+
+
+        ${
+          p.sold
+
+          ?
+
+          `
+            <div
+              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
+
+              สินค้านี้ขายแล้ว
+
+            </div>
+          `
+
+          :
+
+          cfg.ig_url
+
+          ?
+
+          `
+            <a
+              href="${escAttr(cfg.ig_url)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">
+
+              สั่งซื้อผ่าน Instagram
+
+            </a>
+          `
+
+          :
+
+          `
+            <div
+              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
+
+              ยังไม่เปิดช่องทางสั่งซื้อ
+
+            </div>
+          `
+        }
+
+
+        <!-- MEASUREMENTS -->
+
+        <div class="mt-8">
+
+          <p
+            class="text-sm font-bold mb-3 font-display">
+
+            ตารางขนาด (วัดจริง)
+
+          </p>
+
+
+          <div
+            class="border border-stone-200 rounded-2xl overflow-hidden">
+
+            ${
+              Object.entries(
+                p.measurements || {}
+              )
+              .filter(([k,v]) => v)
+              .map(
+                ([k,v],idx) => `
+
+                  <div
+                    class="flex justify-between px-4 py-2.5 text-sm
+                    ${
+                      idx%2===0
+                      ? 'bg-stone-50'
+                      : 'bg-white'
+                    }">
+
+                    <span class="text-stone-500">
+
+                      ${esc(k)}
+
+                    </span>
+
+                    <span class="font-medium">
+
+                      ${esc(v)}
+
+                    </span>
+
+                  </div>
+
+                `
+              )
+              .join('')
+
+              ||
+
+              `
+                <p class="text-sm text-stone-400 p-4">
+                  ไม่มีข้อมูลขนาด
+                </p>
+              `
+            }
+
+          </div>
+
+
+          <p
+            class="text-xs text-stone-400 mt-2">
+
+            ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById('backBtn')
+    .addEventListener(
+      'click',
+      () => {
+
+        detailView.classList.add('hidden');
+
+        storeView.classList.remove('hidden');
+
+        window.scrollTo({
+          top:0,
+          behavior:'smooth'
+        });
+
+      }
+    );
+
 }
 
-function syncSearch(v){ filters.search = v; searchInput.value = v; searchInputMobile.value = v; renderGrid(); }
-searchInput.addEventListener('input', (e) => syncSearch(e.target.value));
-searchInputMobile.addEventListener('input', (e) => syncSearch(e.target.value));
-sortSelect.addEventListener('change', (e) => { filters.sort = e.target.value; renderGrid(); });
+
+/* =========================================
+   SEARCH
+========================================= */
+
+function syncSearch(v){
+
+  filters.search = v;
+
+  searchInput.value = v;
+
+  searchInputMobile.value = v;
+
+  renderGrid();
+
+}
+
+
+searchInput.addEventListener(
+  'input',
+  e =>
+    syncSearch(
+      e.target.value
+    )
+);
+
+
+searchInputMobile.addEventListener(
+  'input',
+  e =>
+    syncSearch(
+      e.target.value
+    )
+);
+
+
+/* =========================================
+   SORT
+========================================= */
+
+sortSelect.addEventListener(
+  'change',
+  e => {
+
+    filters.sort =
+      e.target.value;
+
+    renderGrid();
+
+  }
+);
+
+
+/* =========================================
+   START
+========================================= */
 
 load();
+
 </script>
+
 </body>
 </html>
