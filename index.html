@@ -3,553 +3,509 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NNBShop — เสื้อผ้าวินเทจมือสอง</title>
 
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Prompt:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-:root{
-  --cream:#f4efe6;
-  --paper:#fffdf8;
-  --ink:#29251f;
-  --brown:#3b3027;
-  --brown2:#59483a;
-  --rust:#a94f2d;
-  --rust-dark:#873c22;
-  --olive:#667052;
-  --line:#ded5c7;
-  --muted:#8b8174;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  font-family:'IBM Plex Sans Thai',sans-serif;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(150,120,80,.06), transparent 25%),
-    radial-gradient(circle at 80% 80%, rgba(150,100,50,.05), transparent 30%),
-    var(--cream);
-  color:var(--ink);
-}
-
-/* =========================================
-   PAPER / VINTAGE TEXTURE
-========================================= */
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:9999;
-  opacity:.12;
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.35'/%3E%3C/svg%3E");
-  mix-blend-mode:multiply;
-}
-
-.font-display{
-  font-family:'Prompt',sans-serif;
-}
-
-/* =========================================
-   HEADER
-========================================= */
-
-header{
-  background:rgba(244,239,230,.95)!important;
-  border-color:var(--line)!important;
-  box-shadow:0 2px 15px rgba(50,40,30,.05);
-}
-
-#shopName{
-  color:var(--brown);
-  letter-spacing:-.04em;
-  position:relative;
-}
-
-#shopName::after{
-  content:"THRIFT / VINTAGE";
-  display:block;
-  font-family:'IBM Plex Sans Thai',sans-serif;
-  font-size:7px;
-  letter-spacing:.22em;
-  color:var(--rust);
-  line-height:1;
-  margin-top:1px;
-  font-weight:700;
-}
-
-#searchInput,
-#searchInputMobile{
-  background:#fffdf8!important;
-  border-color:#d8cfc1!important;
-  color:var(--ink);
-}
-
-#searchInput::placeholder,
-#searchInputMobile::placeholder{
-  color:#aaa092;
-}
-
-#searchInput:focus,
-#searchInputMobile:focus{
-  border-color:var(--rust)!important;
-  box-shadow:0 0 0 3px rgba(169,79,45,.08);
-}
-
-#navContact{
-  background:var(--brown)!important;
-  border-radius:5px!important;
-  box-shadow:3px 3px 0 var(--rust);
-  transition:.2s ease;
-}
-
-#navContact:hover{
-  background:var(--rust)!important;
-  transform:translate(-1px,-1px);
-}
-
-/* =========================================
-   HERO
-========================================= */
-
-#storeView main > section:first-child{
-  min-height:550px;
-  display:flex;
-  align-items:center;
-  background:
-    linear-gradient(rgba(43,35,29,.87),rgba(43,35,29,.94)),
-    radial-gradient(circle at 15% 20%,#a94f2d,transparent 35%),
-    radial-gradient(circle at 80% 80%,#74774e,transparent 35%),
-    #302821;
-}
-
-#storeView main > section:first-child .absolute:first-child{
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,.015) 0px,
-      rgba(255,255,255,.015) 1px,
-      transparent 1px,
-      transparent 4px
-    )!important;
-}
-
-#storeView main > section:first-child .relative{
-  position:relative;
-}
-
-#storeView main > section:first-child .relative::before{
-  content:"EST. 2024";
-  position:absolute;
-  top:-38px;
-  left:50%;
-  transform:translateX(-50%);
-  color:#d8b98d;
-  font-size:10px;
-  letter-spacing:.35em;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-#tagline{
-  color:#d9a46e!important;
-  letter-spacing:.35em!important;
-}
-
-#heroTitle{
-  font-family:'DM Serif Display',serif!important;
-  font-weight:400!important;
-  letter-spacing:-.02em;
-  text-shadow:2px 3px 0 rgba(0,0,0,.18);
-}
-
-#heroTitle .text-orange-400{
-  color:#d17a4d!important;
-}
-
-#heroSub{
-  color:#c8bfb2!important;
-  line-height:1.9;
-}
-
-#storeView main > section:first-child .flex.justify-center{
-  border-top:1px solid rgba(255,255,255,.12);
-  border-bottom:1px solid rgba(255,255,255,.12);
-  padding:18px 0;
-  max-width:430px;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-#statTotal,
-#statAvailable,
-#statSold{
-  color:#f5eadb!important;
-}
-
-#storeView main > section:first-child a[href="#products"]{
-  background:var(--rust)!important;
-  border-radius:4px!important;
-  box-shadow:4px 4px 0 #5e2c1d;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  transition:.2s ease;
-}
-
-#storeView main > section:first-child a[href="#products"]:hover{
-  background:#bd6039!important;
-  transform:translateY(-2px);
-}
-
-/* =========================================
-   PRODUCT SECTION
-========================================= */
-
-#products{
-  position:relative;
-}
-
-#products h2{
-  font-family:'DM Serif Display',serif!important;
-  font-size:30px;
-  font-weight:400;
-  color:var(--brown);
-}
-
-#products h2::before{
-  content:"NEW ARRIVALS";
-  display:block;
-  font-family:'IBM Plex Sans Thai',sans-serif;
-  font-size:9px;
-  letter-spacing:.25em;
-  color:var(--rust);
-  font-weight:700;
-  margin-bottom:3px;
-}
-
-#products .text-stone-500{
-  color:#8c8173!important;
-}
-
-#sortSelect{
-  background:#fffdf8!important;
-  border-color:var(--line)!important;
-  color:var(--brown);
-}
-
-/* =========================================
-   CATEGORY FILTER
-========================================= */
-
-.cat-chip{
-  transition:.2s ease;
-  border-radius:4px!important;
-  font-size:12px!important;
-  letter-spacing:.03em;
-}
-
-.cat-chip:not(.bg-stone-900){
-  background:#eee8dd!important;
-  border-color:#d8cdbd!important;
-  color:#65594c!important;
-}
-
-.cat-chip.bg-stone-900{
-  background:var(--brown)!important;
-  color:white!important;
-  box-shadow:3px 3px 0 var(--rust);
-}
-
-.cat-chip:hover{
-  transform:translateY(-1px);
-}
-
-.chip{
-  border-radius:3px!important;
-}
-
-.chip:hover{
-  border-color:#bcae9c!important;
-}
-
-/* =========================================
-   PRODUCT GRID
-========================================= */
-
-#cardGrid{
-  position:relative;
-}
-
-/* =========================================
-   PRODUCT CARD
-========================================= */
-
-.card-btn{
-  background:#fffdf8!important;
-  border:1px solid #ded5c7!important;
-  border-radius:4px!important;
-
-  box-shadow:
-    0 2px 5px rgba(50,40,30,.05),
-    0 8px 20px rgba(50,40,30,.04)!important;
-
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    border-color .25s ease!important;
-}
-
-.card-btn:hover{
-  transform:translateY(-5px) rotate(-.25deg);
-
-  border-color:#c8b9a5!important;
-
-  box-shadow:
-    0 12px 30px rgba(50,40,30,.13)!important;
-}
-
-.card-btn > div:first-child{
-  background:#e7dfd3!important;
-}
-
-.card-btn img{
-  filter:saturate(.86) contrast(1.02);
-  transition:
-    transform .5s ease,
-    filter .5s ease!important;
-}
-
-.card-btn:hover img{
-  filter:saturate(1) contrast(1.05);
-}
-
-.card-btn .p-4{
-  position:relative;
-}
-
-.card-btn .p-4::before{
-  content:"";
-  position:absolute;
-  top:12px;
-  right:14px;
-  width:25px;
-  height:1px;
-  background:#d3c6b5;
-}
-
-.card-btn .text-stone-500{
-  color:#9a8d7e!important;
-  font-size:9px!important;
-  letter-spacing:.14em!important;
-}
-
-.card-btn h3{
-  color:#302a24;
-  font-size:14px!important;
-}
-
-.card-btn .text-lg{
-  color:var(--rust)!important;
-}
-
-/* =========================================
-   CONDITION BADGES
-========================================= */
-
-.card-btn .bg-emerald-700{
-  background:#59684d!important;
-}
-
-.card-btn .bg-amber-700{
-  background:#94733f!important;
-}
-
-.card-btn .bg-orange-800{
-  background:#9b4d31!important;
-}
-
-/* =========================================
-   SOLD
-========================================= */
-
-.card-btn .absolute.inset-0.bg-black\/50{
-  background:rgba(38,31,26,.70)!important;
-}
-
-.card-btn .absolute.inset-0.bg-black\/50 span{
-  border:1px solid rgba(255,255,255,.6);
-  padding:9px 22px;
-  letter-spacing:.16em;
-  transform:rotate(-7deg);
-  font-size:13px;
-}
-
-/* =========================================
-   SINGLE STOCK
-========================================= */
-
-.card-btn .bg-red-700{
-  background:var(--rust)!important;
-  border-radius:2px!important;
-  box-shadow:2px 2px 0 rgba(0,0,0,.18);
-}
-
-/* =========================================
-   DETAIL PAGE
-========================================= */
-
-#detailView{
-  min-height:70vh;
-}
-
-#detailView #backBtn{
-  color:#766a5d!important;
-  transition:.2s;
-}
-
-#detailView #backBtn:hover{
-  color:var(--rust)!important;
-}
-
-#detailView h1{
-  font-family:'DM Serif Display',serif!important;
-  font-size:36px;
-  font-weight:400;
-  color:var(--brown);
-}
-
-#detailView .aspect-\[3\/4\]{
-  border-radius:4px!important;
-  box-shadow:0 12px 35px rgba(50,40,30,.12);
-}
-
-#detailView .text-3xl{
-  color:var(--rust);
-}
-
-#detailView .bg-stone-900{
-  background:var(--brown)!important;
-  border-radius:4px!important;
-}
-
-#detailView .bg-stone-900:hover{
-  background:var(--rust)!important;
-}
-
-#detailView .border-orange-200{
-  border-color:#dfc4a8!important;
-  background:#f6eadc!important;
-}
-
-/* =========================================
-   FOOTER
-========================================= */
-
-footer{
-  background:#2d2722!important;
-  margin-top:30px;
-}
-
-footer .absolute:first-child{
-  background:
-    linear-gradient(135deg,#2e2823,#1f1b18)!important;
-}
-
-#footShopName{
-  font-family:'DM Serif Display',serif!important;
-  font-weight:400!important;
-  font-size:28px!important;
-}
-
-#footLinks a{
-  background:#3b332c!important;
-  border:1px solid #55483d;
-  transition:.2s;
-}
-
-#footLinks a:hover{
-  background:var(--rust)!important;
-}
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media(max-width:640px){
+  :root{
+    --ink:#24221f;
+    --muted:#746f67;
+    --cream:#f5f1e9;
+    --paper:#fbfaf7;
+    --line:#ddd7cc;
+    --olive:#59624b;
+    --olive-dark:#424936;
+    --rust:#a65335;
+    --rust-dark:#87432c;
+    --sand:#d9c9ae;
+  }
+
+  *{
+    box-sizing:border-box;
+  }
+
+  html{
+    scroll-behavior:smooth;
+  }
+
+  body{
+    font-family:'IBM Plex Sans Thai',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+
+  .font-display{
+    font-family:'Kanit',sans-serif;
+  }
+
+  /* =========================
+     GLOBAL
+  ========================= */
+
+  ::selection{
+    background:#59624b;
+    color:#fff;
+  }
+
+  .soft-border{
+    border-color:var(--line);
+  }
+
+  /* =========================
+     HEADER
+  ========================= */
+
+  header{
+    background:rgba(251,250,247,.94) !important;
+    border-color:var(--line) !important;
+  }
 
   #shopName{
-    font-size:20px!important;
+    color:var(--ink);
+    letter-spacing:-.03em;
   }
 
-  #storeView main > section:first-child{
-    min-height:500px;
+  #navContact{
+    background:var(--olive);
+    box-shadow:0 4px 14px rgba(66,73,54,.15);
   }
 
-  #storeView main > section:first-child .relative::before{
-    top:-25px;
+  #navContact:hover{
+    background:var(--olive-dark);
+  }
+
+  #searchInput,
+  #searchInputMobile{
+    background:#fff;
+    border-color:var(--line);
+    color:var(--ink);
+  }
+
+  #searchInput:focus,
+  #searchInputMobile:focus{
+    border-color:var(--olive);
+    box-shadow:0 0 0 2px rgba(89,98,75,.10);
+  }
+
+  #searchInput::placeholder,
+  #searchInputMobile::placeholder{
+    color:#aaa49b;
+  }
+
+  /* =========================
+     HERO
+  ========================= */
+
+  section.relative.overflow-hidden:first-child{
+    min-height:560px;
+  }
+
+  section.relative.overflow-hidden:first-child .absolute.inset-0.bg-gradient-to-br{
+    background:
+      linear-gradient(
+        135deg,
+        #292a24 0%,
+        #36372f 48%,
+        #24251f 100%
+      ) !important;
+  }
+
+  section.relative.overflow-hidden:first-child .absolute.inset-0.opacity-60{
+    opacity:1 !important;
+    background-image:
+      radial-gradient(
+        circle at 12% 25%,
+        rgba(166,83,53,.25),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 88% 78%,
+        rgba(143,139,91,.18),
+        transparent 42%
+      ),
+      linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,.025) 50%,
+        transparent 100%
+      ) !important;
+  }
+
+  #tagline{
+    color:#c7a57b !important;
+    letter-spacing:.28em;
   }
 
   #heroTitle{
-    font-size:35px!important;
-    line-height:1.18!important;
+    letter-spacing:-.035em;
+    text-shadow:0 3px 25px rgba(0,0,0,.2);
+  }
+
+  #heroTitle .text-orange-400{
+    color:#c68b63 !important;
   }
 
   #heroSub{
-    font-size:13px!important;
-    line-height:1.8;
+    color:#c7c5bb !important;
+    line-height:1.9;
   }
 
+  #statTotal,
+  #statAvailable,
+  #statSold{
+    color:#f8f5ed !important;
+  }
+
+  section.relative.overflow-hidden:first-child
+  .inline-block.mt-10{
+    background:var(--rust);
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+    padding-left:2.1rem;
+    padding-right:2.1rem;
+  }
+
+  section.relative.overflow-hidden:first-child
+  .inline-block.mt-10:hover{
+    background:var(--rust-dark);
+  }
+
+  /* =========================
+     PRODUCT SECTION
+  ========================= */
+
   #products{
-    padding-top:35px!important;
+    padding-top:4.5rem;
+    padding-bottom:5rem;
   }
 
   #products h2{
-    font-size:27px!important;
+    color:var(--ink);
+    letter-spacing:-.025em;
   }
+
+  #products h2 + p{
+    color:var(--muted);
+  }
+
+  #sortSelect{
+    background:#fff;
+    border-color:var(--line);
+    color:var(--ink);
+  }
+
+  #sortSelect:focus{
+    border-color:var(--olive);
+  }
+
+  /* =========================
+     CATEGORY
+  ========================= */
+
+  #categoryChips{
+    padding-top:.5rem;
+  }
+
+  .cat-chip{
+    transition:
+      background .2s ease,
+      color .2s ease,
+      border .2s ease,
+      transform .2s ease;
+  }
+
+  .cat-chip:hover{
+    transform:translateY(-1px);
+  }
+
+  .cat-chip.bg-stone-900{
+    background:var(--ink) !important;
+  }
+
+  /* =========================
+     FILTER
+  ========================= */
+
+  #filterGroups{
+    padding-bottom:.5rem;
+  }
+
+  #filterGroups .chip{
+    transition:
+      background .2s ease,
+      border .2s ease,
+      color .2s ease,
+      transform .2s ease;
+  }
+
+  #filterGroups .chip:hover{
+    transform:translateY(-1px);
+    border-color:#aaa297;
+  }
+
+  #filterGroups .chip.bg-orange-700{
+    background:var(--olive) !important;
+    border-color:var(--olive) !important;
+  }
+
+  /* =========================
+     PRODUCT CARDS
+  ========================= */
 
   #cardGrid{
-    gap:12px!important;
+    margin-top:1rem;
   }
 
-  .card-btn .p-4{
-    padding:12px!important;
+  #cardGrid .card-btn{
+    background:#fff;
+    border-color:#e7e2d9;
+    box-shadow:0 3px 12px rgba(45,40,32,.045);
+    transition:
+      transform .25s ease,
+      box-shadow .25s ease,
+      border-color .25s ease;
   }
 
-  .card-btn h3{
-    font-size:12px!important;
+  #cardGrid .card-btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 35px rgba(45,40,32,.10);
+    border-color:#d5cec2;
   }
 
-  .card-btn .text-lg{
-    font-size:16px!important;
+  #cardGrid .card-btn > div:first-child{
+    background:#e9e5dc;
   }
 
-  .card-btn .absolute.bottom-3{
-    left:8px!important;
-    bottom:8px!important;
-    padding:4px 8px!important;
-    font-size:9px!important;
+  #cardGrid .card-btn img{
+    transition:
+      transform .45s cubic-bezier(.2,.7,.2,1),
+      filter .3s ease;
+  }
+
+  #cardGrid .card-btn:hover img{
+    filter:saturate(.92) contrast(1.02);
+  }
+
+  #cardGrid .card-btn .p-4{
+    padding:1rem 1rem 1.15rem;
+  }
+
+  #cardGrid .card-btn .text-\[11px\]{
+    color:#8a847a !important;
+    letter-spacing:.08em;
+  }
+
+  #cardGrid .card-btn h3{
+    color:#302e2a;
+    font-weight:600;
+  }
+
+  #cardGrid .card-btn .text-lg{
+    color:var(--rust);
+  }
+
+  #cardGrid .card-btn .line-through{
+    color:#aaa49b !important;
+  }
+
+  /* condition badges */
+  #cardGrid .bg-emerald-700{
+    background:#596b56 !important;
+  }
+
+  #cardGrid .bg-amber-700{
+    background:#9b7543 !important;
+  }
+
+  #cardGrid .bg-orange-800{
+    background:#96513a !important;
+  }
+
+  #cardGrid .bg-red-700{
+    background:#8f4030 !important;
+  }
+
+  /* =========================
+     DETAIL PAGE
+  ========================= */
+
+  #detailView{
+    min-height:650px;
+  }
+
+  #detailView #backBtn{
+    color:#7d776d;
+    transition:color .2s ease;
+  }
+
+  #detailView #backBtn:hover{
+    color:var(--ink);
+  }
+
+  #detailView .shadow-sm{
+    box-shadow:0 5px 20px rgba(40,35,28,.06) !important;
   }
 
   #detailView h1{
-    font-size:30px!important;
+    color:#292722;
+    letter-spacing:-.025em;
   }
-}
 
+  #detailView .text-3xl{
+    color:var(--rust);
+  }
+
+  #detailView .bg-emerald-700{
+    background:#596b56 !important;
+  }
+
+  #detailView .bg-amber-700{
+    background:#9b7543 !important;
+  }
+
+  #detailView .bg-orange-800{
+    background:#96513a !important;
+  }
+
+  #detailView a.mt-6{
+    background:var(--olive) !important;
+    box-shadow:0 8px 20px rgba(66,73,54,.13);
+  }
+
+  #detailView a.mt-6:hover{
+    background:var(--olive-dark) !important;
+  }
+
+  #detailView .border-orange-200{
+    border-color:#e3c8b6;
+  }
+
+  #detailView .bg-orange-50{
+    background:#faf3ed;
+  }
+
+  /* =========================
+     FOOTER
+  ========================= */
+
+  footer{
+    margin-top:1rem;
+  }
+
+  footer .absolute.inset-0.bg-gradient-to-br{
+    background:
+      linear-gradient(
+        135deg,
+        #292a24 0%,
+        #36372f 55%,
+        #23241f 100%
+      ) !important;
+  }
+
+  footer .absolute.inset-0.opacity-50{
+    opacity:1 !important;
+    background-image:
+      radial-gradient(
+        circle at 82% 18%,
+        rgba(166,83,53,.18),
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 15% 82%,
+        rgba(143,139,91,.13),
+        transparent 42%
+      ) !important;
+  }
+
+  footer #footShopName{
+    color:#f7f2e8 !important;
+  }
+
+  #footLinks a{
+    background:#45483d !important;
+  }
+
+  #footLinks a:hover{
+    background:var(--rust) !important;
+  }
+
+  /* =========================
+     RESPONSIVE
+  ========================= */
+
+  @media (max-width:640px){
+
+    #shopName{
+      font-size:1.15rem;
+    }
+
+    section.relative.overflow-hidden:first-child{
+      min-height:auto;
+    }
+
+    section.relative.overflow-hidden:first-child
+    .relative.max-w-7xl{
+      padding-top:4rem;
+      padding-bottom:4rem;
+    }
+
+    #heroTitle{
+      font-size:2rem;
+      line-height:1.25;
+    }
+
+    #heroSub{
+      font-size:.88rem;
+    }
+
+    #products{
+      padding-top:3rem;
+      padding-bottom:3.5rem;
+    }
+
+    #cardGrid{
+      gap:12px;
+    }
+
+    #cardGrid .card-btn{
+      border-radius:16px;
+    }
+
+    #cardGrid .card-btn .p-4{
+      padding:.8rem;
+    }
+
+    #cardGrid .card-btn h3{
+      font-size:.82rem;
+    }
+
+    #cardGrid .card-btn .text-lg{
+      font-size:1rem;
+    }
+
+    #cardGrid .card-btn .text-\[11px\]{
+      font-size:9px;
+    }
+  }
+
+  /* subtle paper texture */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.035;
+    z-index:9999;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  }
 </style>
 </head>
 
@@ -572,6 +528,7 @@ footer .absolute:first-child{
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24">
+
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -584,13 +541,16 @@ footer .absolute:first-child{
         type="search"
         placeholder="ค้นหาแบรนด์, ชื่อสินค้า..."
         class="w-full bg-white border border-stone-300 rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none">
+
     </div>
 
     <a
       id="navContact"
       target="_blank"
       class="hidden sm:flex ml-auto items-center gap-1.5 text-white rounded-full px-4 py-2 text-sm font-bold font-display transition-colors">
+
       แชทสั่งซื้อ
+
     </a>
 
   </div>
@@ -604,11 +564,13 @@ footer .absolute:first-child{
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24">
+
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
           d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+
       </svg>
 
       <input
@@ -624,186 +586,171 @@ footer .absolute:first-child{
 </header>
 
 
-<!-- =========================================
-     STORE
-========================================= -->
-
 <div id="storeView">
 
 <main>
 
-<!-- HERO -->
+  <!-- HERO -->
 
-<section class="relative overflow-hidden">
+  <section class="relative overflow-hidden">
 
-  <div class="absolute inset-0 bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950"></div>
+    <div class="absolute inset-0 bg-gradient-to-br"></div>
 
-  <div
-    class="absolute inset-0 opacity-60"
-    style="
-      background-image:
-      radial-gradient(circle at 15% 20%, rgba(194,101,61,0.4), transparent 50%),
-      radial-gradient(circle at 85% 80%, rgba(168,130,58,0.3), transparent 55%);
-    ">
-  </div>
+    <div
+      class="absolute inset-0 opacity-60"
+      style="
+        background-image:
+        radial-gradient(circle at 15% 20%, rgba(194,101,61,0.4), transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(168,130,58,0.3), transparent 55%);
+      ">
+    </div>
 
-  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-20 lg:py-28 text-center">
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-16 lg:py-24 text-center">
 
-    <p
-      id="tagline"
-      class="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] mb-4 font-display">
-    </p>
+      <p
+        id="tagline"
+        class="text-orange-400 text-xs lg:text-sm font-bold uppercase mb-4 font-display">
+      </p>
 
-    <h1
-      id="heroTitle"
-      class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight font-display max-w-3xl mx-auto">
-    </h1>
+      <h1
+        id="heroTitle"
+        class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight font-display max-w-3xl mx-auto">
+      </h1>
 
-    <p
-      id="heroSub"
-      class="text-stone-300 mt-5 max-w-lg mx-auto text-sm lg:text-base">
-    </p>
+      <p
+        id="heroSub"
+        class="text-stone-300 mt-5 max-w-lg mx-auto text-sm lg:text-base">
+      </p>
 
-    <!-- STATS -->
+      <div class="flex justify-center gap-10 mt-10">
 
-    <div class="flex justify-center gap-8 sm:gap-10 mt-10">
-
-      <div>
-        <div
-          id="statTotal"
-          class="text-white text-2xl font-extrabold font-display">
-          –
+        <div>
+          <div
+            id="statTotal"
+            class="text-white text-2xl font-extrabold font-display">
+            –
+          </div>
+          <div class="text-stone-400 text-xs mt-1">
+            สินค้าทั้งหมด
+          </div>
         </div>
 
-        <div class="text-stone-400 text-xs mt-1">
-          สินค้าทั้งหมด
+        <div>
+          <div
+            id="statAvailable"
+            class="text-white text-2xl font-extrabold font-display">
+            –
+          </div>
+          <div class="text-stone-400 text-xs mt-1">
+            พร้อมขาย
+          </div>
         </div>
+
+        <div>
+          <div
+            id="statSold"
+            class="text-white text-2xl font-extrabold font-display">
+            –
+          </div>
+          <div class="text-stone-400 text-xs mt-1">
+            ขายแล้ว
+          </div>
+        </div>
+
       </div>
 
-      <div>
-        <div
-          id="statAvailable"
-          class="text-white text-2xl font-extrabold font-display">
-          –
-        </div>
+      <a
+        href="#products"
+        class="inline-block mt-10 text-white font-bold px-8 py-4 rounded-full font-display transition-colors">
 
-        <div class="text-stone-400 text-xs mt-1">
-          พร้อมขาย
-        </div>
-      </div>
+        ช้อปเลย
 
-      <div>
-        <div
-          id="statSold"
-          class="text-white text-2xl font-extrabold font-display">
-          –
-        </div>
-
-        <div class="text-stone-400 text-xs mt-1">
-          ขายแล้ว
-        </div>
-      </div>
+      </a>
 
     </div>
 
-    <a
-      href="#products"
-      class="inline-block mt-10 text-white font-bold px-8 py-4 font-display transition-colors">
-      ดูเสื้อผ้าทั้งหมด →
-    </a>
-
-  </div>
-
-</section>
+  </section>
 
 
-<!-- PRODUCTS -->
+  <!-- PRODUCTS -->
 
-<section
-  id="products"
-  class="max-w-7xl mx-auto px-4 lg:px-8 py-10 lg:py-14">
+  <section
+    id="products"
+    class="max-w-7xl mx-auto px-4 lg:px-8">
 
-  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
 
-    <div>
+      <div>
 
-      <h2 class="font-bold font-display">
-        สินค้าล่าสุด (<span id="countLabel">0</span>)
-      </h2>
+        <h2 class="text-xl lg:text-2xl font-bold font-display">
+          สินค้าล่าสุด (<span id="countLabel">0</span>)
+        </h2>
 
-      <p class="text-stone-500 text-sm mt-1">
-        คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น
+        <p class="text-stone-500 text-sm mt-1">
+          คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น
+        </p>
+
+      </div>
+
+      <label class="flex items-center gap-2 text-sm">
+
+        <span class="text-stone-500">
+          เรียงตาม
+        </span>
+
+        <select
+          id="sortSelect"
+          class="border border-stone-300 rounded-full pl-4 pr-8 py-2 text-sm font-medium focus:outline-none bg-white">
+
+          <option value="new">
+            สินค้ามาใหม่
+          </option>
+
+          <option value="low">
+            ราคา: น้อย → มาก
+          </option>
+
+          <option value="high">
+            ราคา: มาก → น้อย
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+
+    <div
+      id="categoryChips"
+      class="flex flex-wrap gap-2 mb-4">
+    </div>
+
+
+    <div
+      id="filterGroups"
+      class="flex flex-wrap gap-2 mb-8">
+    </div>
+
+
+    <div
+      id="cardGrid"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
+
+      <p class="text-stone-400 col-span-full py-10 text-center">
+        กำลังโหลด...
       </p>
 
     </div>
 
-    <label class="flex items-center gap-2 text-sm">
-
-      <span class="text-stone-500">
-        เรียงตาม
-      </span>
-
-      <select
-        id="sortSelect"
-        class="border border-stone-300 rounded-full pl-4 pr-8 py-2 text-sm font-medium focus:outline-none bg-white">
-
-        <option value="new">
-          สินค้ามาใหม่
-        </option>
-
-        <option value="low">
-          ราคา: น้อย → มาก
-        </option>
-
-        <option value="high">
-          ราคา: มาก → น้อย
-        </option>
-
-      </select>
-
-    </label>
-
-  </div>
-
-
-  <!-- CATEGORY -->
-
-  <div
-    id="categoryChips"
-    class="flex flex-wrap gap-2 mb-4">
-  </div>
-
-
-  <!-- FILTER -->
-
-  <div
-    id="filterGroups"
-    class="flex flex-wrap gap-2 mb-8">
-  </div>
-
-
-  <!-- GRID -->
-
-  <div
-    id="cardGrid"
-    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
-
-    <p class="text-stone-400 col-span-full py-10 text-center">
-      กำลังโหลด...
-    </p>
-
-  </div>
-
-</section>
+  </section>
 
 </main>
 
 </div>
 
 
-<!-- =========================================
-     DETAIL
-========================================= -->
+<!-- DETAIL -->
 
 <div
   id="detailView"
@@ -811,15 +758,11 @@ footer .absolute:first-child{
 </div>
 
 
-<!-- =========================================
-     FOOTER
-========================================= -->
+<!-- FOOTER -->
 
 <footer class="relative overflow-hidden text-stone-300">
 
-  <div
-    class="absolute inset-0 bg-gradient-to-br from-stone-900 via-stone-900 to-stone-950">
-  </div>
+  <div class="absolute inset-0 bg-gradient-to-br"></div>
 
   <div
     class="absolute inset-0 opacity-50"
@@ -830,24 +773,14 @@ footer .absolute:first-child{
     ">
   </div>
 
-  <div
-    class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
+  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
 
-    <div
-      class="flex flex-col sm:flex-row justify-between items-center gap-6">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
 
-      <div class="text-center sm:text-left">
-
-        <p
-          id="footShopName"
-          class="text-white text-lg font-extrabold font-display">
-        </p>
-
-        <p class="text-stone-500 text-xs mt-2 tracking-widest">
-          THRIFT • VINTAGE • SECOND HAND
-        </p>
-
-      </div>
+      <p
+        id="footShopName"
+        class="text-white text-lg font-extrabold font-display">
+      </p>
 
       <div
         id="footLinks"
@@ -870,34 +803,25 @@ const sb = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
-
-/* =========================================
-   CONDITION
-========================================= */
-
 const CONDITION = {
 
-  9:{
+  9: {
     label:"9/10 — เกือบใหม่",
     cls:"bg-emerald-700"
   },
 
-  7:{
+  7: {
     label:"7/10 — สภาพดี",
     cls:"bg-amber-700"
   },
 
-  5:{
+  5: {
     label:"5/10 — มีตำหนิเล็กน้อย",
     cls:"bg-orange-800"
-  }
+  },
 
 };
 
-
-/* =========================================
-   HELPERS
-========================================= */
 
 function esc(s){
 
@@ -932,34 +856,18 @@ function fmt(n){
 }
 
 
-/* =========================================
-   STATE
-========================================= */
-
 let items = [];
-
 let cfg = {};
 
 let filters = {
-
   category:'ทั้งหมด',
-
   brand:'ทั้งหมด',
-
   size:'ทั้งหมด',
-
   score:null,
-
   search:'',
-
   sort:'new'
-
 };
 
-
-/* =========================================
-   LOAD
-========================================= */
 
 async function load(){
 
@@ -979,18 +887,15 @@ async function load(){
   } = await sb
     .from('items')
     .select('*')
-    .order(
-      'created_at',
-      {
-        ascending:false
-      }
-    );
+    .order('created_at',{
+      ascending:false
+    });
 
 
   if(cErr || iErr){
 
     cardGrid.innerHTML = `
-      <p class="text-red-600 col-span-full text-center py-10">
+      <p class="text-red-600 col-span-full">
         โหลดข้อมูลไม่สำเร็จ ตรวจสอบ config.js และ Supabase
       </p>
     `;
@@ -998,22 +903,19 @@ async function load(){
     console.error(cErr || iErr);
 
     return;
-
   }
 
 
   cfg = c;
-
   items = rows || [];
 
-
-  /* SHOP INFO */
 
   shopName.textContent = cfg.shop_name;
 
   footShopName.textContent = cfg.shop_name;
 
   tagline.textContent = cfg.tagline;
+
 
   heroTitle.innerHTML = `
     ${esc(cfg.hero_title1)}
@@ -1024,10 +926,9 @@ async function load(){
     ${esc(cfg.hero_title3)}
   `;
 
+
   heroSub.textContent = cfg.hero_sub;
 
-
-  /* INSTAGRAM */
 
   if(cfg.ig_url){
 
@@ -1040,25 +941,20 @@ async function load(){
   }
 
 
-  /* =========================================
-     SOCIAL ICONS
-  ========================================= */
-
   const igIcon = `
 
     <a
       href="${escAttr(cfg.ig_url)}"
       target="_blank"
-      rel="noopener noreferrer"
       aria-label="Instagram"
-      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+      class="w-9 h-9 rounded-full bg-stone-800 hover:bg-orange-700 flex items-center justify-center transition-colors">
 
       <svg
         class="w-4 h-4"
         fill="currentColor"
         viewBox="0 0 24 24">
 
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.28-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.695.272.273 2.69.073 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.948C23.73 2.7 21.311.273 16.949.073 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.28-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.332.014 8.741 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
 
       </svg>
 
@@ -1072,9 +968,8 @@ async function load(){
     <a
       href="${escAttr(cfg.fb_url)}"
       target="_blank"
-      rel="noopener noreferrer"
       aria-label="Facebook"
-      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+      class="w-9 h-9 rounded-full bg-stone-800 hover:bg-orange-700 flex items-center justify-center transition-colors">
 
       <svg
         class="w-4 h-4"
@@ -1095,10 +990,6 @@ async function load(){
     (cfg.fb_url ? fbIcon : '');
 
 
-  /* =========================================
-     STATS
-  ========================================= */
-
   statTotal.textContent = items.length;
 
   statAvailable.textContent =
@@ -1117,10 +1008,6 @@ async function load(){
 }
 
 
-/* =========================================
-   CATEGORY
-========================================= */
-
 function renderCategoryChips(){
 
   const cats = [
@@ -1133,22 +1020,22 @@ function renderCategoryChips(){
   ];
 
 
-  categoryChips.innerHTML = cats.map(c => `
+  categoryChips.innerHTML =
+    cats.map(c => `
 
-    <button
-      data-cat="${escAttr(c)}"
-      class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display
-      ${
-        filters.category===c
-        ? 'bg-stone-900 text-white'
-        : 'bg-white border border-stone-300 text-stone-600'
-      }">
+      <button
+        data-cat="${escAttr(c)}"
+        class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display ${
+          filters.category===c
+            ? 'bg-stone-900 text-white'
+            : 'bg-white border border-stone-300 text-stone-600 hover:border-stone-500'
+        }">
 
-      ${esc(c)}
+        ${esc(c)}
 
-    </button>
+      </button>
 
-  `).join('');
+    `).join('');
 
 
   categoryChips
@@ -1174,18 +1061,12 @@ function renderCategoryChips(){
 }
 
 
-/* =========================================
-   FILTERS
-========================================= */
-
 function renderFilters(){
 
   const brands = [
     'ทั้งหมด',
     ...new Set(
-      items
-        .map(i=>i.brand)
-        .filter(Boolean)
+      items.map(i => i.brand)
     )
   ];
 
@@ -1209,11 +1090,8 @@ function renderFilters(){
 
       <div class="flex flex-wrap items-center gap-2 mr-4">
 
-        <span
-          class="text-xs text-stone-400 uppercase font-display font-semibold">
-
+        <span class="text-xs text-stone-400 uppercase font-display font-semibold">
           ${title}:
-
         </span>
 
         ${options.map(o => `
@@ -1221,11 +1099,10 @@ function renderFilters(){
           <button
             data-group="${key}"
             data-val="${escAttr(o)}"
-            class="chip px-3 py-1 rounded-full text-xs font-medium border
-            ${
+            class="chip px-3 py-1 rounded-full text-xs font-medium border ${
               filters[key]===o
-              ? 'bg-orange-700 text-white border-orange-700'
-              : 'bg-white text-stone-600 border-stone-300'
+                ? 'bg-orange-700 text-white border-orange-700'
+                : 'bg-white text-stone-600 border-stone-300'
             }">
 
             ${esc(o)}
@@ -1247,11 +1124,8 @@ function renderFilters(){
 
       <div class="flex flex-wrap items-center gap-2">
 
-        <span
-          class="text-xs text-stone-400 uppercase font-display font-semibold">
-
+        <span class="text-xs text-stone-400 uppercase font-display font-semibold">
           สภาพ:
-
         </span>
 
         ${[9,7,5].map(s => `
@@ -1259,11 +1133,10 @@ function renderFilters(){
           <button
             data-group="score"
             data-val="${s}"
-            class="chip px-3 py-1 rounded-full text-xs font-medium border
-            ${
+            class="chip px-3 py-1 rounded-full text-xs font-medium border ${
               filters.score===s
-              ? 'bg-orange-700 text-white border-orange-700'
-              : 'bg-white text-stone-600 border-stone-300'
+                ? 'bg-orange-700 text-white border-orange-700'
+                : 'bg-white text-stone-600 border-stone-300'
             }">
 
             ${s}/10
@@ -1306,8 +1179,8 @@ function renderFilters(){
 
             filters.score =
               filters.score === n
-              ? null
-              : n;
+                ? null
+                : n;
 
           }else{
 
@@ -1328,60 +1201,37 @@ function renderFilters(){
 }
 
 
-/* =========================================
-   GRID
-========================================= */
-
 function renderGrid(){
 
   const q =
-    filters.search
-      .trim()
-      .toLowerCase();
+    filters.search.trim().toLowerCase();
 
 
   let visible = items.filter(i =>
 
-    (
-      filters.category === 'ทั้งหมด' ||
-      i.category === filters.category
-    )
+    (filters.category==='ทั้งหมด' ||
+      i.category===filters.category)
 
     &&
 
-    (
-      filters.brand === 'ทั้งหมด' ||
-      i.brand === filters.brand
-    )
+    (filters.brand==='ทั้งหมด' ||
+      i.brand===filters.brand)
 
     &&
 
-    (
-      filters.size === 'ทั้งหมด' ||
-      i.size_label === filters.size
-    )
+    (filters.size==='ทั้งหมด' ||
+      i.size_label===filters.size)
 
     &&
 
-    (
-      !filters.score ||
-      i.condition_score === filters.score
-    )
+    (!filters.score ||
+      i.condition_score===filters.score)
 
     &&
 
-    (
-      !q ||
-      String(i.title || '')
-        .toLowerCase()
-        .includes(q)
-
-      ||
-
-      String(i.brand || '')
-        .toLowerCase()
-        .includes(q)
-    )
+    (!q ||
+      i.title.toLowerCase().includes(q) ||
+      i.brand.toLowerCase().includes(q))
 
   );
 
@@ -1390,9 +1240,7 @@ function renderGrid(){
 
     visible =
       [...visible]
-      .sort(
-        (a,b) => a.price - b.price
-      );
+      .sort((a,b) => a.price - b.price);
 
   }
 
@@ -1401,9 +1249,7 @@ function renderGrid(){
 
     visible =
       [...visible]
-      .sort(
-        (a,b) => b.price - a.price
-      );
+      .sort((a,b) => b.price - a.price);
 
   }
 
@@ -1415,192 +1261,158 @@ function renderGrid(){
   cardGrid.innerHTML =
     visible.length
 
-    ?
+      ? visible.map(i => `
 
-    visible.map(i => `
-
-      <button
-        data-id="${i.id}"
-        class="card-btn text-left group bg-white overflow-hidden">
-
-        <!-- IMAGE -->
-
-        <div
-          class="relative aspect-[3/4] bg-stone-200 overflow-hidden">
-
-          ${
-            i.images && i.images[0]
-
-            ?
-
-            `
-              <img
-                src="${escAttr(i.images[0])}"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                alt="${escAttr(i.title)}">
-            `
-
-            :
-
-            `
-              <div
-                class="w-full h-full flex items-center justify-center text-stone-400 text-xs">
-
-                ไม่มีรูป
-
-              </div>
-            `
-          }
-
-
-          ${
-            i.sold
-
-            ?
-
-            `
-              <div
-                class="absolute inset-0 bg-black/50 flex items-center justify-center">
-
-                <span
-                  class="text-white text-sm font-bold font-display">
-
-                  SOLD OUT
-
-                </span>
-
-              </div>
-            `
-
-            :
-
-            ''
-          }
-
-
-          ${
-            (!i.sold && i.single_stock)
-
-            ?
-
-            `
-              <span
-                class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
-
-                เหลือชิ้นเดียว
-
-              </span>
-            `
-
-            :
-
-            ''
-          }
-
-
-          ${
-            CONDITION[i.condition_score]
-
-            ?
-
-            `
-              <span
-                class="absolute bottom-3 left-3
-                ${CONDITION[i.condition_score].cls}
-                text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
-
-                ${CONDITION[i.condition_score].label}
-
-              </span>
-            `
-
-            :
-
-            ''
-          }
-
-        </div>
-
-
-        <!-- INFO -->
-
-        <div class="p-4">
-
-          <p
-            class="text-[11px] text-stone-500 uppercase tracking-wider">
-
-            ${esc(i.brand)}
-
-          </p>
-
-
-          <h3
-            class="font-semibold text-sm mt-0.5 leading-snug font-display">
-
-            ${esc(i.title)}
-
-          </h3>
-
+        <button
+          data-id="${i.id}"
+          class="card-btn text-left group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow overflow-hidden border border-stone-100">
 
           <div
-            class="flex items-center gap-2 mt-2">
+            class="relative aspect-[3/4] bg-stone-200 overflow-hidden">
 
             ${
-              i.old_price
+              i.images && i.images[0]
 
-              ?
+                ? `
 
-              `
-                <span
-                  class="text-xs text-stone-400 line-through">
+                  <img
+                    src="${escAttr(i.images[0])}"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    alt="${escAttr(i.title)}">
 
-                  ฿${fmt(i.old_price)}
+                `
 
-                </span>
-              `
+                : `
 
-              :
+                  <div
+                    class="w-full h-full flex items-center justify-center text-stone-400 text-xs">
 
-              ''
+                    ไม่มีรูป
+
+                  </div>
+
+                `
+            }
+
+
+            ${
+              i.sold
+
+                ? `
+
+                  <div
+                    class="absolute inset-0 bg-black/50 flex items-center justify-center">
+
+                    <span
+                      class="text-white text-sm font-bold font-display">
+
+                      ขายแล้ว
+
+                    </span>
+
+                  </div>
+
+                `
+
+                : ''
+            }
+
+
+            ${
+              (!i.sold && i.single_stock)
+
+                ? `
+
+                  <span
+                    class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
+
+                    เหลือชิ้นเดียว
+
+                  </span>
+
+                `
+
+                : ''
             }
 
 
             <span
-              class="text-lg font-bold font-display">
+              class="absolute bottom-3 left-3 ${CONDITION[i.condition_score].cls} text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
 
-              ฿${fmt(i.price)}
+              ${CONDITION[i.condition_score].label}
 
             </span>
 
           </div>
 
-        </div>
 
-      </button>
+          <div class="p-4">
 
-    `).join('')
+            <p
+              class="text-[11px] text-stone-500 uppercase tracking-wider">
 
-    :
+              ${esc(i.brand)}
 
-    `
-      <div
-        class="col-span-full py-16 text-center">
+            </p>
 
-        <div class="text-4xl mb-3">
-          🧥
-        </div>
+            <h3
+              class="font-semibold text-sm mt-0.5 leading-snug font-display">
 
-        <p class="text-stone-400 text-sm">
+              ${esc(i.title)}
+
+            </h3>
+
+            <div class="flex items-center gap-2 mt-2">
+
+              ${
+                i.old_price
+
+                  ? `
+
+                    <span
+                      class="text-xs text-stone-400 line-through">
+
+                      ฿${fmt(i.old_price)}
+
+                    </span>
+
+                  `
+
+                  : ''
+              }
+
+              <span
+                class="text-lg font-bold font-display">
+
+                ฿${fmt(i.price)}
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </button>
+
+      `).join('')
+
+      :
+
+      `
+
+        <p
+          class="text-stone-400 col-span-full py-10 text-center">
+
           ไม่พบสินค้าตามตัวกรองที่เลือก
+
         </p>
 
-      </div>
-    `;
+      `;
 
 
   cardGrid
     .querySelectorAll('.card-btn')
-    .forEach(btn => {
+    .forEach(btn =>
 
       btn.addEventListener(
         'click',
@@ -1610,16 +1422,12 @@ function renderGrid(){
               btn.getAttribute('data-id')
             )
           )
-      );
+      )
 
-    });
+    );
 
 }
 
-
-/* =========================================
-   DETAIL
-========================================= */
 
 function showDetail(id){
 
@@ -1635,24 +1443,14 @@ function showDetail(id){
   detailView.classList.remove('hidden');
 
   window.scrollTo({
-    top:0,
-    behavior:'smooth'
+    top:0
   });
 
 
   const gallery =
-    (
-      p.images &&
-      p.images.length
-    )
-
-    ?
-
-    p.images
-
-    :
-
-    [null];
+    (p.images && p.images.length
+      ? p.images
+      : [null]);
 
 
   detailView.innerHTML = `
@@ -1666,11 +1464,7 @@ function showDetail(id){
     </button>
 
 
-    <div
-      class="grid lg:grid-cols-2 gap-10">
-
-
-      <!-- GALLERY -->
+    <div class="grid lg:grid-cols-2 gap-10">
 
       <div>
 
@@ -1680,45 +1474,43 @@ function showDetail(id){
           ${
             gallery[0]
 
-            ?
+              ? `
 
-            `
-              <img
-                src="${escAttr(gallery[0])}"
-                class="w-full h-full object-cover"
-                alt="${escAttr(p.title)}">
-            `
+                <img
+                  src="${escAttr(gallery[0])}"
+                  class="w-full h-full object-cover"
+                  alt="${escAttr(p.title)}">
 
-            :
+              `
 
-            `
-              <div
-                class="w-full h-full flex items-center justify-center text-stone-400 text-sm">
+              : `
 
-                ไม่มีรูป
+                <div
+                  class="w-full h-full flex items-center justify-center text-stone-400 text-sm">
 
-              </div>
-            `
+                  ไม่มีรูป
+
+                </div>
+
+              `
           }
 
 
           ${
             (!p.sold && p.single_stock)
 
-            ?
+              ? `
 
-            `
-              <span
-                class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
+                <span
+                  class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
 
-                เหลือชิ้นเดียว
+                  เหลือชิ้นเดียว
 
-              </span>
-            `
+                </span>
 
-            :
+              `
 
-            ''
+              : ''
           }
 
         </div>
@@ -1727,108 +1519,98 @@ function showDetail(id){
         ${
           gallery.length > 1
 
-          ?
+            ? `
 
-          `
-            <div class="flex gap-2 mt-3">
+              <div class="flex gap-2 mt-3">
 
-              ${gallery.slice(1).map(g => `
+                ${gallery.slice(1).map(g => `
 
-                <img
-                  src="${escAttr(g)}"
-                  class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-stone-200">
+                  <img
+                    src="${escAttr(g)}"
+                    class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-stone-200">
 
-              `).join('')}
+                `).join('')}
 
-            </div>
-          `
+              </div>
 
-          :
+            `
 
-          ''
+            : ''
         }
 
 
         ${
           p.defects && p.defects.length
 
-          ?
+            ? `
 
-          `
+              <div
+                class="mt-6 border border-orange-200 bg-orange-50 rounded-2xl p-4">
 
-            <div
-              class="mt-6 border border-orange-200 bg-orange-50 rounded-2xl p-4">
+                <p
+                  class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">
 
-              <p
-                class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">
+                  จุดตำหนิที่พบ (${p.defects.length})
 
-                จุดตำหนิที่พบ (${p.defects.length})
-
-              </p>
+                </p>
 
 
-              <div class="space-y-2">
+                <div class="space-y-2">
 
-                ${p.defects.map(d => `
+                  ${p.defects.map(d => `
 
-                  <div
-                    class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100">
+                    <div
+                      class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100">
 
-                    ${
-                      d.image
+                      ${
+                        d.image
 
-                      ?
+                          ? `
 
-                      `
-                        <img
-                          src="${escAttr(d.image)}"
-                          class="w-14 h-14 rounded object-cover flex-shrink-0">
-                      `
+                            <img
+                              src="${escAttr(d.image)}"
+                              class="w-14 h-14 rounded object-cover flex-shrink-0">
 
-                      :
+                          `
 
-                      `
-                        <div
-                          class="w-14 h-14 rounded bg-stone-100 flex-shrink-0">
-                        </div>
-                      `
-                    }
+                          : `
+
+                            <div
+                              class="w-14 h-14 rounded bg-stone-100 flex-shrink-0">
+                            </div>
+
+                          `
+                      }
 
 
-                    <p class="text-sm text-stone-700">
+                      <p class="text-sm text-stone-700">
 
-                      ${esc(d.note)}
+                        ${esc(d.note)}
 
-                    </p>
+                      </p>
 
-                  </div>
+                    </div>
 
-                `).join('')}
+                  `).join('')}
+
+                </div>
 
               </div>
 
-            </div>
+            `
 
-          `
-
-          :
-
-          ''
+            : ''
         }
 
       </div>
 
-
-      <!-- PRODUCT INFO -->
 
       <div>
 
         <p
           class="text-xs text-stone-500 uppercase tracking-wider">
 
-          ${esc(p.brand)}
-          ·
-          ${esc(p.category)}
+          ${esc(p.brand)} · ${esc(p.category)}
 
         </p>
 
@@ -1841,51 +1623,35 @@ function showDetail(id){
         </h1>
 
 
-        ${
-          CONDITION[p.condition_score]
+        <div class="mt-4">
 
-          ?
+          <span
+            class="${CONDITION[p.condition_score].cls} text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">
 
-          `
-            <div class="mt-4">
+            ${CONDITION[p.condition_score].label}
 
-              <span
-                class="${CONDITION[p.condition_score].cls}
-                text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">
+          </span>
 
-                ${CONDITION[p.condition_score].label}
-
-              </span>
-
-            </div>
-          `
-
-          :
-
-          ''
-        }
+        </div>
 
 
-        <div
-          class="flex items-baseline gap-3 mt-5">
+        <div class="flex items-baseline gap-3 mt-5">
 
           ${
             p.old_price
 
-            ?
+              ? `
 
-            `
-              <span
-                class="text-lg text-stone-400 line-through">
+                <span
+                  class="text-lg text-stone-400 line-through">
 
-                ฿${fmt(p.old_price)}
+                  ฿${fmt(p.old_price)}
 
-              </span>
-            `
+                </span>
 
-            :
+              `
 
-            ''
+              : ''
           }
 
 
@@ -1902,49 +1668,44 @@ function showDetail(id){
         ${
           p.sold
 
-          ?
+            ? `
 
-          `
-            <div
-              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
+              <div
+                class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
 
-              สินค้านี้ขายแล้ว
+                สินค้านี้ขายแล้ว
 
-            </div>
-          `
+              </div>
 
-          :
+            `
 
-          cfg.ig_url
+            : cfg.ig_url
 
-          ?
+              ? `
 
-          `
-            <a
-              href="${escAttr(cfg.ig_url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">
+                <a
+                  href="${escAttr(cfg.ig_url)}"
+                  target="_blank"
+                  class="mt-6 w-full text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">
 
-              สั่งซื้อผ่าน Instagram
+                  สั่งซื้อผ่าน Instagram
 
-            </a>
-          `
+                </a>
 
-          :
+              `
 
-          `
-            <div
-              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
+              : `
 
-              ยังไม่เปิดช่องทางสั่งซื้อ
+                <div
+                  class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
 
-            </div>
-          `
+                  ยังไม่เปิดช่องทางสั่งซื้อ
+
+                </div>
+
+              `
         }
 
-
-        <!-- MEASUREMENTS -->
 
         <div class="mt-8">
 
@@ -1960,19 +1721,16 @@ function showDetail(id){
             class="border border-stone-200 rounded-2xl overflow-hidden">
 
             ${
-              Object.entries(
-                p.measurements || {}
-              )
-              .filter(([k,v]) => v)
-              .map(
-                ([k,v],idx) => `
+              Object
+                .entries(p.measurements || {})
+                .filter(([k,v]) => v)
+                .map(([k,v],idx) => `
 
                   <div
-                    class="flex justify-between px-4 py-2.5 text-sm
-                    ${
+                    class="flex justify-between px-4 py-2.5 text-sm ${
                       idx%2===0
-                      ? 'bg-stone-50'
-                      : 'bg-white'
+                        ? 'bg-stone-50'
+                        : 'bg-white'
                     }">
 
                     <span class="text-stone-500">
@@ -1989,16 +1747,19 @@ function showDetail(id){
 
                   </div>
 
-                `
-              )
-              .join('')
+                `).join('')
 
               ||
 
               `
-                <p class="text-sm text-stone-400 p-4">
+
+                <p
+                  class="text-sm text-stone-400 p-4">
+
                   ไม่มีข้อมูลขนาด
+
                 </p>
+
               `
             }
 
@@ -2032,8 +1793,7 @@ function showDetail(id){
         storeView.classList.remove('hidden');
 
         window.scrollTo({
-          top:0,
-          behavior:'smooth'
+          top:0
         });
 
       }
@@ -2041,10 +1801,6 @@ function showDetail(id){
 
 }
 
-
-/* =========================================
-   SEARCH
-========================================= */
 
 function syncSearch(v){
 
@@ -2062,24 +1818,16 @@ function syncSearch(v){
 searchInput.addEventListener(
   'input',
   e =>
-    syncSearch(
-      e.target.value
-    )
+    syncSearch(e.target.value)
 );
 
 
 searchInputMobile.addEventListener(
   'input',
   e =>
-    syncSearch(
-      e.target.value
-    )
+    syncSearch(e.target.value)
 );
 
-
-/* =========================================
-   SORT
-========================================= */
 
 sortSelect.addEventListener(
   'change',
@@ -2093,10 +1841,6 @@ sortSelect.addEventListener(
   }
 );
 
-
-/* =========================================
-   START
-========================================= */
 
 load();
 
