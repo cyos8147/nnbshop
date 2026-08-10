@@ -1,16 +1,17 @@
+'use client'; // สำหรับ Next.js (ถ้าใช้ React ปกติให้ลบบรรทัดนี้ออก)
+
 import { useState } from 'react';
 
-export default function ProductGallery({ productImages }) {
-  // สมมุติตัวอย่างรูปภาพ (หรือรับ props มาจาก backend)
-  const images = productImages || [
-    '/images/spain-1.jpg',
-    '/images/spain-2.jpg',
+export default function ProductGallery({ productImages = [] }) {
+  // รูปภาพตัวอย่าง (ระบบจะใช้รูปนี้ถ้ายังไม่มีการส่ง props เข้ามา)
+  const defaultImages = [
+    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800',
+    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'
   ];
 
-  // 1. ตัวแปรเก็บตำแหน่งรูปที่กำลังเลือกอยู่
+  const images = productImages.length > 0 ? productImages : defaultImages;
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // ฟังก์ชันเลื่อนรูปซ้าย-ขวา (สำหรับปัดหรือกดปุ่ม)
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
@@ -20,27 +21,29 @@ export default function ProductGallery({ productImages }) {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto">
-      {/* ---------------- รูปใหญ่ด้านบน ---------------- */}
-      <div className="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden mb-3">
+    <div className="w-full max-w-xl mx-auto p-2">
+      {/* 1. รูปใหญ่ด้านบน */}
+      <div className="relative w-full aspect-square bg-gray-100 rounded-xl overflow-hidden mb-3 shadow-sm">
         <img
           src={images[currentIndex]}
           alt="Product detail"
-          className="w-full h-full object-cover transition-opacity duration-300"
+          className="w-full h-full object-cover transition-all duration-300"
         />
 
-        {/* ปุ่มกดเลื่อนซ้าย-ขวาบนรูปใหญ่ (แสดงเมื่อมีมากกว่า 1 รูป) */}
+        {/* ปุ่มกดเลื่อนซ้าย-ขวา บนรูปใหญ่ */}
         {images.length > 1 && (
           <>
             <button
+              type="button"
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition"
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-9 h-9 rounded-full flex items-center justify-center transition"
             >
               &#10094;
             </button>
             <button
+              type="button"
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-9 h-9 rounded-full flex items-center justify-center transition"
             >
               &#10095;
             </button>
@@ -48,15 +51,16 @@ export default function ProductGallery({ productImages }) {
         )}
       </div>
 
-      {/* ---------------- รูปเล็ก (Thumbnails) ด้านล่าง ---------------- */}
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+      {/* 2. รูปเล็ก (Thumbnails) ด้านล่าง */}
+      <div className="flex gap-3 overflow-x-auto pb-2">
         {images.map((img, index) => (
           <button
             key={index}
-            onClick={() => setCurrentIndex(index)} // กดแล้วเปลี่ยนรูปใหญ่
-            className={`relative w-16 h-16 rounded-md overflow-hidden border-2 flex-shrink-0 transition-all ${
+            type="button"
+            onClick={() => setCurrentIndex(index)}
+            className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
               currentIndex === index
-                ? 'border-orange-500 scale-105 opacity-100' // รูปที่เลือกอยู่
+                ? 'border-orange-500 scale-105 opacity-100'
                 : 'border-gray-200 opacity-60 hover:opacity-100'
             }`}
           >
