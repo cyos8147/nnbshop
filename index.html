@@ -199,8 +199,8 @@ function showDetail(id){
         <div class="mt-8">
           <p class="text-sm font-bold mb-3 font-display">ตารางขนาด (วัดจริง)</p>
           <div class="border border-stone-200 rounded-xl overflow-hidden">
-            ${Object.entries(p.measurements || {}).map(([k,v], idx) => `
-              <div class="flex justify-between px-4 py-2.5 text-sm ${idx%2===0?'bg-stone-50':'bg-white'}"><span class="text-stone-500">${esc(k)}</span><span class="font-medium">${esc(v)}</span></div>
+      ${Object.entries(p.measurements || {}).filter(([k,v]) => v).map(([k,v], idx) => `
+ <div class="flex justify-between px-4 py-2.5 text-sm ${idx%2===0?'bg-stone-50':'bg-white'}"><span class="text-stone-500">${esc(k)}</span><span class="font-medium">${esc(v)}</span></div>
             `).join('') || '<p class="text-sm text-stone-400 p-4">ไม่มีข้อมูลขนาด</p>'}
           </div>
           <p class="text-xs text-stone-400 mt-2">ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก</p>
