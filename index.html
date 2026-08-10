@@ -4,791 +4,452 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NNBShop — เสื้อผ้ามือสอง</title>
+<title>NNBShop — เสื้อผ้าวินเทจมือสอง</title>
 
+<!-- =========================
+     FONTS
+========================= -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- NEW FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-:root{
-  --cream:#f3f0e8;
-  --paper:#faf9f5;
-  --white:#ffffff;
-  --ink:#101817;
-  --blue:#142d3d;
-  --blue2:#1d4055;
-  --lime:#c8f15a;
-  --lime-dark:#a8d63d;
-  --orange:#d66a3d;
-  --muted:#777d78;
-  --line:#dcded7;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:'Anuphan',sans-serif;
-}
-
-.font-display{
-  font-family:'Chakra Petch',sans-serif;
-}
-
-button,
-input,
-select{
-  font-family:inherit;
-}
-
-::selection{
-  background:var(--lime);
-  color:var(--ink);
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-header{
-  background:rgba(250,249,245,.92)!important;
-  border-color:var(--line)!important;
-}
-
-#shopName{
-  color:var(--ink);
-  font-family:'Chakra Petch',sans-serif;
-  font-weight:700;
-  letter-spacing:-.04em;
-}
-
-#navContact{
-  background:var(--blue)!important;
-  color:#fff!important;
-  border-radius:8px!important;
-  box-shadow:none!important;
-}
-
-#navContact:hover{
-  background:var(--blue2)!important;
-}
-
-
-/* SEARCH */
-
-#searchInput,
-#searchInputMobile{
-  background:#fff!important;
-  border:1px solid var(--line)!important;
-  border-radius:8px!important;
-  color:var(--ink);
-}
-
-#searchInput:focus,
-#searchInputMobile:focus{
-  border-color:var(--blue)!important;
-  box-shadow:0 0 0 2px rgba(20,45,61,.08)!important;
-}
-
-#searchInput::placeholder,
-#searchInputMobile::placeholder{
-  color:#9a9e99;
-}
-
-
-/* =========================================================
-   HERO — COMPLETELY NEW LAYOUT
-========================================================= */
-
-.hero-new{
-  background:var(--cream);
-  border-bottom:1px solid var(--line);
-}
-
-.hero-inner{
-  max-width:1280px;
-  margin:auto;
-  padding:64px 24px 70px;
-}
-
-.hero-layout{
-  display:grid;
-  grid-template-columns:1.25fr .75fr;
-  gap:28px;
-  align-items:stretch;
-}
-
-.hero-main{
-  position:relative;
-  overflow:hidden;
-  min-height:480px;
-  background:var(--blue);
-  color:#fff;
-  padding:52px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.hero-main:after{
-  content:"SECONDHAND";
-  position:absolute;
-  right:-35px;
-  bottom:25px;
-  font-family:'Chakra Petch',sans-serif;
-  font-size:100px;
-  line-height:.8;
-  font-weight:700;
-  letter-spacing:-.08em;
-  color:rgba(255,255,255,.045);
-  pointer-events:none;
-}
-
-.hero-kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:9px;
-  font-family:'Chakra Petch',sans-serif;
-  font-size:12px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--lime);
-  font-weight:600;
-}
-
-.hero-kicker:before{
-  content:"";
-  width:8px;
-  height:8px;
-  background:var(--lime);
-  border-radius:50%;
-}
-
-#heroTitle{
-  position:relative;
-  z-index:2;
-  font-family:'Chakra Petch',sans-serif;
-  font-size:clamp(38px,5vw,72px);
-  line-height:1.03;
-  letter-spacing:-.055em;
-  max-width:780px;
-}
-
-#heroTitle .text-orange-400{
-  color:var(--lime)!important;
-}
-
-#heroSub{
-  color:#c8d0d1!important;
-  line-height:1.8;
-  max-width:570px;
-}
-
-.hero-action{
-  position:relative;
-  z-index:5;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:max-content;
-  background:var(--lime);
-  color:var(--ink);
-  padding:13px 22px;
-  font-family:'Chakra Petch',sans-serif;
-  font-weight:700;
-  border-radius:7px;
-  transition:.2s ease;
-}
-
-.hero-action:hover{
-  background:#d8ff7b;
-  transform:translateY(-2px);
-}
-
-
-/* HERO SIDE */
-
-.hero-side{
-  display:grid;
-  grid-template-rows:1fr 1fr;
-  gap:18px;
-}
-
-.hero-card{
-  background:#fff;
-  border:1px solid var(--line);
-  padding:28px;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero-card-dark{
-  background:#dce6c4;
-  border-color:#d0dcb2;
-}
-
-.hero-card-label{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:11px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#71776e;
-}
-
-.hero-card-number{
-  margin-top:15px;
-  font-family:'Chakra Petch',sans-serif;
-  font-size:54px;
-  font-weight:700;
-  line-height:1;
-  color:var(--blue);
-}
-
-.hero-card-text{
-  margin-top:10px;
-  font-size:14px;
-  color:#626962;
-}
-
-.hero-card-dark .hero-card-number{
-  color:var(--ink);
-}
-
-
-/* STAT STRIP */
-
-.hero-stats{
-  max-width:1280px;
-  margin:0 auto;
-  padding:0 24px 28px;
-}
-
-.hero-stats-inner{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-
-.hero-stat{
-  padding:18px 24px;
-  border-right:1px solid var(--line);
-}
-
-.hero-stat:last-child{
-  border-right:0;
-}
-
-.hero-stat-number{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:26px;
-  font-weight:700;
-  color:var(--blue);
-}
-
-.hero-stat-label{
-  font-size:12px;
-  color:var(--muted);
-}
-
-
-/* =========================================================
-   PRODUCT SECTION
-========================================================= */
-
-.products-new{
-  max-width:1280px;
-  margin:auto;
-  padding:72px 24px 90px;
-}
-
-.section-heading{
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:30px;
-  margin-bottom:32px;
-}
-
-.section-eyebrow{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:11px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--orange);
-  margin-bottom:8px;
-}
-
-#products h2{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:34px;
-  line-height:1;
-  letter-spacing:-.04em;
-  color:var(--ink);
-}
-
-
-/* SORT */
-
-#sortSelect{
-  background:#fff!important;
-  border:1px solid var(--line)!important;
-  border-radius:6px!important;
-  min-width:180px;
-  color:var(--ink);
-}
-
-
-/* =========================================================
-   CATEGORY BAR
-========================================================= */
-
-.category-bar{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  overflow-x:auto;
-  padding:5px 0 18px;
-  scrollbar-width:none;
-}
-
-.category-bar::-webkit-scrollbar{
-  display:none;
-}
-
-.cat-chip{
-  white-space:nowrap;
-  border-radius:5px!important;
-  padding:9px 17px!important;
-  font-family:'Chakra Petch',sans-serif;
-  border:1px solid var(--line)!important;
-  background:#fff!important;
-  color:#626863!important;
-  transition:.2s ease;
-}
-
-.cat-chip:hover{
-  border-color:var(--blue)!important;
-  color:var(--blue)!important;
-}
-
-.cat-chip.bg-stone-900{
-  background:var(--blue)!important;
-  color:#fff!important;
-  border-color:var(--blue)!important;
-}
-
-
-/* =========================================================
-   FILTER AREA
-========================================================= */
-
-.filter-panel{
-  background:#f0eee7;
-  border:1px solid var(--line);
-  padding:18px 20px;
-  margin-bottom:34px;
-}
-
-#filterGroups{
-  margin:0!important;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px 22px;
-}
-
-#filterGroups > div{
-  margin-right:0!important;
-}
-
-#filterGroups .chip{
-  border-radius:4px!important;
-  background:#fff!important;
-  border-color:#d2d4cc!important;
-  color:#68706a!important;
-}
-
-#filterGroups .chip:hover{
-  border-color:var(--blue)!important;
-  color:var(--blue)!important;
-}
-
-#filterGroups .chip.bg-orange-700{
-  background:var(--lime)!important;
-  color:var(--ink)!important;
-  border-color:var(--lime)!important;
-}
-
-
-/* =========================================================
-   PRODUCT GRID
-========================================================= */
-
-#cardGrid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:22px;
-}
-
-#cardGrid .card-btn{
-  position:relative;
-  overflow:hidden;
-  background:#fff;
-  border:1px solid #e2e3dd!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-  transition:
-    transform .25s ease,
-    border-color .25s ease,
-    box-shadow .25s ease;
-}
-
-#cardGrid .card-btn:hover{
-  transform:translateY(-5px);
-  border-color:#b9bdb5!important;
-  box-shadow:0 18px 35px rgba(20,45,61,.09)!important;
-}
-
-#cardGrid .card-btn > div:first-child{
-  border-radius:0!important;
-  background:#e5e4dd;
-}
-
-#cardGrid .card-btn img{
-  transition:transform .45s cubic-bezier(.2,.7,.2,1);
-}
-
-#cardGrid .card-btn:hover img{
-  transform:scale(1.045);
-}
-
-
-/* IMAGE BADGES */
-
-#cardGrid .bg-emerald-700{
-  background:var(--blue)!important;
-}
-
-#cardGrid .bg-amber-700{
-  background:#7e7659!important;
-}
-
-#cardGrid .bg-orange-800{
-  background:var(--orange)!important;
-}
-
-#cardGrid .bg-red-700{
-  background:var(--orange)!important;
-}
-
-
-/* CARD CONTENT */
-
-#cardGrid .p-4{
-  padding:17px!important;
-}
-
-#cardGrid .text-\[11px\]{
-  font-family:'Chakra Petch',sans-serif;
-  color:#92978f!important;
-  letter-spacing:.1em;
-}
-
-#cardGrid h3{
-  color:var(--ink);
-  font-family:'Anuphan',sans-serif;
-  font-weight:600;
-  font-size:14px;
-}
-
-#cardGrid .text-lg{
-  font-family:'Chakra Petch',sans-serif;
-  color:var(--blue);
-}
-
-#cardGrid .line-through{
-  color:#aaa!important;
-}
-
-
-/* =========================================================
-   DETAIL VIEW — NEW EDITORIAL LAYOUT
-========================================================= */
-
-#detailView{
-  max-width:1280px!important;
-  min-height:700px;
-  padding:50px 24px 90px!important;
-}
-
-#detailView #backBtn{
-  font-family:'Chakra Petch',sans-serif;
-  color:#6f766f;
-  border-bottom:1px solid #cdd0c9;
-  padding-bottom:4px;
-  margin-bottom:35px!important;
-}
-
-#detailView #backBtn:hover{
-  color:var(--blue);
-}
-
-#detailView > div:last-child{
-  align-items:start;
-}
-
-#detailView .aspect-\[3\/4\]{
-  border-radius:0!important;
-  box-shadow:none!important;
-}
-
-#detailView h1{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:42px;
-  line-height:1.05;
-  letter-spacing:-.045em;
-}
-
-#detailView .text-3xl{
-  font-family:'Chakra Petch',sans-serif;
-  color:var(--blue);
-}
-
-#detailView .bg-emerald-700{
-  background:var(--blue)!important;
-}
-
-#detailView .bg-amber-700{
-  background:#7e7659!important;
-}
-
-#detailView .bg-orange-800{
-  background:var(--orange)!important;
-}
-
-#detailView a.mt-6{
-  background:var(--blue)!important;
-  border-radius:5px!important;
-}
-
-#detailView a.mt-6:hover{
-  background:var(--blue2)!important;
-}
-
-#detailView .border-orange-200{
-  border-color:#ddd0bd!important;
-}
-
-#detailView .bg-orange-50{
-  background:#f7f1e6!important;
-}
-
-#detailView .rounded-2xl{
-  border-radius:4px!important;
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-footer{
-  background:var(--blue)!important;
-}
-
-footer .absolute.inset-0.bg-gradient-to-br{
-  background:var(--blue)!important;
-}
-
-footer .absolute.inset-0.opacity-50{
-  opacity:1!important;
-  background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(200,241,90,.06)
-    )!important;
-}
-
-footer #footShopName{
-  font-family:'Chakra Petch',sans-serif;
-  color:#fff!important;
-}
-
-#footLinks a{
-  background:#254253!important;
-}
-
-#footLinks a:hover{
-  background:var(--lime)!important;
-  color:var(--ink)!important;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1024px){
-
-  .hero-layout{
-    grid-template-columns:1fr;
+  /* =====================================================
+     GLOBAL
+  ===================================================== */
+
+  :root{
+    --orange:#f4511e;
+    --orange-dark:#d83b0d;
+    --orange-light:#fff0e9;
+    --black:#111111;
+    --black-2:#1b1b1b;
+    --white:#ffffff;
+    --gray:#737373;
+    --line:#e7e7e7;
+    --bg:#fafafa;
   }
 
-  .hero-side{
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:none;
+  *{
+    box-sizing:border-box;
   }
 
-  #cardGrid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+  html{
+    scroll-behavior:smooth;
   }
 
-}
-
-
-@media(max-width:700px){
-
-  .hero-inner{
-    padding:28px 16px 35px;
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--black);
+    font-family:'IBM Plex Sans Thai',sans-serif;
   }
 
-  .hero-main{
-    min-height:470px;
-    padding:30px 25px;
+  .font-display{
+    font-family:'Kanit',sans-serif;
   }
 
-  .hero-main:after{
-    font-size:65px;
-    right:-20px;
+  ::selection{
+    background:var(--orange);
+    color:white;
   }
 
-  #heroTitle{
-    font-size:42px;
+  /* =====================================================
+     SCROLLBAR
+  ===================================================== */
+
+  ::-webkit-scrollbar{
+    width:8px;
   }
 
-  .hero-side{
-    grid-template-columns:1fr 1fr;
+  ::-webkit-scrollbar-track{
+    background:#f4f4f4;
+  }
+
+  ::-webkit-scrollbar-thumb{
+    background:#222;
+    border-radius:20px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover{
+    background:var(--orange);
+  }
+
+  /* =====================================================
+     HEADER
+  ===================================================== */
+
+  .main-header{
+    background:#fff;
+    border-bottom:1px solid #dedede;
+  }
+
+  .header-inner{
+    min-height:74px;
+  }
+
+  .brand-mark{
+    display:flex;
+    align-items:center;
     gap:10px;
+    text-decoration:none;
   }
 
-  .hero-card{
-    padding:20px;
+  .brand-dot{
+    width:12px;
+    height:12px;
+    background:var(--orange);
+    display:block;
+    transform:rotate(45deg);
   }
 
-  .hero-card-number{
-    font-size:38px;
+  .brand-name{
+    font-family:'Kanit',sans-serif;
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:-.5px;
   }
 
-  .hero-stats{
-    padding:0 16px 20px;
+  .search-box{
+    background:#f6f6f6;
+    border:1px solid #dedede;
+    transition:.2s;
+  }
+
+  .search-box:focus-within{
+    background:#fff;
+    border-color:var(--orange);
+    box-shadow:0 0 0 3px rgba(244,81,30,.08);
+  }
+
+  .search-box input{
+    background:transparent;
+  }
+
+  .search-box input::placeholder{
+    color:#999;
+  }
+
+  .contact-button{
+    background:var(--black);
+    color:#fff;
+    transition:.2s;
+  }
+
+  .contact-button:hover{
+    background:var(--orange);
+  }
+
+  /* =====================================================
+     HERO
+  ===================================================== */
+
+  .hero{
+    background:#111;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .hero::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:var(--orange);
+    right:-180px;
+    top:-280px;
+    opacity:.9;
+  }
+
+  .hero::after{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    border:1px solid rgba(255,255,255,.14);
+    right:80px;
+    bottom:-170px;
+    transform:rotate(20deg);
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:2;
+  }
+
+  .hero-label{
+    color:#ff754b;
+    font-family:'Kanit',sans-serif;
+    letter-spacing:.12em;
+    font-weight:600;
+  }
+
+  .hero-title{
+    font-family:'Kanit',sans-serif;
+    font-weight:800;
+    letter-spacing:-1.5px;
+    line-height:1.08;
+  }
+
+  .hero-title .orange{
+    color:#ff5a2c;
+  }
+
+  .hero-sub{
+    color:#bdbdbd;
+  }
+
+  .hero-button{
+    background:var(--orange);
+    color:#fff;
+    transition:.2s;
+  }
+
+  .hero-button:hover{
+    background:#ff693c;
+    transform:translateY(-2px);
   }
 
   .hero-stat{
-    padding:14px 10px;
+    border-left:1px solid #383838;
+    padding-left:20px;
   }
 
-  .hero-stat-number{
-    font-size:21px;
+  .hero-stat:first-child{
+    border-left:0;
+    padding-left:0;
   }
 
-  .hero-stat-label{
+  /* =====================================================
+     SECTION
+  ===================================================== */
+
+  .section-wrap{
+    background:#fafafa;
+  }
+
+  .section-title{
+    font-family:'Kanit',sans-serif;
+    font-weight:700;
+    letter-spacing:-.3px;
+  }
+
+  .section-description{
+    color:#777;
+  }
+
+  /* =====================================================
+     CATEGORY
+  ===================================================== */
+
+  .category-bar{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:4px;
+    scrollbar-width:none;
+  }
+
+  .category-bar::-webkit-scrollbar{
+    display:none;
+  }
+
+  .cat-chip{
+    white-space:nowrap;
+    transition:.2s;
+  }
+
+  /* =====================================================
+     FILTERS
+  ===================================================== */
+
+  .filter-panel{
+    background:#fff;
+    border:1px solid #dedede;
+    border-radius:16px;
+    padding:14px;
+  }
+
+  .filter-title{
+    font-family:'Kanit',sans-serif;
+    font-weight:600;
+  }
+
+  .filter-chip{
+    transition:.2s;
+  }
+
+  .filter-chip:hover{
+    border-color:var(--orange);
+    color:var(--orange);
+  }
+
+  /* =====================================================
+     PRODUCT CARD
+  ===================================================== */
+
+  .product-card{
+    background:#fff;
+    border:1px solid #e4e4e4;
+    border-radius:4px;
+    overflow:hidden;
+    transition:
+      transform .25s ease,
+      box-shadow .25s ease,
+      border-color .25s ease;
+  }
+
+  .product-card:hover{
+    transform:translateY(-5px);
+    border-color:#cfcfcf;
+    box-shadow:0 14px 35px rgba(0,0,0,.10);
+  }
+
+  .product-image{
+    background:#eeeeee;
+    position:relative;
+  }
+
+  .product-image img{
+    transition:transform .45s ease;
+  }
+
+  .product-card:hover .product-image img{
+    transform:scale(1.045);
+  }
+
+  .brand-label{
+    color:#888;
     font-size:10px;
+    letter-spacing:.14em;
+    font-weight:600;
   }
 
-  .products-new{
-    padding:50px 16px 65px;
+  .product-title{
+    font-family:'Kanit',sans-serif;
+    font-weight:600;
+    color:#171717;
   }
 
-  .section-heading{
-    align-items:start;
-    flex-direction:column;
-    gap:18px;
+  .price{
+    font-family:'Kanit',sans-serif;
+    font-weight:700;
   }
 
-  #products h2{
-    font-size:29px;
+  .old-price{
+    color:#aaa;
   }
 
-  #sortSelect{
-    width:100%;
+  /* =====================================================
+     SOLD
+  ===================================================== */
+
+  .sold-overlay{
+    background:rgba(0,0,0,.68);
   }
 
-  #cardGrid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
+  /* =====================================================
+     CONDITION
+  ===================================================== */
+
+  .condition-badge{
+    background:#111;
+    color:#fff;
+    border:1px solid rgba(255,255,255,.3);
   }
 
-  #cardGrid .p-4{
-    padding:12px!important;
+  .single-stock{
+    background:var(--orange);
+    color:#fff;
   }
 
-  #cardGrid h3{
-    font-size:12px;
+  /* =====================================================
+     DETAIL PAGE
+  ===================================================== */
+
+  .detail-image{
+    background:#eee;
   }
 
-  #cardGrid .text-lg{
-    font-size:17px;
+  .detail-price{
+    font-family:'Kanit',sans-serif;
+    font-weight:700;
   }
 
-  #detailView{
-    padding:30px 16px 65px!important;
+  .buy-button{
+    background:var(--black);
+    transition:.2s;
   }
 
-  #detailView h1{
-    font-size:32px;
+  .buy-button:hover{
+    background:var(--orange);
   }
 
-}
-
-
-@media(max-width:430px){
-
-  #heroTitle{
-    font-size:36px;
+  .measurement-box{
+    border:1px solid #dedede;
+    background:#fff;
   }
 
-  .hero-side{
-    grid-template-columns:1fr;
+  /* =====================================================
+     DEFECT BOX
+  ===================================================== */
+
+  .defect-box{
+    border:1px solid #ffc7b5;
+    background:#fff5f1;
   }
 
-  .hero-card{
-    min-height:150px;
+  /* =====================================================
+     FOOTER
+  ===================================================== */
+
+  .main-footer{
+    background:#111;
+    color:#fff;
   }
 
-}
+  .footer-orange{
+    color:var(--orange);
+  }
 
+  .social-button{
+    background:#222;
+    transition:.2s;
+  }
 
-/* =========================================================
-   SUBTLE TEXTURE
-========================================================= */
+  .social-button:hover{
+    background:var(--orange);
+  }
 
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:9999;
-  opacity:.025;
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-}
+  /* =====================================================
+     MOBILE
+  ===================================================== */
+
+  @media(max-width:640px){
+
+    .brand-name{
+      font-size:20px;
+    }
+
+    .hero-title{
+      font-size:34px;
+    }
+
+    .hero-stat{
+      padding-left:12px;
+    }
+
+    .product-card{
+      border-radius:3px;
+    }
+
+  }
 
 </style>
 </head>
@@ -796,86 +457,111 @@ body:before{
 
 <body>
 
-
-<!-- =========================================================
+<!-- =====================================================
      HEADER
-========================================================= -->
+===================================================== -->
 
-<header class="sticky top-0 z-40 backdrop-blur border-b">
+<header class="main-header sticky top-0 z-40">
 
-  <div class="max-w-7xl mx-auto px-4 lg:px-8 h-16 lg:h-20 flex items-center gap-5">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 header-inner flex items-center gap-4">
 
-    <span
-      id="shopName"
-      class="text-xl lg:text-2xl flex-shrink-0">
-      …
-    </span>
+    <!-- LOGO -->
+    <div class="brand-mark flex-shrink-0">
 
+      <span class="brand-dot"></span>
 
-    <div class="hidden md:flex flex-1 max-w-xl mx-auto relative">
-
-      <svg
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24">
-
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
-
-      </svg>
-
-
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="ค้นหาแบรนด์ หรือชื่อสินค้า..."
-        class="w-full pl-11 pr-4 py-2.5 text-sm focus:outline-none">
+      <span id="shopName" class="brand-name">
+        …
+      </span>
 
     </div>
 
 
+    <!-- DESKTOP SEARCH -->
+
+    <div class="hidden md:flex flex-1 max-w-xl mx-auto">
+
+      <div class="search-box relative w-full rounded-full">
+
+        <svg
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+          />
+        </svg>
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="ค้นหาแบรนด์ หรือชื่อสินค้า..."
+          class="w-full rounded-full pl-11 pr-4 py-3 text-sm focus:outline-none"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- CONTACT -->
+
     <a
       id="navContact"
       target="_blank"
-      class="hidden sm:flex ml-auto items-center gap-2 px-5 py-2.5 text-sm font-bold font-display">
+      class="contact-button hidden sm:flex ml-auto items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold font-display"
+    >
+      <span>แชทสั่งซื้อ</span>
 
-      แชทสั่งซื้อ
-
-      <span>↗</span>
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 11.5a8.38 8.38 0 01-1 3.9 8.5 8.5 0 01-7.5 4.6 8.38 8.38 0 01-3.9-1L3 21l1.5-4.6A8.38 8.38 0 013.5 12 8.5 8.5 0 0112 3.5a8.5 8.5 0 019 8z"
+        />
+      </svg>
 
     </a>
 
   </div>
 
 
+  <!-- MOBILE SEARCH -->
+
   <div class="md:hidden px-4 pb-3">
 
-    <div class="relative">
+    <div class="search-box relative w-full rounded-full">
 
       <svg
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500"
         fill="none"
         stroke="currentColor"
-        viewBox="0 0 24 24">
-
+        viewBox="0 0 24 24"
+      >
         <path
           stroke-linecap="round"
-          stroke-linejoin="round"
           stroke-width="2"
-          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
-
+          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+        />
       </svg>
-
 
       <input
         id="searchInputMobile"
         type="search"
         placeholder="ค้นหาแบรนด์ หรือชื่อสินค้า..."
-        class="w-full pl-11 pr-4 py-2.5 text-sm focus:outline-none">
+        class="w-full rounded-full pl-11 pr-4 py-3 text-sm focus:outline-none"
+      >
 
     </div>
 
@@ -884,162 +570,127 @@ body:before{
 </header>
 
 
-<!-- =========================================================
+<!-- =====================================================
      STORE
-========================================================= -->
+===================================================== -->
 
 <div id="storeView">
 
 <main>
 
 
-<!-- =========================================================
-     NEW HERO
-========================================================= -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-<section class="hero-new">
+<section class="hero">
 
-  <div class="hero-inner">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-14 lg:py-20">
 
-    <div class="hero-layout">
+    <div class="hero-content">
+
+      <div class="grid lg:grid-cols-[1.4fr_.6fr] gap-12 items-end">
 
 
-      <!-- MAIN HERO -->
-
-      <div class="hero-main">
+        <!-- LEFT -->
 
         <div>
 
-          <div
+          <p
             id="tagline"
-            class="hero-kicker">
-          </div>
+            class="hero-label text-xs lg:text-sm uppercase mb-5"
+          ></p>
 
 
           <h1
             id="heroTitle"
-            class="mt-8">
-          </h1>
+            class="hero-title text-4xl sm:text-5xl lg:text-6xl max-w-4xl"
+          ></h1>
 
 
           <p
             id="heroSub"
-            class="mt-7 text-sm lg:text-base">
-          </p>
+            class="hero-sub mt-6 max-w-xl text-sm lg:text-base leading-relaxed"
+          ></p>
+
+
+          <a
+            href="#products"
+            class="hero-button inline-flex items-center gap-3 mt-8 px-7 py-3.5 rounded-full font-bold font-display"
+          >
+
+            <span>ดูสินค้าทั้งหมด</span>
+
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 12h14M13 6l6 6-6 6"
+              />
+            </svg>
+
+          </a>
 
         </div>
 
 
-        <a
-          href="#products"
-          class="hero-action mt-10">
+        <!-- RIGHT STATS -->
 
-          ดูสินค้าทั้งหมด
+        <div class="grid grid-cols-3 lg:grid-cols-1 gap-5 lg:gap-7">
 
-          <span class="ml-3">
-            ↓
-          </span>
+          <div class="hero-stat">
 
-        </a>
+            <div
+              id="statTotal"
+              class="text-3xl font-extrabold font-display"
+            >
+              –
+            </div>
 
-      </div>
+            <div class="text-xs text-stone-400 mt-1">
+              สินค้าทั้งหมด
+            </div>
 
-
-      <!-- SIDE CARDS -->
-
-      <div class="hero-side">
-
-        <div class="hero-card">
-
-          <div class="hero-card-label">
-            Collection
           </div>
 
-          <div
-            id="statTotal"
-            class="hero-card-number">
-            –
+
+          <div class="hero-stat">
+
+            <div
+              id="statAvailable"
+              class="text-3xl font-extrabold font-display"
+            >
+              –
+            </div>
+
+            <div class="text-xs text-stone-400 mt-1">
+              พร้อมขาย
+            </div>
+
           </div>
 
-          <div class="hero-card-text">
-            ชิ้นทั้งหมดในร้าน
+
+          <div class="hero-stat">
+
+            <div
+              id="statSold"
+              class="text-3xl font-extrabold font-display"
+            >
+              –
+            </div>
+
+            <div class="text-xs text-stone-400 mt-1">
+              ขายแล้ว
+            </div>
+
           </div>
 
-        </div>
-
-
-        <div class="hero-card hero-card-dark">
-
-          <div class="hero-card-label">
-            Available Now
-          </div>
-
-          <div
-            id="statAvailable"
-            class="hero-card-number">
-            –
-          </div>
-
-          <div class="hero-card-text">
-            พร้อมให้เจ้าของใหม่รับไป
-          </div>
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-  </div>
-
-
-  <!-- STATS -->
-
-  <div class="hero-stats">
-
-    <div class="hero-stats-inner">
-
-      <div class="hero-stat">
-
-        <div
-          id="statTotal"
-          class="hero-stat-number">
-          –
-        </div>
-
-        <div class="hero-stat-label">
-          สินค้าทั้งหมด
-        </div>
-
-      </div>
-
-
-      <div class="hero-stat">
-
-        <div
-          id="statAvailable"
-          class="hero-stat-number">
-          –
-        </div>
-
-        <div class="hero-stat-label">
-          พร้อมขาย
-        </div>
-
-      </div>
-
-
-      <div class="hero-stat">
-
-        <div
-          id="statSold"
-          class="hero-stat-number">
-          –
-        </div>
-
-        <div class="hero-stat-label">
-          ส่งต่อไปแล้ว
         </div>
 
       </div>
@@ -1051,56 +702,68 @@ body:before{
 </section>
 
 
-
-<!-- =========================================================
+<!-- =====================================================
      PRODUCTS
-========================================================= -->
+===================================================== -->
 
 <section
   id="products"
-  class="products-new">
+  class="section-wrap max-w-7xl mx-auto px-4 lg:px-8 py-12 lg:py-16"
+>
 
+  <!-- SECTION HEADING -->
 
-  <!-- SECTION HEADER -->
-
-  <div class="section-heading">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-7">
 
     <div>
 
-      <div class="section-eyebrow">
-        Curated secondhand
+      <div class="flex items-center gap-3">
+
+        <span class="w-8 h-[3px] bg-orange-600"></span>
+
+        <span class="text-xs font-bold uppercase tracking-[.18em] text-orange-600">
+          Latest Drop
+        </span>
+
       </div>
 
-      <h2>
-        เสื้อผ้าที่กำลังรอเจ้าของใหม่
-        <span class="text-stone-400">
-          / <span id="countLabel">0</span>
+      <h2 class="section-title text-2xl lg:text-3xl mt-2">
+        สินค้าล่าสุด
+        <span class="text-orange-600">
+          (<span id="countLabel">0</span>)
         </span>
       </h2>
+
+      <p class="section-description text-sm mt-1">
+        คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น
+      </p>
 
     </div>
 
 
-    <label class="flex items-center gap-3 text-sm">
+    <!-- SORT -->
 
-      <span class="text-stone-500">
-        เรียง
+    <label class="flex items-center gap-3">
+
+      <span class="text-xs text-stone-500 font-medium">
+        เรียงสินค้า
       </span>
 
       <select
         id="sortSelect"
-        class="pl-4 pr-8 py-2.5 text-sm font-medium focus:outline-none">
+        class="bg-white border border-stone-300 rounded-full pl-4 pr-9 py-2.5 text-sm font-medium focus:outline-none focus:border-orange-600"
+      >
 
         <option value="new">
-          มาใหม่
+          สินค้ามาใหม่
         </option>
 
         <option value="low">
-          ราคา น้อย → มาก
+          ราคา: น้อย → มาก
         </option>
 
         <option value="high">
-          ราคา มาก → น้อย
+          ราคา: มาก → น้อย
         </option>
 
       </select>
@@ -1110,36 +773,63 @@ body:before{
   </div>
 
 
-  <!-- CATEGORIES -->
+  <!-- CATEGORY -->
 
-  <div
-    id="categoryChips"
-    class="category-bar">
-  </div>
-
-
-  <!-- FILTER -->
-
-  <div class="filter-panel">
+  <div class="mb-5">
 
     <div
-      id="filterGroups">
-    </div>
+      id="categoryChips"
+      class="category-bar"
+    ></div>
 
   </div>
 
 
-  <!-- GRID -->
+  <!-- FILTER PANEL -->
+
+  <div class="filter-panel mb-8">
+
+    <div class="flex items-center gap-2 mb-3">
+
+      <svg
+        class="w-4 h-4 text-orange-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-width="2"
+          stroke-linecap="round"
+          d="M3 5h18M6 12h12M10 19h4"
+        />
+      </svg>
+
+      <span class="filter-title text-sm">
+        ตัวกรองสินค้า
+      </span>
+
+    </div>
+
+    <div
+      id="filterGroups"
+      class="flex flex-wrap gap-2"
+    ></div>
+
+  </div>
+
+
+  <!-- PRODUCT GRID -->
 
   <div
-    id="cardGrid">
+    id="cardGrid"
+    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
+  >
 
     <p class="text-stone-400 col-span-full py-10 text-center">
       กำลังโหลด...
     </p>
 
   </div>
-
 
 </section>
 
@@ -1148,40 +838,51 @@ body:before{
 </div>
 
 
-
-<!-- =========================================================
+<!-- =====================================================
      DETAIL
-========================================================= -->
+===================================================== -->
 
 <div
   id="detailView"
-  class="hidden">
-</div>
+  class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-10 lg:py-14"
+></div>
 
 
-
-<!-- =========================================================
+<!-- =====================================================
      FOOTER
-========================================================= -->
+===================================================== -->
 
-<footer class="relative overflow-hidden text-stone-300">
+<footer class="main-footer relative overflow-hidden">
 
-  <div class="absolute inset-0"></div>
+  <div class="absolute inset-0 opacity-10">
 
-  <div
-    class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <div
+      class="absolute right-0 bottom-0 w-96 h-96 rounded-full bg-orange-600 blur-3xl"
+    ></div>
 
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+  </div>
 
-      <div>
 
-        <div
-          id="footShopName"
-          class="text-xl font-bold">
+  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
+
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-7">
+
+
+      <div class="text-center sm:text-left">
+
+        <div class="flex items-center justify-center sm:justify-start gap-3">
+
+          <span class="brand-dot"></span>
+
+          <p
+            id="footShopName"
+            class="text-xl font-extrabold font-display"
+          ></p>
+
         </div>
 
-        <p class="text-sm text-slate-400 mt-1">
-          Wear it. Love it. Pass it on.
+        <p class="text-stone-500 text-xs mt-2">
+          Curated vintage & secondhand clothing
         </p>
 
       </div>
@@ -1189,8 +890,17 @@ body:before{
 
       <div
         id="footLinks"
-        class="flex gap-3">
-      </div>
+        class="flex gap-3"
+      ></div>
+
+    </div>
+
+
+    <div class="border-t border-stone-800 mt-9 pt-5 text-center">
+
+      <p class="text-xs text-stone-600">
+        © NNBShop — Vintage / Secondhand Collection
+      </p>
 
     </div>
 
@@ -1199,10 +909,9 @@ body:before{
 </footer>
 
 
-
-<!-- =========================================================
-     ORIGINAL FUNCTIONALITY
-========================================================= -->
+<!-- =====================================================
+     CONFIG
+===================================================== -->
 
 <script src="/config.js"></script>
 
@@ -1214,31 +923,39 @@ const sb = window.supabase.createClient(
 );
 
 
+/* =====================================================
+   CONDITION
+===================================================== */
+
 const CONDITION = {
 
   9:{
     label:"9/10 — เกือบใหม่",
-    cls:"bg-emerald-700"
+    cls:"condition-badge"
   },
 
   7:{
     label:"7/10 — สภาพดี",
-    cls:"bg-amber-700"
+    cls:"condition-badge"
   },
 
   5:{
     label:"5/10 — มีตำหนิเล็กน้อย",
-    cls:"bg-orange-800"
-  },
+    cls:"condition-badge"
+  }
 
 };
 
+
+/* =====================================================
+   ESCAPE
+===================================================== */
 
 function esc(s){
 
   return String(s ?? '').replace(
     /[&<>"']/g,
-    c=>({
+    c => ({
       '&':'&amp;',
       '<':'&lt;',
       '>':'&gt;',
@@ -1252,10 +969,7 @@ function esc(s){
 
 function escAttr(s){
 
-  return esc(s).replace(
-    /`/g,
-    '&#96;'
-  );
+  return esc(s).replace(/`/g,'&#96;');
 
 }
 
@@ -1267,26 +981,41 @@ function fmt(n){
 }
 
 
-let items=[];
+/* =====================================================
+   GLOBAL STATE
+===================================================== */
 
-let cfg={};
+let items = [];
 
-let filters={
+let cfg = {};
+
+let filters = {
+
   category:'ทั้งหมด',
+
   brand:'ทั้งหมด',
+
   size:'ทั้งหมด',
+
   score:null,
+
   search:'',
+
   sort:'new'
+
 };
 
+
+/* =====================================================
+   LOAD
+===================================================== */
 
 async function load(){
 
   const {
     data:c,
     error:cErr
-  }=await sb
+  } = await sb
     .from('config')
     .select('*')
     .eq('id',1)
@@ -1296,123 +1025,150 @@ async function load(){
   const {
     data:rows,
     error:iErr
-  }=await sb
+  } = await sb
     .from('items')
     .select('*')
-    .order(
-      'created_at',
-      {
-        ascending:false
-      }
-    );
+    .order('created_at',{
+      ascending:false
+    });
 
 
   if(cErr || iErr){
 
-    cardGrid.innerHTML=`
-
-      <p class="text-red-600 col-span-full">
-
-        โหลดข้อมูลไม่สำเร็จ
-        ตรวจสอบ config.js และ Supabase
-
+    cardGrid.innerHTML = `
+      <p class="text-red-600 col-span-full py-10 text-center">
+        โหลดข้อมูลไม่สำเร็จ ตรวจสอบ config.js และ Supabase
       </p>
-
     `;
 
     console.error(cErr || iErr);
 
     return;
-
   }
 
 
-  cfg=c;
+  cfg = c;
 
-  items=rows || [];
-
-
-  shopName.textContent=
-    cfg.shop_name;
-
-  footShopName.textContent=
-    cfg.shop_name;
-
-  tagline.textContent=
-    cfg.tagline;
+  items = rows || [];
 
 
-  heroTitle.innerHTML=`
+  /* SHOP INFO */
 
+  shopName.textContent = cfg.shop_name;
+
+  footShopName.textContent = cfg.shop_name;
+
+  tagline.textContent = cfg.tagline;
+
+
+  heroTitle.innerHTML = `
     ${esc(cfg.hero_title1)}
-
-    <span class="text-orange-400">
-
+    <span class="orange text-orange-500">
       ${esc(cfg.hero_title2)}
-
     </span>
-
     <br class="hidden sm:block">
-
     ${esc(cfg.hero_title3)}
-
   `;
 
 
-  heroSub.textContent=
-    cfg.hero_sub;
+  heroSub.textContent = cfg.hero_sub;
 
+
+  /* CONTACT */
 
   if(cfg.ig_url){
 
-    navContact.href=
-      cfg.ig_url;
+    navContact.href = cfg.ig_url;
 
   }else{
 
-    navContact.classList.add(
-      'hidden'
-    );
+    navContact.classList.add('hidden');
 
   }
 
 
-  const igIcon=`
+  /* =====================================================
+     INSTAGRAM ICON
+  ===================================================== */
+
+  const igIcon = `
 
     <a
       href="${escAttr(cfg.ig_url)}"
       target="_blank"
       aria-label="Instagram"
-      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+      class="social-button w-10 h-10 rounded-full flex items-center justify-center"
+    >
 
       <svg
         class="w-4 h-4"
         fill="currentColor"
-        viewBox="0 0 24 24">
+        viewBox="0 0 24 24"
+      >
 
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584.012-4.849.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.28-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.332.014 8.741 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07
+        3.252.148 4.771 1.691 4.919 4.919.058
+        1.265.069 1.645.069 4.849 0 3.205-.012
+        3.584-.069 4.849-.149 3.225-1.664
+        4.771-4.919 4.919-1.266.058-1.644.07-4.85.07
+        -3.204 0-3.584-.012-4.849-.07-3.26-.149
+        -4.771-1.699-4.919-4.92-.058-1.28-.07-1.644
+        -.07-4.849 0-3.204.013-3.583.07-4.849
+        .149-3.227 1.664-4.771 4.919-4.919
+        1.266-.057 1.645-.069 4.849-.069z"/>
+
+        <path d="M12 0C8.741 0 8.332.014 7.052.072
+        2.695.272.273 2.69.073 7.052.014
+        8.332 0 8.741 0 12c0 3.259.014 3.668
+        .072 4.948.2 4.358 2.618 6.78 6.98
+        6.98C8.332 23.986 8.741 24 12 24c3.259
+        0 3.668-.014 4.948-.072 4.354-.2
+        6.782-2.618 6.979-6.98.059-1.28.073
+        -1.689.073-4.948 0-3.259-.014-3.668
+        -.072-4.948C23.73 2.7 21.311.273
+        16.949.073 15.668.014 15.259 0 12 0z"/>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+          fill="#111"
+        />
 
       </svg>
 
     </a>
-
   `;
 
 
-  const fbIcon=`
+  /* =====================================================
+     FACEBOOK
+  ===================================================== */
+
+  const fbIcon = `
 
     <a
       href="${escAttr(cfg.fb_url)}"
       target="_blank"
       aria-label="Facebook"
-      class="w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+      class="social-button w-10 h-10 rounded-full flex items-center justify-center"
+    >
 
       <svg
         class="w-4 h-4"
         fill="currentColor"
-        viewBox="0 0 24 24">
+        viewBox="0 0 24 24"
+      >
 
-        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+        <path d="M22 12c0-5.523-4.477-10-10-10S2
+        6.477 2 12c0 4.991 3.657 9.128 8.438
+        9.878v-6.987h-2.54V12h2.54V9.797
+        c0-2.506 1.492-3.89 3.777-3.89
+        1.094 0 2.238.195 2.238.195v2.46
+        h-1.26c-1.243 0-1.63.771-1.63
+        1.562V12h2.773l-.443 2.89h-2.33
+        v6.988C18.343 21.128 22 16.991
+        22 12z"/>
 
       </svg>
 
@@ -1421,39 +1177,22 @@ async function load(){
   `;
 
 
-  footLinks.innerHTML=
+  footLinks.innerHTML =
     (cfg.ig_url ? igIcon : '') +
     (cfg.fb_url ? fbIcon : '');
 
 
-  /*
-    NOTE:
-    IDs เดิมยังคงใช้เหมือนเดิม
-    เพื่อไม่กระทบระบบเดิม
-  */
+  /* =====================================================
+     STATS
+  ===================================================== */
 
-  document
-    .querySelectorAll('#statTotal')
-    .forEach(el=>{
-      el.textContent=
-        items.length;
-    });
+  statTotal.textContent = items.length;
 
+  statAvailable.textContent =
+    items.filter(l => !l.sold).length;
 
-  document
-    .querySelectorAll('#statAvailable')
-    .forEach(el=>{
-      el.textContent=
-        items.filter(l=>!l.sold).length;
-    });
-
-
-  document
-    .querySelectorAll('#statSold')
-    .forEach(el=>{
-      el.textContent=
-        items.filter(l=>l.sold).length;
-    });
+  statSold.textContent =
+    items.filter(l => l.sold).length;
 
 
   renderCategoryChips();
@@ -1465,48 +1204,51 @@ async function load(){
 }
 
 
+/* =====================================================
+   CATEGORY
+===================================================== */
+
 function renderCategoryChips(){
 
-  const cats=[
+  const cats = [
     'ทั้งหมด',
     ...new Set(
       items
-        .map(i=>i.category)
+        .map(i => i.category)
         .filter(Boolean)
     )
   ];
 
 
-  categoryChips.innerHTML=
-    cats.map(c=>`
+  categoryChips.innerHTML = cats.map(c => `
 
-      <button
-        data-cat="${escAttr(c)}"
-        class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display ${
-          filters.category===c
-            ? 'bg-stone-900 text-white'
-            : 'bg-white border border-stone-300 text-stone-600'
-        }">
+    <button
+      data-cat="${escAttr(c)}"
+      class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display
+      ${
+        filters.category === c
+        ? 'bg-orange-600 text-white'
+        : 'bg-white border border-stone-300 text-stone-700 hover:border-orange-500 hover:text-orange-600'
+      }"
+    >
 
-        ${esc(c)}
+      ${esc(c)}
 
-      </button>
+    </button>
 
-    `).join('');
+  `).join('');
 
 
   categoryChips
     .querySelectorAll('.cat-chip')
-    .forEach(btn=>{
+    .forEach(btn => {
 
       btn.addEventListener(
         'click',
-        ()=>{
+        () => {
 
-          filters.category=
-            btn.getAttribute(
-              'data-cat'
-            );
+          filters.category =
+            btn.getAttribute('data-cat');
 
           renderCategoryChips();
 
@@ -1520,17 +1262,21 @@ function renderCategoryChips(){
 }
 
 
+/* =====================================================
+   FILTER
+===================================================== */
+
 function renderFilters(){
 
-  const brands=[
+  const brands = [
     'ทั้งหมด',
     ...new Set(
-      items.map(i=>i.brand)
+      items.map(i => i.brand)
     )
   ];
 
 
-  const sizes=[
+  const sizes = [
     'ทั้งหมด',
     'S',
     'M',
@@ -1547,24 +1293,24 @@ function renderFilters(){
 
     return `
 
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2 mr-4">
 
-        <span class="text-xs text-stone-400 uppercase font-display font-semibold">
-
-          ${title}:
-
+        <span class="text-xs text-stone-400 font-display font-semibold">
+          ${title}
         </span>
 
-        ${options.map(o=>`
+        ${options.map(o => `
 
           <button
             data-group="${key}"
             data-val="${escAttr(o)}"
-            class="chip px-3 py-1 rounded-full text-xs font-medium border ${
-              filters[key]===o
-                ? 'bg-orange-700 text-white border-orange-700'
-                : 'bg-white text-stone-600 border-stone-300'
-            }">
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-medium border
+            ${
+              filters[key] === o
+              ? 'bg-black text-white border-black'
+              : 'bg-white text-stone-600 border-stone-300'
+            }"
+          >
 
             ${esc(o)}
 
@@ -1585,22 +1331,22 @@ function renderFilters(){
 
       <div class="flex flex-wrap items-center gap-2">
 
-        <span class="text-xs text-stone-400 uppercase font-display font-semibold">
-
-          สภาพ:
-
+        <span class="text-xs text-stone-400 font-display font-semibold">
+          สภาพ
         </span>
 
-        ${[9,7,5].map(s=>`
+        ${[9,7,5].map(s => `
 
           <button
             data-group="score"
             data-val="${s}"
-            class="chip px-3 py-1 rounded-full text-xs font-medium border ${
-              filters.score===s
-                ? 'bg-orange-700 text-white border-orange-700'
-                : 'bg-white text-stone-600 border-stone-300'
-            }">
+            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-medium border
+            ${
+              filters.score === s
+              ? 'bg-orange-600 text-white border-orange-600'
+              : 'bg-white text-stone-600 border-stone-300'
+            }"
+          >
 
             ${s}/10
 
@@ -1615,43 +1361,39 @@ function renderFilters(){
   }
 
 
-  filterGroups.innerHTML=
-    group('แบรนด์',brands,'brand')+
-    group('ไซส์',sizes,'size')+
+  filterGroups.innerHTML =
+    group('แบรนด์',brands,'brand') +
+    group('ไซส์',sizes,'size') +
     scoreGroup();
 
 
   filterGroups
-    .querySelectorAll('.chip')
-    .forEach(btn=>{
+    .querySelectorAll('.filter-chip')
+    .forEach(btn => {
 
       btn.addEventListener(
         'click',
-        ()=>{
+        () => {
 
-          const g=
-            btn.getAttribute(
-              'data-group'
-            );
+          const g =
+            btn.getAttribute('data-group');
 
-          const v=
-            btn.getAttribute(
-              'data-val'
-            );
+          const v =
+            btn.getAttribute('data-val');
 
 
-          if(g==='score'){
+          if(g === 'score'){
 
-            const n=Number(v);
+            const n = Number(v);
 
-            filters.score=
-              filters.score===n
-                ? null
-                : n;
+            filters.score =
+              filters.score === n
+              ? null
+              : n;
 
           }else{
 
-            filters[g]=v;
+            filters[g] = v;
 
           }
 
@@ -1668,238 +1410,306 @@ function renderFilters(){
 }
 
 
+/* =====================================================
+   PRODUCT GRID
+===================================================== */
+
 function renderGrid(){
 
-  const q=
+  const q =
     filters.search
       .trim()
       .toLowerCase();
 
 
-  let visible=
-    items.filter(i=>
+  let visible = items.filter(i =>
 
-      (filters.category==='ทั้งหมด' ||
-        i.category===filters.category)
+    (
+      filters.category === 'ทั้งหมด' ||
+      i.category === filters.category
+    )
 
-      &&
+    &&
 
-      (filters.brand==='ทั้งหมด' ||
-        i.brand===filters.brand)
+    (
+      filters.brand === 'ทั้งหมด' ||
+      i.brand === filters.brand
+    )
 
-      &&
+    &&
 
-      (filters.size==='ทั้งหมด' ||
-        i.size_label===filters.size)
+    (
+      filters.size === 'ทั้งหมด' ||
+      i.size_label === filters.size
+    )
 
-      &&
+    &&
 
-      (!filters.score ||
-        i.condition_score===filters.score)
+    (
+      !filters.score ||
+      i.condition_score === filters.score
+    )
 
-      &&
+    &&
 
-      (!q ||
-        i.title.toLowerCase().includes(q) ||
-        i.brand.toLowerCase().includes(q))
+    (
+      !q ||
+      i.title.toLowerCase().includes(q) ||
+      i.brand.toLowerCase().includes(q)
+    )
 
-    );
-
-
-  if(filters.sort==='low'){
-
-    visible=
-      [...visible]
-      .sort(
-        (a,b)=>a.price-b.price
-      );
-
-  }
+  );
 
 
-  if(filters.sort==='high'){
+  if(filters.sort === 'low'){
 
-    visible=
-      [...visible]
-      .sort(
-        (a,b)=>b.price-a.price
-      );
+    visible = [...visible]
+      .sort((a,b) => a.price - b.price);
 
   }
 
 
-  countLabel.textContent=
+  if(filters.sort === 'high'){
+
+    visible = [...visible]
+      .sort((a,b) => b.price - a.price);
+
+  }
+
+
+  countLabel.textContent =
     visible.length;
 
 
-  cardGrid.innerHTML=
+  cardGrid.innerHTML =
     visible.length
 
-      ? visible.map(i=>`
+    ? visible.map(i => `
 
-        <button
-          data-id="${i.id}"
-          class="card-btn text-left group bg-white overflow-hidden border">
+      <button
+        data-id="${i.id}"
+        class="product-card text-left group"
+      >
 
-          <div
-            class="relative aspect-[3/4] overflow-hidden">
+        <!-- IMAGE -->
 
-            ${
-              i.images &&
-              i.images[0]
+        <div
+          class="product-image relative aspect-[3/4] overflow-hidden"
+        >
 
-              ? `
+          ${
+            i.images && i.images[0]
 
-                <img
-                  src="${escAttr(i.images[0])}"
-                  class="w-full h-full object-cover"
-                  alt="${escAttr(i.title)}">
+            ?
 
-              `
+            `
+              <img
+                src="${escAttr(i.images[0])}"
+                class="w-full h-full object-cover"
+                alt="${escAttr(i.title)}"
+              >
+            `
 
-              : `
+            :
 
-                <div
-                  class="w-full h-full flex items-center justify-center text-stone-400 text-xs">
-
-                  ไม่มีรูป
-
-                </div>
-
-              `
-            }
-
-
-            ${
-              i.sold
-
-              ? `
-
-                <div
-                  class="absolute inset-0 bg-black/50 flex items-center justify-center">
-
-                  <span
-                    class="text-white text-sm font-bold font-display">
-
-                    SOLD
-
-                  </span>
-
-                </div>
-
-              `
-
-              : ''
-            }
+            `
+              <div
+                class="w-full h-full flex items-center justify-center text-stone-400 text-xs"
+              >
+                ไม่มีรูป
+              </div>
+            `
+          }
 
 
-            ${
-              !i.sold &&
-              i.single_stock
+          <!-- SOLD -->
 
-              ? `
+          ${
+            i.sold
+
+            ?
+
+            `
+              <div
+                class="sold-overlay absolute inset-0 flex items-center justify-center"
+              >
 
                 <span
-                  class="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
-
-                  เหลือชิ้นเดียว
-
+                  class="text-white text-sm font-bold font-display border border-white/50 px-5 py-2 rounded-full"
+                >
+                  SOLD OUT
                 </span>
 
+              </div>
+            `
+
+            :
+
+            ''
+          }
+
+
+          <!-- SINGLE STOCK -->
+
+          ${
+            !i.sold && i.single_stock
+
+            ?
+
+            `
+              <span
+                class="single-stock absolute top-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full font-display"
+              >
+                เหลือชิ้นเดียว
+              </span>
+            `
+
+            :
+
+            ''
+          }
+
+
+          <!-- CONDITION -->
+
+          <span
+            class="condition-badge absolute bottom-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full font-display"
+          >
+
+            ${CONDITION[i.condition_score].label}
+
+          </span>
+
+        </div>
+
+
+        <!-- INFO -->
+
+        <div class="p-4">
+
+          <p class="brand-label uppercase">
+            ${esc(i.brand)}
+          </p>
+
+
+          <h3
+            class="product-title text-sm mt-1 leading-snug"
+          >
+            ${esc(i.title)}
+          </h3>
+
+
+          <div
+            class="flex items-center gap-2 mt-3"
+          >
+
+            ${
+              i.old_price
+
+              ?
+
+              `
+                <span class="old-price text-xs line-through">
+                  ฿${fmt(i.old_price)}
+                </span>
               `
 
-              : ''
+              :
+
+              ''
             }
 
 
             <span
-              class="absolute bottom-3 left-3 ${CONDITION[i.condition_score].cls} text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
-
-              ${CONDITION[i.condition_score].label}
-
+              class="price text-lg"
+            >
+              ฿${fmt(i.price)}
             </span>
 
           </div>
 
 
-          <div class="p-4">
+          <div
+            class="flex items-center justify-between mt-4 pt-3 border-t border-stone-100"
+          >
 
-            <p class="text-[11px] uppercase tracking-wider">
+            <span class="text-[10px] text-stone-400 uppercase tracking-wider">
+              View item
+            </span>
 
-              ${esc(i.brand)}
+            <span
+              class="w-7 h-7 rounded-full border border-stone-200 flex items-center justify-center group-hover:bg-orange-600 group-hover:border-orange-600 group-hover:text-white transition-colors"
+            >
 
-            </p>
+              <svg
+                class="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
 
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 12h14M13 6l6 6-6 6"
+                />
 
-            <h3
-              class="font-semibold text-sm mt-1 leading-snug">
+              </svg>
 
-              ${esc(i.title)}
-
-            </h3>
-
-
-            <div
-              class="flex items-center gap-2 mt-3">
-
-              ${
-                i.old_price
-
-                ? `
-
-                  <span
-                    class="text-xs line-through">
-
-                    ฿${fmt(i.old_price)}
-
-                  </span>
-
-                `
-
-                : ''
-              }
-
-
-              <span
-                class="text-lg font-bold">
-
-                ฿${fmt(i.price)}
-
-              </span>
-
-            </div>
+            </span>
 
           </div>
 
-        </button>
+        </div>
 
-      `).join('')
+      </button>
 
-      :
+    `).join('')
 
-      `
+    :
 
-        <p
-          class="text-stone-400 col-span-full py-10 text-center">
+    `
+      <div class="col-span-full py-16 text-center">
 
+        <div
+          class="w-14 h-14 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-4"
+        >
+
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+
+            <path
+              stroke-width="2"
+              stroke-linecap="round"
+              d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+            />
+
+          </svg>
+
+        </div>
+
+        <p class="text-stone-500">
           ไม่พบสินค้าตามตัวกรองที่เลือก
-
         </p>
 
-      `;
+      </div>
+    `;
 
 
   cardGrid
-    .querySelectorAll('.card-btn')
-    .forEach(btn=>{
+    .querySelectorAll('.product-card')
+    .forEach(btn => {
 
       btn.addEventListener(
         'click',
-        ()=>showDetail(
+        () => showDetail(
           Number(
-            btn.getAttribute(
-              'data-id'
-            )
+            btn.getAttribute('data-id')
           )
         )
       );
@@ -1909,51 +1719,62 @@ function renderGrid(){
 }
 
 
+/* =====================================================
+   DETAIL
+===================================================== */
+
 function showDetail(id){
 
-  const p=
-    items.find(
-      i=>i.id===id
-    );
+  const p =
+    items.find(i => i.id === id);
 
 
-  if(!p)return;
+  if(!p) return;
 
 
-  storeView.classList.add(
-    'hidden'
-  );
+  storeView.classList.add('hidden');
 
-  detailView.classList.remove(
-    'hidden'
-  );
-
+  detailView.classList.remove('hidden');
 
   window.scrollTo({
     top:0
   });
 
 
-  const gallery=
-    p.images &&
-    p.images.length
-      ? p.images
-      : [null];
+  const gallery =
+    (
+      p.images &&
+      p.images.length
+    )
+
+    ?
+
+    p.images
+
+    :
+
+    [null];
 
 
-  detailView.innerHTML=`
+  detailView.innerHTML = `
+
+    <!-- BACK -->
 
     <button
       id="backBtn"
-      class="flex items-center gap-1.5 text-sm font-medium">
+      class="flex items-center gap-2 text-sm text-stone-500 hover:text-orange-600 mb-8 font-medium transition-colors"
+    >
 
-      ← กลับไปดูสินค้าทั้งหมด
+      <span class="w-8 h-8 rounded-full border border-stone-300 flex items-center justify-center">
+        ←
+      </span>
+
+      กลับไปดูสินค้าทั้งหมด
 
     </button>
 
 
-    <div
-      class="grid lg:grid-cols-2 gap-12 lg:gap-20">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16">
 
 
       <!-- IMAGE -->
@@ -1961,74 +1782,78 @@ function showDetail(id){
       <div>
 
         <div
-          class="relative aspect-[3/4] overflow-hidden bg-stone-200">
+          class="detail-image relative aspect-[3/4] rounded overflow-hidden"
+        >
 
           ${
             gallery[0]
 
-            ? `
+            ?
 
+            `
               <img
                 src="${escAttr(gallery[0])}"
                 class="w-full h-full object-cover"
-                alt="${escAttr(p.title)}">
-
+                alt="${escAttr(p.title)}"
+              >
             `
 
-            : `
+            :
 
+            `
               <div
-                class="w-full h-full flex items-center justify-center text-stone-400">
-
+                class="w-full h-full flex items-center justify-center text-stone-400"
+              >
                 ไม่มีรูป
-
               </div>
-
             `
           }
 
 
           ${
-            !p.sold &&
-            p.single_stock
+            (!p.sold && p.single_stock)
 
-            ? `
-
-              <span
-                class="absolute top-4 left-4 bg-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full font-display">
-
-                เหลือชิ้นเดียว
-
-              </span>
+            ?
 
             `
+              <span
+                class="single-stock absolute top-4 left-4 text-xs font-bold px-4 py-2 rounded-full font-display"
+              >
+                เหลือชิ้นเดียว
+              </span>
+            `
 
-            : ''
+            :
+
+            ''
           }
 
         </div>
 
 
         ${
-          gallery.length>1
+          gallery.length > 1
 
-          ? `
+          ?
 
+          `
             <div class="flex gap-2 mt-3">
 
-              ${gallery.slice(1).map(g=>`
+              ${gallery.slice(1).map(g => `
 
                 <img
                   src="${escAttr(g)}"
-                  class="w-16 h-16 object-cover border border-stone-200">
+                  class="w-16 h-16 rounded object-cover flex-shrink-0 border border-stone-200"
+                >
 
               `).join('')}
 
             </div>
-
           `
 
-          : ''
+          :
+
+          ''
         }
 
 
@@ -2036,52 +1861,50 @@ function showDetail(id){
           p.defects &&
           p.defects.length
 
-          ? `
+          ?
 
-            <div
-              class="mt-7 border bg-orange-50 p-5">
+          `
+
+            <div class="defect-box rounded-xl p-5 mt-6">
 
               <p
-                class="text-xs font-bold uppercase tracking-wider text-orange-800 mb-3 font-display">
-
-                จุดตำหนิที่พบ
-                (${p.defects.length})
-
+                class="text-xs font-bold uppercase tracking-wider text-orange-700 mb-4 font-display"
+              >
+                จุดตำหนิที่พบ (${p.defects.length})
               </p>
 
 
               <div class="space-y-2">
 
-                ${p.defects.map(d=>`
+                ${p.defects.map(d => `
 
                   <div
-                    class="flex items-center gap-3 bg-white p-2 border border-orange-100">
+                    class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100"
+                  >
 
                     ${
                       d.image
 
-                      ? `
-
-                        <img
-                          src="${escAttr(d.image)}"
-                          class="w-14 h-14 object-cover flex-shrink-0">
+                      ?
 
                       `
+                        <img
+                          src="${escAttr(d.image)}"
+                          class="w-14 h-14 rounded object-cover flex-shrink-0"
+                        >
+                      `
 
-                      : `
+                      :
 
+                      `
                         <div
-                          class="w-14 h-14 bg-stone-100 flex-shrink-0">
-                        </div>
-
+                          class="w-14 h-14 rounded bg-stone-100 flex-shrink-0"
+                        ></div>
                       `
                     }
 
-
                     <p class="text-sm text-stone-700">
-
                       ${esc(d.note)}
-
                     </p>
 
                   </div>
@@ -2094,73 +1917,68 @@ function showDetail(id){
 
           `
 
-          : ''
+          :
+
+          ''
         }
 
       </div>
 
 
+      <!-- PRODUCT INFO -->
 
-      <!-- INFO -->
-
-      <div class="lg:pt-8">
+      <div>
 
         <p
-          class="text-xs text-stone-500 uppercase tracking-wider">
-
-          ${esc(p.brand)}
-          ·
-          ${esc(p.category)}
-
+          class="text-xs text-orange-600 uppercase tracking-widest font-bold"
+        >
+          ${esc(p.brand)} · ${esc(p.category)}
         </p>
 
 
         <h1
-          class="mt-3 font-bold">
-
+          class="text-3xl lg:text-4xl font-bold mt-2 font-display leading-tight"
+        >
           ${esc(p.title)}
-
         </h1>
 
 
         <div class="mt-5">
 
           <span
-            class="${CONDITION[p.condition_score].cls} text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">
-
+            class="condition-badge px-4 py-2 rounded-full text-xs font-bold font-display"
+          >
             ${CONDITION[p.condition_score].label}
-
           </span>
 
         </div>
 
 
         <div
-          class="flex items-baseline gap-3 mt-7 pb-7 border-b border-stone-200">
+          class="flex items-baseline gap-3 mt-6 pb-6 border-b border-stone-200"
+        >
 
           ${
             p.old_price
 
-            ? `
-
-              <span
-                class="text-lg text-stone-400 line-through">
-
-                ฿${fmt(p.old_price)}
-
-              </span>
+            ?
 
             `
+              <span class="text-lg text-stone-400 line-through">
+                ฿${fmt(p.old_price)}
+              </span>
+            `
 
-            : ''
+            :
+
+            ''
           }
 
 
           <span
-            class="text-3xl font-bold">
-
+            class="detail-price text-4xl"
+          >
             ฿${fmt(p.price)}
-
           </span>
 
         </div>
@@ -2169,111 +1987,120 @@ function showDetail(id){
         ${
           p.sold
 
-          ? `
-
-            <div
-              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
-
-              สินค้านี้ขายแล้ว
-
-            </div>
+          ?
 
           `
+            <div
+              class="mt-6 w-full bg-stone-100 text-stone-500 py-4 rounded-full font-bold text-center font-display border border-stone-200"
+            >
+              สินค้านี้ขายแล้ว
+            </div>
+          `
 
-          : cfg.ig_url
+          :
 
-          ? `
+          cfg.ig_url
 
+          ?
+
+          `
             <a
               href="${escAttr(cfg.ig_url)}"
               target="_blank"
-              class="mt-6 w-full text-white py-3.5 rounded-full font-bold flex items-center justify-center gap-2 transition-colors font-display">
+              class="buy-button mt-6 w-full text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 font-display"
+            >
 
               สั่งซื้อผ่าน Instagram
-              <span>↗</span>
+
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M5 12h14M13 6l6 6-6 6"
+                />
+
+              </svg>
 
             </a>
-
           `
 
-          : `
+          :
 
+          `
             <div
-              class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-full font-bold text-center font-display">
-
+              class="mt-6 w-full bg-stone-100 text-stone-500 py-4 rounded-full font-bold text-center font-display"
+            >
               ยังไม่เปิดช่องทางสั่งซื้อ
-
             </div>
-
           `
         }
 
 
-        <div class="mt-10">
+        <!-- MEASUREMENTS -->
 
-          <p
-            class="text-sm font-bold mb-3 font-display">
+        <div class="mt-9">
 
-            ตารางขนาด
-            <span class="text-stone-400">
-              / วัดจริง
+          <div class="flex items-center justify-between mb-3">
+
+            <p
+              class="text-base font-bold font-display"
+            >
+              ตารางขนาด
+            </p>
+
+            <span
+              class="text-xs text-orange-600 font-medium"
+            >
+              วัดจริง
             </span>
 
-          </p>
+          </div>
 
 
           <div
-            class="border border-stone-200 overflow-hidden">
+            class="measurement-box rounded-xl overflow-hidden"
+          >
 
             ${
-              Object
-                .entries(
-                  p.measurements || {}
-                )
-                .filter(
-                  ([k,v])=>v
-                )
-                .map(
-                  ([k,v],idx)=>`
+              Object.entries(
+                p.measurements || {}
+              )
+              .filter(([k,v]) => v)
+              .map(([k,v],idx) => `
 
-                    <div
-                      class="flex justify-between px-4 py-3 text-sm ${
-                        idx%2===0
-                          ? 'bg-stone-50'
-                          : 'bg-white'
-                      }">
+                <div
+                  class="flex justify-between px-4 py-3 text-sm
+                  ${
+                    idx % 2 === 0
+                    ? 'bg-stone-50'
+                    : 'bg-white'
+                  }"
+                >
 
-                      <span
-                        class="text-stone-500">
+                  <span class="text-stone-500">
+                    ${esc(k)}
+                  </span>
 
-                        ${esc(k)}
+                  <span class="font-medium">
+                    ${esc(v)}
+                  </span>
 
-                      </span>
+                </div>
 
-                      <span
-                        class="font-medium">
-
-                        ${esc(v)}
-
-                      </span>
-
-                    </div>
-
-                  `
-                )
-                .join('')
+              `).join('')
 
               ||
 
               `
-
-                <p
-                  class="text-sm text-stone-400 p-4">
-
+                <p class="text-sm text-stone-400 p-4">
                   ไม่มีข้อมูลขนาด
-
                 </p>
-
               `
             }
 
@@ -2281,11 +2108,9 @@ function showDetail(id){
 
 
           <p
-            class="text-xs text-stone-400 mt-2">
-
-            ไซส์ป้ายอาจไม่ตรงตัว
-            แนะนำให้ดูตารางวัดจริงเป็นหลัก
-
+            class="text-xs text-stone-400 mt-3 leading-relaxed"
+          >
+            ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก
           </p>
 
         </div>
@@ -2301,15 +2126,11 @@ function showDetail(id){
     .getElementById('backBtn')
     .addEventListener(
       'click',
-      ()=>{
+      () => {
 
-        detailView.classList.add(
-          'hidden'
-        );
+        detailView.classList.add('hidden');
 
-        storeView.classList.remove(
-          'hidden'
-        );
+        storeView.classList.remove('hidden');
 
         window.scrollTo({
           top:0
@@ -2321,13 +2142,17 @@ function showDetail(id){
 }
 
 
+/* =====================================================
+   SEARCH
+===================================================== */
+
 function syncSearch(v){
 
-  filters.search=v;
+  filters.search = v;
 
-  searchInput.value=v;
+  searchInput.value = v;
 
-  searchInputMobile.value=v;
+  searchInputMobile.value = v;
 
   renderGrid();
 
@@ -2336,25 +2161,25 @@ function syncSearch(v){
 
 searchInput.addEventListener(
   'input',
-  e=>syncSearch(
-    e.target.value
-  )
+  e => syncSearch(e.target.value)
 );
 
 
 searchInputMobile.addEventListener(
   'input',
-  e=>syncSearch(
-    e.target.value
-  )
+  e => syncSearch(e.target.value)
 );
 
 
+/* =====================================================
+   SORT
+===================================================== */
+
 sortSelect.addEventListener(
   'change',
-  e=>{
+  e => {
 
-    filters.sort=
+    filters.sort =
       e.target.value;
 
     renderGrid();
@@ -2362,6 +2187,10 @@ sortSelect.addEventListener(
   }
 );
 
+
+/* =====================================================
+   START
+===================================================== */
 
 load();
 
