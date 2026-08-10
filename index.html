@@ -1,2200 +1,278 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>NNBShop — เสื้อผ้าวินเทจมือสอง</title>
-
-<!-- =========================
-     FONTS
-========================= -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-  /* =====================================================
-     GLOBAL
-  ===================================================== */
-
-  :root{
-    --orange:#f4511e;
-    --orange-dark:#d83b0d;
-    --orange-light:#fff0e9;
-    --black:#111111;
-    --black-2:#1b1b1b;
-    --white:#ffffff;
-    --gray:#737373;
-    --line:#e7e7e7;
-    --bg:#fafafa;
-  }
-
-  *{
-    box-sizing:border-box;
-  }
-
-  html{
-    scroll-behavior:smooth;
-  }
-
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--black);
-    font-family:'IBM Plex Sans Thai',sans-serif;
-  }
-
-  .font-display{
-    font-family:'Kanit',sans-serif;
-  }
-
-  ::selection{
-    background:var(--orange);
-    color:white;
-  }
-
-  /* =====================================================
-     SCROLLBAR
-  ===================================================== */
-
-  ::-webkit-scrollbar{
-    width:8px;
-  }
-
-  ::-webkit-scrollbar-track{
-    background:#f4f4f4;
-  }
-
-  ::-webkit-scrollbar-thumb{
-    background:#222;
-    border-radius:20px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover{
-    background:var(--orange);
-  }
-
-  /* =====================================================
-     HEADER
-  ===================================================== */
-
-  .main-header{
-    background:#fff;
-    border-bottom:1px solid #dedede;
-  }
-
-  .header-inner{
-    min-height:74px;
-  }
-
-  .brand-mark{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
-  }
-
-  .brand-dot{
-    width:12px;
-    height:12px;
-    background:var(--orange);
-    display:block;
-    transform:rotate(45deg);
-  }
-
-  .brand-name{
-    font-family:'Kanit',sans-serif;
-    font-size:22px;
-    font-weight:800;
-    letter-spacing:-.5px;
-  }
-
-  .search-box{
-    background:#f6f6f6;
-    border:1px solid #dedede;
-    transition:.2s;
-  }
-
-  .search-box:focus-within{
-    background:#fff;
-    border-color:var(--orange);
-    box-shadow:0 0 0 3px rgba(244,81,30,.08);
-  }
-
-  .search-box input{
-    background:transparent;
-  }
-
-  .search-box input::placeholder{
-    color:#999;
-  }
-
-  .contact-button{
-    background:var(--black);
-    color:#fff;
-    transition:.2s;
-  }
-
-  .contact-button:hover{
-    background:var(--orange);
-  }
-
-  /* =====================================================
-     HERO
-  ===================================================== */
-
-  .hero{
-    background:#111;
-    color:#fff;
-    position:relative;
-    overflow:hidden;
-  }
-
-  .hero::before{
-    content:"";
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    background:var(--orange);
-    right:-180px;
-    top:-280px;
-    opacity:.9;
-  }
-
-  .hero::after{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    border:1px solid rgba(255,255,255,.14);
-    right:80px;
-    bottom:-170px;
-    transform:rotate(20deg);
-  }
-
-  .hero-content{
-    position:relative;
-    z-index:2;
-  }
-
-  .hero-label{
-    color:#ff754b;
-    font-family:'Kanit',sans-serif;
-    letter-spacing:.12em;
-    font-weight:600;
-  }
-
-  .hero-title{
-    font-family:'Kanit',sans-serif;
-    font-weight:800;
-    letter-spacing:-1.5px;
-    line-height:1.08;
-  }
-
-  .hero-title .orange{
-    color:#ff5a2c;
-  }
-
-  .hero-sub{
-    color:#bdbdbd;
-  }
-
-  .hero-button{
-    background:var(--orange);
-    color:#fff;
-    transition:.2s;
-  }
-
-  .hero-button:hover{
-    background:#ff693c;
-    transform:translateY(-2px);
-  }
-
-  .hero-stat{
-    border-left:1px solid #383838;
-    padding-left:20px;
-  }
-
-  .hero-stat:first-child{
-    border-left:0;
-    padding-left:0;
-  }
-
-  /* =====================================================
-     SECTION
-  ===================================================== */
-
-  .section-wrap{
-    background:#fafafa;
-  }
-
-  .section-title{
-    font-family:'Kanit',sans-serif;
-    font-weight:700;
-    letter-spacing:-.3px;
-  }
-
-  .section-description{
-    color:#777;
-  }
-
-  /* =====================================================
-     CATEGORY
-  ===================================================== */
-
-  .category-bar{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding-bottom:4px;
-    scrollbar-width:none;
-  }
-
-  .category-bar::-webkit-scrollbar{
-    display:none;
-  }
-
-  .cat-chip{
-    white-space:nowrap;
-    transition:.2s;
-  }
-
-  /* =====================================================
-     FILTERS
-  ===================================================== */
-
-  .filter-panel{
-    background:#fff;
-    border:1px solid #dedede;
-    border-radius:16px;
-    padding:14px;
-  }
-
-  .filter-title{
-    font-family:'Kanit',sans-serif;
-    font-weight:600;
-  }
-
-  .filter-chip{
-    transition:.2s;
-  }
-
-  .filter-chip:hover{
-    border-color:var(--orange);
-    color:var(--orange);
-  }
-
-  /* =====================================================
-     PRODUCT CARD
-  ===================================================== */
-
-  .product-card{
-    background:#fff;
-    border:1px solid #e4e4e4;
-    border-radius:4px;
-    overflow:hidden;
-    transition:
-      transform .25s ease,
-      box-shadow .25s ease,
-      border-color .25s ease;
-  }
-
-  .product-card:hover{
-    transform:translateY(-5px);
-    border-color:#cfcfcf;
-    box-shadow:0 14px 35px rgba(0,0,0,.10);
-  }
-
-  .product-image{
-    background:#eeeeee;
-    position:relative;
-  }
-
-  .product-image img{
-    transition:transform .45s ease;
-  }
-
-  .product-card:hover .product-image img{
-    transform:scale(1.045);
-  }
-
-  .brand-label{
-    color:#888;
-    font-size:10px;
-    letter-spacing:.14em;
-    font-weight:600;
-  }
-
-  .product-title{
-    font-family:'Kanit',sans-serif;
-    font-weight:600;
-    color:#171717;
-  }
-
-  .price{
-    font-family:'Kanit',sans-serif;
-    font-weight:700;
-  }
-
-  .old-price{
-    color:#aaa;
-  }
-
-  /* =====================================================
-     SOLD
-  ===================================================== */
-
-  .sold-overlay{
-    background:rgba(0,0,0,.68);
-  }
-
-  /* =====================================================
-     CONDITION
-  ===================================================== */
-
-  .condition-badge{
-    background:#111;
-    color:#fff;
-    border:1px solid rgba(255,255,255,.3);
-  }
-
-  .single-stock{
-    background:var(--orange);
-    color:#fff;
-  }
-
-  /* =====================================================
-     DETAIL PAGE
-  ===================================================== */
-
-  .detail-image{
-    background:#eee;
-  }
-
-  .detail-price{
-    font-family:'Kanit',sans-serif;
-    font-weight:700;
-  }
-
-  .buy-button{
-    background:var(--black);
-    transition:.2s;
-  }
-
-  .buy-button:hover{
-    background:var(--orange);
-  }
-
-  .measurement-box{
-    border:1px solid #dedede;
-    background:#fff;
-  }
-
-  /* =====================================================
-     DEFECT BOX
-  ===================================================== */
-
-  .defect-box{
-    border:1px solid #ffc7b5;
-    background:#fff5f1;
-  }
-
-  /* =====================================================
-     FOOTER
-  ===================================================== */
-
-  .main-footer{
-    background:#111;
-    color:#fff;
-  }
-
-  .footer-orange{
-    color:var(--orange);
-  }
-
-  .social-button{
-    background:#222;
-    transition:.2s;
-  }
-
-  .social-button:hover{
-    background:var(--orange);
-  }
-
-  /* =====================================================
-     MOBILE
-  ===================================================== */
-
-  @media(max-width:640px){
-
-    .brand-name{
-      font-size:20px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - ตรวจสอบรูปภาพจากลูกค้า</title>
+  
+  <!-- Google Fonts: Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-body: #f8fafc;
+      --card-bg: #ffffff;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --radius: 12px;
     }
 
-    .hero-title{
-      font-size:34px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif;
     }
 
-    .hero-stat{
-      padding-left:12px;
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
     }
 
-    .product-card{
-      border-radius:3px;
+    .admin-container {
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
-  }
+    .header {
+      margin-bottom: 24px;
+    }
 
-</style>
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    /* การ์ดรายละเอียดออเดอร์ */
+    .order-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .order-id {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .badge-status {
+      background-color: #fef3c7;
+      color: #d97706;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* ==============================================
+       ส่วนสไลเดอร์รูปภาพแนบจากลูกค้า (ไฮไลท์สำคัญ)
+       ============================================== */
+    .attached-section {
+      margin-top: 16px;
+    }
+
+    .attached-title {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* ตัวควบคุมการเลื่อน */
+    .gallery-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .gallery-container {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 4px 0;
+      width: 100%;
+      /* ซ่อน Scrollbar บนมือถือและเบราว์เซอร์หลัก */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    /* ตกแต่งแท่ง Scrollbar */
+    .gallery-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .gallery-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .gallery-item {
+      flex: 0 0 auto;
+      position: relative;
+      width: 140px;
+      height: 140px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      background-color: #f1f5f9;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ปุ่มกดเลื่อน ซ้าย-ขวา สำหรับ Desktop */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .nav-btn.prev { left: -16px; }
+    .nav-btn.next { right: -16px; }
+
+    /* ==============================================
+       Modal ขยายรูปภาพขนาดใหญ่เมื่อคลิก
+       ============================================== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 8px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-
-
 <body>
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header class="main-header sticky top-0 z-40">
-
-  <div class="max-w-7xl mx-auto px-4 lg:px-8 header-inner flex items-center gap-4">
-
-    <!-- LOGO -->
-    <div class="brand-mark flex-shrink-0">
-
-      <span class="brand-dot"></span>
-
-      <span id="shopName" class="brand-name">
-        …
-      </span>
-
+  <div class="admin-container">
+    <div class="header">
+      <h1>จัดการคำสั่งซื้อ (Admin)</h1>
     </div>
 
-
-    <!-- DESKTOP SEARCH -->
-
-    <div class="hidden md:flex flex-1 max-w-xl mx-auto">
-
-      <div class="search-box relative w-full rounded-full">
-
-        <svg
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
-          />
-        </svg>
-
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="ค้นหาแบรนด์ หรือชื่อสินค้า..."
-          class="w-full rounded-full pl-11 pr-4 py-3 text-sm focus:outline-none"
-        >
-
-      </div>
-
-    </div>
-
-
-    <!-- CONTACT -->
-
-    <a
-      id="navContact"
-      target="_blank"
-      class="contact-button hidden sm:flex ml-auto items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold font-display"
-    >
-      <span>แชทสั่งซื้อ</span>
-
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 11.5a8.38 8.38 0 01-1 3.9 8.5 8.5 0 01-7.5 4.6 8.38 8.38 0 01-3.9-1L3 21l1.5-4.6A8.38 8.38 0 013.5 12 8.5 8.5 0 0112 3.5a8.5 8.5 0 019 8z"
-        />
-      </svg>
-
-    </a>
-
-  </div>
-
-
-  <!-- MOBILE SEARCH -->
-
-  <div class="md:hidden px-4 pb-3">
-
-    <div class="search-box relative w-full rounded-full">
-
-      <svg
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-width="2"
-          d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
-        />
-      </svg>
-
-      <input
-        id="searchInputMobile"
-        type="search"
-        placeholder="ค้นหาแบรนด์ หรือชื่อสินค้า..."
-        class="w-full rounded-full pl-11 pr-4 py-3 text-sm focus:outline-none"
-      >
-
-    </div>
-
-  </div>
-
-</header>
-
-
-<!-- =====================================================
-     STORE
-===================================================== -->
-
-<div id="storeView">
-
-<main>
-
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
-<section class="hero">
-
-  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-14 lg:py-20">
-
-    <div class="hero-content">
-
-      <div class="grid lg:grid-cols-[1.4fr_.6fr] gap-12 items-end">
-
-
-        <!-- LEFT -->
-
+    <!-- รายการออเดอร์ -->
+    <div class="order-card">
+      <div class="order-header">
         <div>
-
-          <p
-            id="tagline"
-            class="hero-label text-xs lg:text-sm uppercase mb-5"
-          ></p>
-
-
-          <h1
-            id="heroTitle"
-            class="hero-title text-4xl sm:text-5xl lg:text-6xl max-w-4xl"
-          ></h1>
-
-
-          <p
-            id="heroSub"
-            class="hero-sub mt-6 max-w-xl text-sm lg:text-base leading-relaxed"
-          ></p>
-
-
-          <a
-            href="#products"
-            class="hero-button inline-flex items-center gap-3 mt-8 px-7 py-3.5 rounded-full font-bold font-display"
-          >
-
-            <span>ดูสินค้าทั้งหมด</span>
-
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 12h14M13 6l6 6-6 6"
-              />
-            </svg>
-
-          </a>
-
+          <span class="order-id">รายการ #ORD-8921</span>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">ลูกค้า: สมชาย ใจดี</p>
         </div>
-
-
-        <!-- RIGHT STATS -->
-
-        <div class="grid grid-cols-3 lg:grid-cols-1 gap-5 lg:gap-7">
-
-          <div class="hero-stat">
-
-            <div
-              id="statTotal"
-              class="text-3xl font-extrabold font-display"
-            >
-              –
-            </div>
-
-            <div class="text-xs text-stone-400 mt-1">
-              สินค้าทั้งหมด
-            </div>
-
-          </div>
-
-
-          <div class="hero-stat">
-
-            <div
-              id="statAvailable"
-              class="text-3xl font-extrabold font-display"
-            >
-              –
-            </div>
-
-            <div class="text-xs text-stone-400 mt-1">
-              พร้อมขาย
-            </div>
-
-          </div>
-
-
-          <div class="hero-stat">
-
-            <div
-              id="statSold"
-              class="text-3xl font-extrabold font-display"
-            >
-              –
-            </div>
-
-            <div class="text-xs text-stone-400 mt-1">
-              ขายแล้ว
-            </div>
-
-          </div>
-
-        </div>
-
+        <span class="badge-status">รอตรวจสอบ</span>
       </div>
 
+      <!-- ส่วนแนบรูปภาพ -->
+      <div class="attached-section">
+        <p class="attached-title">รูปภาพที่ลูกค้าแนบมา (เลื่อนซ้าย-ขวา เพื่อดูรูปทั้งหมด):</p>
+        
+        <div class="gallery-wrapper">
+          <button class="nav-btn prev" onclick="scrollGallery(-200)">&#10094;</button>
+          
+          <div class="gallery-container" id="gallery">
+            <!-- นำรูปจากระบบเดิมมาวนลูปใส่ในแท็ก <img> ได้เลย -->
+            <div class="gallery-item" onclick="openModal(this)">
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="รูปแนบ 1">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="รูปแนบ 2">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+              <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500" alt="รูปแนบ 3">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+              <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500" alt="รูปแนบ 4">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+              <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" alt="รูปแนบ 5">
+            </div>
+          </div>
+
+          <button class="nav-btn next" onclick="scrollGallery(200)">&#10095;</button>
+        </div>
+      </div>
     </div>
-
   </div>
 
-</section>
-
-
-<!-- =====================================================
-     PRODUCTS
-===================================================== -->
-
-<section
-  id="products"
-  class="section-wrap max-w-7xl mx-auto px-4 lg:px-8 py-12 lg:py-16"
->
-
-  <!-- SECTION HEADING -->
-
-  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-7">
-
-    <div>
-
-      <div class="flex items-center gap-3">
-
-        <span class="w-8 h-[3px] bg-orange-600"></span>
-
-        <span class="text-xs font-bold uppercase tracking-[.18em] text-orange-600">
-          Latest Drop
-        </span>
-
-      </div>
-
-      <h2 class="section-title text-2xl lg:text-3xl mt-2">
-        สินค้าล่าสุด
-        <span class="text-orange-600">
-          (<span id="countLabel">0</span>)
-        </span>
-      </h2>
-
-      <p class="section-description text-sm mt-1">
-        คัดสภาพ วัดขนาดจริง ก่อนวางขายทุกชิ้น
-      </p>
-
-    </div>
-
-
-    <!-- SORT -->
-
-    <label class="flex items-center gap-3">
-
-      <span class="text-xs text-stone-500 font-medium">
-        เรียงสินค้า
-      </span>
-
-      <select
-        id="sortSelect"
-        class="bg-white border border-stone-300 rounded-full pl-4 pr-9 py-2.5 text-sm font-medium focus:outline-none focus:border-orange-600"
-      >
-
-        <option value="new">
-          สินค้ามาใหม่
-        </option>
-
-        <option value="low">
-          ราคา: น้อย → มาก
-        </option>
-
-        <option value="high">
-          ราคา: มาก → น้อย
-        </option>
-
-      </select>
-
-    </label>
-
+  <!-- Popup ขยายรูปใหญ่ -->
+  <div class="modal" id="imageModal" onclick="closeModal()">
+    <span class="modal-close">&times;</span>
+    <img id="modalImg" src="" alt="รูปขยายใหญ่">
   </div>
 
-
-  <!-- CATEGORY -->
-
-  <div class="mb-5">
-
-    <div
-      id="categoryChips"
-      class="category-bar"
-    ></div>
-
-  </div>
-
-
-  <!-- FILTER PANEL -->
-
-  <div class="filter-panel mb-8">
-
-    <div class="flex items-center gap-2 mb-3">
-
-      <svg
-        class="w-4 h-4 text-orange-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-width="2"
-          stroke-linecap="round"
-          d="M3 5h18M6 12h12M10 19h4"
-        />
-      </svg>
-
-      <span class="filter-title text-sm">
-        ตัวกรองสินค้า
-      </span>
-
-    </div>
-
-    <div
-      id="filterGroups"
-      class="flex flex-wrap gap-2"
-    ></div>
-
-  </div>
-
-
-  <!-- PRODUCT GRID -->
-
-  <div
-    id="cardGrid"
-    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
-  >
-
-    <p class="text-stone-400 col-span-full py-10 text-center">
-      กำลังโหลด...
-    </p>
-
-  </div>
-
-</section>
-
-</main>
-
-</div>
-
-
-<!-- =====================================================
-     DETAIL
-===================================================== -->
-
-<div
-  id="detailView"
-  class="hidden max-w-6xl mx-auto px-4 lg:px-8 py-10 lg:py-14"
-></div>
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="main-footer relative overflow-hidden">
-
-  <div class="absolute inset-0 opacity-10">
-
-    <div
-      class="absolute right-0 bottom-0 w-96 h-96 rounded-full bg-orange-600 blur-3xl"
-    ></div>
-
-  </div>
-
-
-  <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-12">
-
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-7">
-
-
-      <div class="text-center sm:text-left">
-
-        <div class="flex items-center justify-center sm:justify-start gap-3">
-
-          <span class="brand-dot"></span>
-
-          <p
-            id="footShopName"
-            class="text-xl font-extrabold font-display"
-          ></p>
-
-        </div>
-
-        <p class="text-stone-500 text-xs mt-2">
-          Curated vintage & secondhand clothing
-        </p>
-
-      </div>
-
-
-      <div
-        id="footLinks"
-        class="flex gap-3"
-      ></div>
-
-    </div>
-
-
-    <div class="border-t border-stone-800 mt-9 pt-5 text-center">
-
-      <p class="text-xs text-stone-600">
-        © NNBShop — Vintage / Secondhand Collection
-      </p>
-
-    </div>
-
-  </div>
-
-</footer>
-
-
-<!-- =====================================================
-     CONFIG
-===================================================== -->
-
-<script src="/config.js"></script>
-
-<script>
-
-const sb = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-
-/* =====================================================
-   CONDITION
-===================================================== */
-
-const CONDITION = {
-
-  9:{
-    label:"9/10 — เกือบใหม่",
-    cls:"condition-badge"
-  },
-
-  7:{
-    label:"7/10 — สภาพดี",
-    cls:"condition-badge"
-  },
-
-  5:{
-    label:"5/10 — มีตำหนิเล็กน้อย",
-    cls:"condition-badge"
-  }
-
-};
-
-
-/* =====================================================
-   ESCAPE
-===================================================== */
-
-function esc(s){
-
-  return String(s ?? '').replace(
-    /[&<>"']/g,
-    c => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#39;'
-    }[c])
-  );
-
-}
-
-
-function escAttr(s){
-
-  return esc(s).replace(/`/g,'&#96;');
-
-}
-
-
-function fmt(n){
-
-  return Number(n).toLocaleString('th-TH');
-
-}
-
-
-/* =====================================================
-   GLOBAL STATE
-===================================================== */
-
-let items = [];
-
-let cfg = {};
-
-let filters = {
-
-  category:'ทั้งหมด',
-
-  brand:'ทั้งหมด',
-
-  size:'ทั้งหมด',
-
-  score:null,
-
-  search:'',
-
-  sort:'new'
-
-};
-
-
-/* =====================================================
-   LOAD
-===================================================== */
-
-async function load(){
-
-  const {
-    data:c,
-    error:cErr
-  } = await sb
-    .from('config')
-    .select('*')
-    .eq('id',1)
-    .single();
-
-
-  const {
-    data:rows,
-    error:iErr
-  } = await sb
-    .from('items')
-    .select('*')
-    .order('created_at',{
-      ascending:false
-    });
-
-
-  if(cErr || iErr){
-
-    cardGrid.innerHTML = `
-      <p class="text-red-600 col-span-full py-10 text-center">
-        โหลดข้อมูลไม่สำเร็จ ตรวจสอบ config.js และ Supabase
-      </p>
-    `;
-
-    console.error(cErr || iErr);
-
-    return;
-  }
-
-
-  cfg = c;
-
-  items = rows || [];
-
-
-  /* SHOP INFO */
-
-  shopName.textContent = cfg.shop_name;
-
-  footShopName.textContent = cfg.shop_name;
-
-  tagline.textContent = cfg.tagline;
-
-
-  heroTitle.innerHTML = `
-    ${esc(cfg.hero_title1)}
-    <span class="orange text-orange-500">
-      ${esc(cfg.hero_title2)}
-    </span>
-    <br class="hidden sm:block">
-    ${esc(cfg.hero_title3)}
-  `;
-
-
-  heroSub.textContent = cfg.hero_sub;
-
-
-  /* CONTACT */
-
-  if(cfg.ig_url){
-
-    navContact.href = cfg.ig_url;
-
-  }else{
-
-    navContact.classList.add('hidden');
-
-  }
-
-
-  /* =====================================================
-     INSTAGRAM ICON
-  ===================================================== */
-
-  const igIcon = `
-
-    <a
-      href="${escAttr(cfg.ig_url)}"
-      target="_blank"
-      aria-label="Instagram"
-      class="social-button w-10 h-10 rounded-full flex items-center justify-center"
-    >
-
-      <svg
-        class="w-4 h-4"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07
-        3.252.148 4.771 1.691 4.919 4.919.058
-        1.265.069 1.645.069 4.849 0 3.205-.012
-        3.584-.069 4.849-.149 3.225-1.664
-        4.771-4.919 4.919-1.266.058-1.644.07-4.85.07
-        -3.204 0-3.584-.012-4.849-.07-3.26-.149
-        -4.771-1.699-4.919-4.92-.058-1.28-.07-1.644
-        -.07-4.849 0-3.204.013-3.583.07-4.849
-        .149-3.227 1.664-4.771 4.919-4.919
-        1.266-.057 1.645-.069 4.849-.069z"/>
-
-        <path d="M12 0C8.741 0 8.332.014 7.052.072
-        2.695.272.273 2.69.073 7.052.014
-        8.332 0 8.741 0 12c0 3.259.014 3.668
-        .072 4.948.2 4.358 2.618 6.78 6.98
-        6.98C8.332 23.986 8.741 24 12 24c3.259
-        0 3.668-.014 4.948-.072 4.354-.2
-        6.782-2.618 6.979-6.98.059-1.28.073
-        -1.689.073-4.948 0-3.259-.014-3.668
-        -.072-4.948C23.73 2.7 21.311.273
-        16.949.073 15.668.014 15.259 0 12 0z"/>
-
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-          fill="#111"
-        />
-
-      </svg>
-
-    </a>
-  `;
-
-
-  /* =====================================================
-     FACEBOOK
-  ===================================================== */
-
-  const fbIcon = `
-
-    <a
-      href="${escAttr(cfg.fb_url)}"
-      target="_blank"
-      aria-label="Facebook"
-      class="social-button w-10 h-10 rounded-full flex items-center justify-center"
-    >
-
-      <svg
-        class="w-4 h-4"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-
-        <path d="M22 12c0-5.523-4.477-10-10-10S2
-        6.477 2 12c0 4.991 3.657 9.128 8.438
-        9.878v-6.987h-2.54V12h2.54V9.797
-        c0-2.506 1.492-3.89 3.777-3.89
-        1.094 0 2.238.195 2.238.195v2.46
-        h-1.26c-1.243 0-1.63.771-1.63
-        1.562V12h2.773l-.443 2.89h-2.33
-        v6.988C18.343 21.128 22 16.991
-        22 12z"/>
-
-      </svg>
-
-    </a>
-
-  `;
-
-
-  footLinks.innerHTML =
-    (cfg.ig_url ? igIcon : '') +
-    (cfg.fb_url ? fbIcon : '');
-
-
-  /* =====================================================
-     STATS
-  ===================================================== */
-
-  statTotal.textContent = items.length;
-
-  statAvailable.textContent =
-    items.filter(l => !l.sold).length;
-
-  statSold.textContent =
-    items.filter(l => l.sold).length;
-
-
-  renderCategoryChips();
-
-  renderFilters();
-
-  renderGrid();
-
-}
-
-
-/* =====================================================
-   CATEGORY
-===================================================== */
-
-function renderCategoryChips(){
-
-  const cats = [
-    'ทั้งหมด',
-    ...new Set(
-      items
-        .map(i => i.category)
-        .filter(Boolean)
-    )
-  ];
-
-
-  categoryChips.innerHTML = cats.map(c => `
-
-    <button
-      data-cat="${escAttr(c)}"
-      class="cat-chip px-5 py-2.5 rounded-full text-sm font-semibold font-display
-      ${
-        filters.category === c
-        ? 'bg-orange-600 text-white'
-        : 'bg-white border border-stone-300 text-stone-700 hover:border-orange-500 hover:text-orange-600'
-      }"
-    >
-
-      ${esc(c)}
-
-    </button>
-
-  `).join('');
-
-
-  categoryChips
-    .querySelectorAll('.cat-chip')
-    .forEach(btn => {
-
-      btn.addEventListener(
-        'click',
-        () => {
-
-          filters.category =
-            btn.getAttribute('data-cat');
-
-          renderCategoryChips();
-
-          renderGrid();
-
-        }
-      );
-
-    });
-
-}
-
-
-/* =====================================================
-   FILTER
-===================================================== */
-
-function renderFilters(){
-
-  const brands = [
-    'ทั้งหมด',
-    ...new Set(
-      items.map(i => i.brand)
-    )
-  ];
-
-
-  const sizes = [
-    'ทั้งหมด',
-    'S',
-    'M',
-    'L',
-    'XL'
-  ];
-
-
-  function group(
-    title,
-    options,
-    key
-  ){
-
-    return `
-
-      <div class="flex flex-wrap items-center gap-2 mr-4">
-
-        <span class="text-xs text-stone-400 font-display font-semibold">
-          ${title}
-        </span>
-
-        ${options.map(o => `
-
-          <button
-            data-group="${key}"
-            data-val="${escAttr(o)}"
-            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-medium border
-            ${
-              filters[key] === o
-              ? 'bg-black text-white border-black'
-              : 'bg-white text-stone-600 border-stone-300'
-            }"
-          >
-
-            ${esc(o)}
-
-          </button>
-
-        `).join('')}
-
-      </div>
-
-    `;
-
-  }
-
-
-  function scoreGroup(){
-
-    return `
-
-      <div class="flex flex-wrap items-center gap-2">
-
-        <span class="text-xs text-stone-400 font-display font-semibold">
-          สภาพ
-        </span>
-
-        ${[9,7,5].map(s => `
-
-          <button
-            data-group="score"
-            data-val="${s}"
-            class="filter-chip px-3.5 py-1.5 rounded-full text-xs font-medium border
-            ${
-              filters.score === s
-              ? 'bg-orange-600 text-white border-orange-600'
-              : 'bg-white text-stone-600 border-stone-300'
-            }"
-          >
-
-            ${s}/10
-
-          </button>
-
-        `).join('')}
-
-      </div>
-
-    `;
-
-  }
-
-
-  filterGroups.innerHTML =
-    group('แบรนด์',brands,'brand') +
-    group('ไซส์',sizes,'size') +
-    scoreGroup();
-
-
-  filterGroups
-    .querySelectorAll('.filter-chip')
-    .forEach(btn => {
-
-      btn.addEventListener(
-        'click',
-        () => {
-
-          const g =
-            btn.getAttribute('data-group');
-
-          const v =
-            btn.getAttribute('data-val');
-
-
-          if(g === 'score'){
-
-            const n = Number(v);
-
-            filters.score =
-              filters.score === n
-              ? null
-              : n;
-
-          }else{
-
-            filters[g] = v;
-
-          }
-
-
-          renderFilters();
-
-          renderGrid();
-
-        }
-      );
-
-    });
-
-}
-
-
-/* =====================================================
-   PRODUCT GRID
-===================================================== */
-
-function renderGrid(){
-
-  const q =
-    filters.search
-      .trim()
-      .toLowerCase();
-
-
-  let visible = items.filter(i =>
-
-    (
-      filters.category === 'ทั้งหมด' ||
-      i.category === filters.category
-    )
-
-    &&
-
-    (
-      filters.brand === 'ทั้งหมด' ||
-      i.brand === filters.brand
-    )
-
-    &&
-
-    (
-      filters.size === 'ทั้งหมด' ||
-      i.size_label === filters.size
-    )
-
-    &&
-
-    (
-      !filters.score ||
-      i.condition_score === filters.score
-    )
-
-    &&
-
-    (
-      !q ||
-      i.title.toLowerCase().includes(q) ||
-      i.brand.toLowerCase().includes(q)
-    )
-
-  );
-
-
-  if(filters.sort === 'low'){
-
-    visible = [...visible]
-      .sort((a,b) => a.price - b.price);
-
-  }
-
-
-  if(filters.sort === 'high'){
-
-    visible = [...visible]
-      .sort((a,b) => b.price - a.price);
-
-  }
-
-
-  countLabel.textContent =
-    visible.length;
-
-
-  cardGrid.innerHTML =
-    visible.length
-
-    ? visible.map(i => `
-
-      <button
-        data-id="${i.id}"
-        class="product-card text-left group"
-      >
-
-        <!-- IMAGE -->
-
-        <div
-          class="product-image relative aspect-[3/4] overflow-hidden"
-        >
-
-          ${
-            i.images && i.images[0]
-
-            ?
-
-            `
-              <img
-                src="${escAttr(i.images[0])}"
-                class="w-full h-full object-cover"
-                alt="${escAttr(i.title)}"
-              >
-            `
-
-            :
-
-            `
-              <div
-                class="w-full h-full flex items-center justify-center text-stone-400 text-xs"
-              >
-                ไม่มีรูป
-              </div>
-            `
-          }
-
-
-          <!-- SOLD -->
-
-          ${
-            i.sold
-
-            ?
-
-            `
-              <div
-                class="sold-overlay absolute inset-0 flex items-center justify-center"
-              >
-
-                <span
-                  class="text-white text-sm font-bold font-display border border-white/50 px-5 py-2 rounded-full"
-                >
-                  SOLD OUT
-                </span>
-
-              </div>
-            `
-
-            :
-
-            ''
-          }
-
-
-          <!-- SINGLE STOCK -->
-
-          ${
-            !i.sold && i.single_stock
-
-            ?
-
-            `
-              <span
-                class="single-stock absolute top-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full font-display"
-              >
-                เหลือชิ้นเดียว
-              </span>
-            `
-
-            :
-
-            ''
-          }
-
-
-          <!-- CONDITION -->
-
-          <span
-            class="condition-badge absolute bottom-3 left-3 text-[10px] font-bold px-3 py-1 rounded-full font-display"
-          >
-
-            ${CONDITION[i.condition_score].label}
-
-          </span>
-
-        </div>
-
-
-        <!-- INFO -->
-
-        <div class="p-4">
-
-          <p class="brand-label uppercase">
-            ${esc(i.brand)}
-          </p>
-
-
-          <h3
-            class="product-title text-sm mt-1 leading-snug"
-          >
-            ${esc(i.title)}
-          </h3>
-
-
-          <div
-            class="flex items-center gap-2 mt-3"
-          >
-
-            ${
-              i.old_price
-
-              ?
-
-              `
-                <span class="old-price text-xs line-through">
-                  ฿${fmt(i.old_price)}
-                </span>
-              `
-
-              :
-
-              ''
-            }
-
-
-            <span
-              class="price text-lg"
-            >
-              ฿${fmt(i.price)}
-            </span>
-
-          </div>
-
-
-          <div
-            class="flex items-center justify-between mt-4 pt-3 border-t border-stone-100"
-          >
-
-            <span class="text-[10px] text-stone-400 uppercase tracking-wider">
-              View item
-            </span>
-
-            <span
-              class="w-7 h-7 rounded-full border border-stone-200 flex items-center justify-center group-hover:bg-orange-600 group-hover:border-orange-600 group-hover:text-white transition-colors"
-            >
-
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-
-                <path
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M5 12h14M13 6l6 6-6 6"
-                />
-
-              </svg>
-
-            </span>
-
-          </div>
-
-        </div>
-
-      </button>
-
-    `).join('')
-
-    :
-
-    `
-      <div class="col-span-full py-16 text-center">
-
-        <div
-          class="w-14 h-14 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-4"
-        >
-
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-
-            <path
-              stroke-width="2"
-              stroke-linecap="round"
-              d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
-            />
-
-          </svg>
-
-        </div>
-
-        <p class="text-stone-500">
-          ไม่พบสินค้าตามตัวกรองที่เลือก
-        </p>
-
-      </div>
-    `;
-
-
-  cardGrid
-    .querySelectorAll('.product-card')
-    .forEach(btn => {
-
-      btn.addEventListener(
-        'click',
-        () => showDetail(
-          Number(
-            btn.getAttribute('data-id')
-          )
-        )
-      );
-
-    });
-
-}
-
-
-/* =====================================================
-   DETAIL
-===================================================== */
-
-function showDetail(id){
-
-  const p =
-    items.find(i => i.id === id);
-
-
-  if(!p) return;
-
-
-  storeView.classList.add('hidden');
-
-  detailView.classList.remove('hidden');
-
-  window.scrollTo({
-    top:0
-  });
-
-
-  const gallery =
-    (
-      p.images &&
-      p.images.length
-    )
-
-    ?
-
-    p.images
-
-    :
-
-    [null];
-
-
-  detailView.innerHTML = `
-
-    <!-- BACK -->
-
-    <button
-      id="backBtn"
-      class="flex items-center gap-2 text-sm text-stone-500 hover:text-orange-600 mb-8 font-medium transition-colors"
-    >
-
-      <span class="w-8 h-8 rounded-full border border-stone-300 flex items-center justify-center">
-        ←
-      </span>
-
-      กลับไปดูสินค้าทั้งหมด
-
-    </button>
-
-
-    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16">
-
-
-      <!-- IMAGE -->
-
-      <div>
-
-        <div
-          class="detail-image relative aspect-[3/4] rounded overflow-hidden"
-        >
-
-          ${
-            gallery[0]
-
-            ?
-
-            `
-              <img
-                src="${escAttr(gallery[0])}"
-                class="w-full h-full object-cover"
-                alt="${escAttr(p.title)}"
-              >
-            `
-
-            :
-
-            `
-              <div
-                class="w-full h-full flex items-center justify-center text-stone-400"
-              >
-                ไม่มีรูป
-              </div>
-            `
-          }
-
-
-          ${
-            (!p.sold && p.single_stock)
-
-            ?
-
-            `
-              <span
-                class="single-stock absolute top-4 left-4 text-xs font-bold px-4 py-2 rounded-full font-display"
-              >
-                เหลือชิ้นเดียว
-              </span>
-            `
-
-            :
-
-            ''
-          }
-
-        </div>
-
-
-        ${
-          gallery.length > 1
-
-          ?
-
-          `
-            <div class="flex gap-2 mt-3">
-
-              ${gallery.slice(1).map(g => `
-
-                <img
-                  src="${escAttr(g)}"
-                  class="w-16 h-16 rounded object-cover flex-shrink-0 border border-stone-200"
-                >
-
-              `).join('')}
-
-            </div>
-          `
-
-          :
-
-          ''
-        }
-
-
-        ${
-          p.defects &&
-          p.defects.length
-
-          ?
-
-          `
-
-            <div class="defect-box rounded-xl p-5 mt-6">
-
-              <p
-                class="text-xs font-bold uppercase tracking-wider text-orange-700 mb-4 font-display"
-              >
-                จุดตำหนิที่พบ (${p.defects.length})
-              </p>
-
-
-              <div class="space-y-2">
-
-                ${p.defects.map(d => `
-
-                  <div
-                    class="flex items-center gap-3 bg-white rounded-lg p-2 border border-orange-100"
-                  >
-
-                    ${
-                      d.image
-
-                      ?
-
-                      `
-                        <img
-                          src="${escAttr(d.image)}"
-                          class="w-14 h-14 rounded object-cover flex-shrink-0"
-                        >
-                      `
-
-                      :
-
-                      `
-                        <div
-                          class="w-14 h-14 rounded bg-stone-100 flex-shrink-0"
-                        ></div>
-                      `
-                    }
-
-                    <p class="text-sm text-stone-700">
-                      ${esc(d.note)}
-                    </p>
-
-                  </div>
-
-                `).join('')}
-
-              </div>
-
-            </div>
-
-          `
-
-          :
-
-          ''
-        }
-
-      </div>
-
-
-      <!-- PRODUCT INFO -->
-
-      <div>
-
-        <p
-          class="text-xs text-orange-600 uppercase tracking-widest font-bold"
-        >
-          ${esc(p.brand)} · ${esc(p.category)}
-        </p>
-
-
-        <h1
-          class="text-3xl lg:text-4xl font-bold mt-2 font-display leading-tight"
-        >
-          ${esc(p.title)}
-        </h1>
-
-
-        <div class="mt-5">
-
-          <span
-            class="condition-badge px-4 py-2 rounded-full text-xs font-bold font-display"
-          >
-            ${CONDITION[p.condition_score].label}
-          </span>
-
-        </div>
-
-
-        <div
-          class="flex items-baseline gap-3 mt-6 pb-6 border-b border-stone-200"
-        >
-
-          ${
-            p.old_price
-
-            ?
-
-            `
-              <span class="text-lg text-stone-400 line-through">
-                ฿${fmt(p.old_price)}
-              </span>
-            `
-
-            :
-
-            ''
-          }
-
-
-          <span
-            class="detail-price text-4xl"
-          >
-            ฿${fmt(p.price)}
-          </span>
-
-        </div>
-
-
-        ${
-          p.sold
-
-          ?
-
-          `
-            <div
-              class="mt-6 w-full bg-stone-100 text-stone-500 py-4 rounded-full font-bold text-center font-display border border-stone-200"
-            >
-              สินค้านี้ขายแล้ว
-            </div>
-          `
-
-          :
-
-          cfg.ig_url
-
-          ?
-
-          `
-            <a
-              href="${escAttr(cfg.ig_url)}"
-              target="_blank"
-              class="buy-button mt-6 w-full text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 font-display"
-            >
-
-              สั่งซื้อผ่าน Instagram
-
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-
-                <path
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  d="M5 12h14M13 6l6 6-6 6"
-                />
-
-              </svg>
-
-            </a>
-          `
-
-          :
-
-          `
-            <div
-              class="mt-6 w-full bg-stone-100 text-stone-500 py-4 rounded-full font-bold text-center font-display"
-            >
-              ยังไม่เปิดช่องทางสั่งซื้อ
-            </div>
-          `
-        }
-
-
-        <!-- MEASUREMENTS -->
-
-        <div class="mt-9">
-
-          <div class="flex items-center justify-between mb-3">
-
-            <p
-              class="text-base font-bold font-display"
-            >
-              ตารางขนาด
-            </p>
-
-            <span
-              class="text-xs text-orange-600 font-medium"
-            >
-              วัดจริง
-            </span>
-
-          </div>
-
-
-          <div
-            class="measurement-box rounded-xl overflow-hidden"
-          >
-
-            ${
-              Object.entries(
-                p.measurements || {}
-              )
-              .filter(([k,v]) => v)
-              .map(([k,v],idx) => `
-
-                <div
-                  class="flex justify-between px-4 py-3 text-sm
-                  ${
-                    idx % 2 === 0
-                    ? 'bg-stone-50'
-                    : 'bg-white'
-                  }"
-                >
-
-                  <span class="text-stone-500">
-                    ${esc(k)}
-                  </span>
-
-                  <span class="font-medium">
-                    ${esc(v)}
-                  </span>
-
-                </div>
-
-              `).join('')
-
-              ||
-
-              `
-                <p class="text-sm text-stone-400 p-4">
-                  ไม่มีข้อมูลขนาด
-                </p>
-              `
-            }
-
-          </div>
-
-
-          <p
-            class="text-xs text-stone-400 mt-3 leading-relaxed"
-          >
-            ไซส์ป้ายอาจไม่ตรงตัว แนะนำให้ดูตารางวัดจริงเป็นหลัก
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById('backBtn')
-    .addEventListener(
-      'click',
-      () => {
-
-        detailView.classList.add('hidden');
-
-        storeView.classList.remove('hidden');
-
-        window.scrollTo({
-          top:0
-        });
-
-      }
-    );
-
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-function syncSearch(v){
-
-  filters.search = v;
-
-  searchInput.value = v;
-
-  searchInputMobile.value = v;
-
-  renderGrid();
-
-}
-
-
-searchInput.addEventListener(
-  'input',
-  e => syncSearch(e.target.value)
-);
-
-
-searchInputMobile.addEventListener(
-  'input',
-  e => syncSearch(e.target.value)
-);
-
-
-/* =====================================================
-   SORT
-===================================================== */
-
-sortSelect.addEventListener(
-  'change',
-  e => {
-
-    filters.sort =
-      e.target.value;
-
-    renderGrid();
-
-  }
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-load();
-
-</script>
-
+  <script>
+    // สคริปต์เลื่อนกล่องรูปภาพ
+    function scrollGallery(distance) {
+      document.getElementById('gallery').scrollBy({
+        left: distance,
+        behavior: 'smooth'
+      });
+    }
+
+    // สคริปต์เปิดดูรูปใหญ่ (Modal)
+    function openModal(element) {
+      const imgSrc = element.querySelector('img').src;
+      document.getElementById('modalImg').src = imgSrc;
+      document.getElementById('imageModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
