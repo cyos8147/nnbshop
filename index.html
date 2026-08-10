@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEADSTOCK. — เสื้อผ้าวินเทจมือสอง</title>
+<title>NNBShop — เสื้อผ้าวินเทจมือสอง</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -54,11 +54,7 @@
   <footer class="border-t border-stone-200 py-6">
     <div class="max-w-6xl mx-auto px-4 lg:px-8 flex justify-between items-center flex-wrap gap-3">
       <p id="footShopName" class="text-xs text-stone-400"></p>
-      <div class="flex gap-4 text-xs text-stone-400">
-        <a id="footLine" target="_blank" class="hover:text-stone-700">LINE</a>
-        <a id="footFb" target="_blank" class="hover:text-stone-700">Facebook</a>
-        <a id="footIg" target="_blank" class="hover:text-stone-700">Instagram</a>
-      </div>
+      <div id="footLinks" class="flex gap-4 text-xs text-stone-400"></div>
     </div>
   </footer>
 </div>
@@ -82,7 +78,7 @@ function fmt(n){ return Number(n).toLocaleString('th-TH'); }
 
 let items = [];
 let cfg = {};
-let filters = { brand: 'ทั้งหมด', size: 'ทั้งหมด', era: 'ทั้งหมด', score: null, search: '' };
+let filters = { brand: 'ทั้งหมด', size: 'ทั้งหมด', score: null, search: '' };
 
 async function load(){
   const { data: c, error: cErr } = await sb.from('config').select('*').eq('id', 1).single();
@@ -98,7 +94,7 @@ async function load(){
   footShopName.textContent = `© 2026 ${cfg.shop_name}`;
   tagline.textContent = cfg.tagline;
   heroSub.textContent = cfg.hero_sub;
-  footLine.href = cfg.line_url; footFb.href = cfg.fb_url; footIg.href = cfg.ig_url;
+  footLinks.innerHTML = cfg.ig_url ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="hover:text-stone-700">Instagram</a>` : '';
 
   renderFilters();
   renderGrid();
@@ -107,7 +103,6 @@ async function load(){
 function renderFilters(){
   const brands = ['ทั้งหมด', ...new Set(items.map(i=>i.brand))];
   const sizes = ['ทั้งหมด','S','M','L','XL'];
-  const eras = ['ทั้งหมด','80s','90s','00s','Y2K'];
   function group(title, options, key){
     return `<div class="mb-6"><p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3 font-display">${title}</p><div class="flex flex-wrap gap-2">
       ${options.map(o => `<button data-group="${key}" data-val="${escAttr(o)}" class="chip px-3 py-1.5 rounded-full text-xs font-medium border ${filters[key]===o?'bg-stone-900 text-white border-stone-900':'bg-white text-stone-600 border-stone-300'}">${esc(o)}</button>`).join('')}
@@ -118,7 +113,7 @@ function renderFilters(){
       ${[9,7,5].map(s => `<button data-group="score" data-val="${s}" class="chip px-3 py-1.5 rounded-full text-xs font-medium border ${filters.score===s?'bg-stone-900 text-white border-stone-900':'bg-white text-stone-600 border-stone-300'}">${CONDITION[s].label}</button>`).join('')}
     </div></div>`;
   }
-  filterGroups.innerHTML = group('แบรนด์', brands, 'brand') + group('ไซส์', sizes, 'size') + group('ยุค / ปี', eras, 'era') + scoreGroup();
+  filterGroups.innerHTML = group('แบรนด์', brands, 'brand') + group('ไซส์', sizes, 'size') + scoreGroup();
   filterGroups.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
     const g = btn.getAttribute('data-group'); const v = btn.getAttribute('data-val');
     if (g === 'score'){ const n = Number(v); filters.score = filters.score === n ? null : n; }
@@ -132,7 +127,6 @@ function renderGrid(){
   const visible = items.filter(i =>
     (filters.brand==='ทั้งหมด' || i.brand===filters.brand) &&
     (filters.size==='ทั้งหมด' || i.size_label===filters.size) &&
-    (filters.era==='ทั้งหมด' || i.era===filters.era) &&
     (!filters.score || i.condition_score===filters.score) &&
     (!q || i.title.toLowerCase().includes(q) || i.brand.toLowerCase().includes(q))
   );
@@ -146,7 +140,7 @@ function renderGrid(){
         <div class="absolute bottom-2.5 left-2.5"><span class="${CONDITION[i.condition_score].cls} text-white px-2.5 py-1 text-[11px] rounded-full font-bold font-display">${CONDITION[i.condition_score].label}</span></div>
       </div>
       <div class="mt-3">
-        <p class="text-[11px] text-stone-500 uppercase tracking-wider">${esc(i.brand)} · ${esc(i.era)}</p>
+        <p class="text-[11px] text-stone-500 uppercase tracking-wider">${esc(i.brand)}</p>
         <h3 class="text-sm font-semibold mt-0.5 leading-snug font-display">${esc(i.title)}</h3>
         <div class="flex items-center gap-2 mt-1.5">
           ${i.old_price ? `<span class="text-xs text-stone-400 line-through">฿${fmt(i.old_price)}</span>` : ''}
@@ -190,7 +184,7 @@ function showDetail(id){
           </div>` : ''}
       </div>
       <div>
-        <p class="text-xs text-stone-500 uppercase tracking-wider">${esc(p.brand)} · ${esc(p.era)} · ${esc(p.category)}</p>
+        <p class="text-xs text-stone-500 uppercase tracking-wider">${esc(p.brand)} · ${esc(p.category)}</p>
         <h1 class="text-2xl font-bold mt-1 font-display">${esc(p.title)}</h1>
         <div class="mt-4"><span class="${CONDITION[p.condition_score].cls} text-white px-3.5 py-1.5 rounded-full text-sm font-bold font-display">${CONDITION[p.condition_score].label}</span></div>
         <div class="flex items-baseline gap-3 mt-5">
@@ -199,7 +193,9 @@ function showDetail(id){
         </div>
         ${p.sold
           ? `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-lg font-bold text-center font-display">สินค้านี้ขายแล้ว</div>`
-          : `<a href="${escAttr(cfg.line_url)}" target="_blank" class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">สั่งซื้อผ่านแชท</a>`}
+          : cfg.ig_url
+            ? `<a href="${escAttr(cfg.ig_url)}" target="_blank" class="mt-6 w-full bg-stone-900 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-orange-700 transition-colors font-display">สั่งซื้อผ่าน Instagram</a>`
+            : `<div class="mt-6 w-full bg-stone-200 text-stone-500 py-3.5 rounded-lg font-bold text-center font-display">ยังไม่เปิดช่องทางสั่งซื้อ</div>`}
         <div class="mt-8">
           <p class="text-sm font-bold mb-3 font-display">ตารางขนาด (วัดจริง)</p>
           <div class="border border-stone-200 rounded-xl overflow-hidden">
