@@ -1,278 +1,73 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - ตรวจสอบรูปภาพจากลูกค้า</title>
-  
-  <!-- Google Fonts: Kanit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg-body: #f8fafc;
-      --card-bg: #ffffff;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --radius: 12px;
-    }
+import { useState } from 'react';
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Kanit', sans-serif;
-    }
+export default function ProductGallery({ productImages }) {
+  // สมมุติตัวอย่างรูปภาพ (หรือรับ props มาจาก backend)
+  const images = productImages || [
+    '/images/spain-1.jpg',
+    '/images/spain-2.jpg',
+  ];
 
-    body {
-      background-color: var(--bg-body);
-      color: var(--text-main);
-      padding: 24px;
-    }
+  // 1. ตัวแปรเก็บตำแหน่งรูปที่กำลังเลือกอยู่
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-    .admin-container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+  // ฟังก์ชันเลื่อนรูปซ้าย-ขวา (สำหรับปัดหรือกดปุ่ม)
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
 
-    .header {
-      margin-bottom: 24px;
-    }
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
-    .header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+  return (
+    <div className="w-full max-w-xl mx-auto">
+      {/* ---------------- รูปใหญ่ด้านบน ---------------- */}
+      <div className="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden mb-3">
+        <img
+          src={images[currentIndex]}
+          alt="Product detail"
+          className="w-full h-full object-cover transition-opacity duration-300"
+        />
 
-    /* การ์ดรายละเอียดออเดอร์ */
-    .order-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-color);
-      padding: 24px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-    }
-
-    .order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 16px;
-    }
-
-    .order-id {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .badge-status {
-      background-color: #fef3c7;
-      color: #d97706;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    /* ==============================================
-       ส่วนสไลเดอร์รูปภาพแนบจากลูกค้า (ไฮไลท์สำคัญ)
-       ============================================== */
-    .attached-section {
-      margin-top: 16px;
-    }
-
-    .attached-title {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    /* ตัวควบคุมการเลื่อน */
-    .gallery-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .gallery-container {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 4px 0;
-      width: 100%;
-      /* ซ่อน Scrollbar บนมือถือและเบราว์เซอร์หลัก */
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-    }
-
-    /* ตกแต่งแท่ง Scrollbar */
-    .gallery-container::-webkit-scrollbar {
-      height: 6px;
-    }
-    .gallery-container::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
-    }
-
-    .gallery-item {
-      flex: 0 0 auto;
-      position: relative;
-      width: 140px;
-      height: 140px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      background-color: #f1f5f9;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .gallery-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* ปุ่มกดเลื่อน ซ้าย-ขวา สำหรับ Desktop */
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border-color);
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 2;
-    }
-
-    .nav-btn.prev { left: -16px; }
-    .nav-btn.next { right: -16px; }
-
-    /* ==============================================
-       Modal ขยายรูปภาพขนาดใหญ่เมื่อคลิก
-       ============================================== */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal img {
-      max-width: 90%;
-      max-height: 85vh;
-      border-radius: 8px;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="admin-container">
-    <div class="header">
-      <h1>จัดการคำสั่งซื้อ (Admin)</h1>
-    </div>
-
-    <!-- รายการออเดอร์ -->
-    <div class="order-card">
-      <div class="order-header">
-        <div>
-          <span class="order-id">รายการ #ORD-8921</span>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">ลูกค้า: สมชาย ใจดี</p>
-        </div>
-        <span class="badge-status">รอตรวจสอบ</span>
+        {/* ปุ่มกดเลื่อนซ้าย-ขวาบนรูปใหญ่ (แสดงเมื่อมีมากกว่า 1 รูป) */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition"
+            >
+              &#10094;
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition"
+            >
+              &#10095;
+            </button>
+          </>
+        )}
       </div>
 
-      <!-- ส่วนแนบรูปภาพ -->
-      <div class="attached-section">
-        <p class="attached-title">รูปภาพที่ลูกค้าแนบมา (เลื่อนซ้าย-ขวา เพื่อดูรูปทั้งหมด):</p>
-        
-        <div class="gallery-wrapper">
-          <button class="nav-btn prev" onclick="scrollGallery(-200)">&#10094;</button>
-          
-          <div class="gallery-container" id="gallery">
-            <!-- นำรูปจากระบบเดิมมาวนลูปใส่ในแท็ก <img> ได้เลย -->
-            <div class="gallery-item" onclick="openModal(this)">
-              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="รูปแนบ 1">
-            </div>
-            <div class="gallery-item" onclick="openModal(this)">
-              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="รูปแนบ 2">
-            </div>
-            <div class="gallery-item" onclick="openModal(this)">
-              <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500" alt="รูปแนบ 3">
-            </div>
-            <div class="gallery-item" onclick="openModal(this)">
-              <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500" alt="รูปแนบ 4">
-            </div>
-            <div class="gallery-item" onclick="openModal(this)">
-              <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" alt="รูปแนบ 5">
-            </div>
-          </div>
-
-          <button class="nav-btn next" onclick="scrollGallery(200)">&#10095;</button>
-        </div>
+      {/* ---------------- รูปเล็ก (Thumbnails) ด้านล่าง ---------------- */}
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+        {images.map((img, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)} // กดแล้วเปลี่ยนรูปใหญ่
+            className={`relative w-16 h-16 rounded-md overflow-hidden border-2 flex-shrink-0 transition-all ${
+              currentIndex === index
+                ? 'border-orange-500 scale-105 opacity-100' // รูปที่เลือกอยู่
+                : 'border-gray-200 opacity-60 hover:opacity-100'
+            }`}
+          >
+            <img
+              src={img}
+              alt={`thumbnail-${index}`}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
       </div>
     </div>
-  </div>
-
-  <!-- Popup ขยายรูปใหญ่ -->
-  <div class="modal" id="imageModal" onclick="closeModal()">
-    <span class="modal-close">&times;</span>
-    <img id="modalImg" src="" alt="รูปขยายใหญ่">
-  </div>
-
-  <script>
-    // สคริปต์เลื่อนกล่องรูปภาพ
-    function scrollGallery(distance) {
-      document.getElementById('gallery').scrollBy({
-        left: distance,
-        behavior: 'smooth'
-      });
-    }
-
-    // สคริปต์เปิดดูรูปใหญ่ (Modal)
-    function openModal(element) {
-      const imgSrc = element.querySelector('img').src;
-      document.getElementById('modalImg').src = imgSrc;
-      document.getElementById('imageModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('imageModal').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+  );
+}
